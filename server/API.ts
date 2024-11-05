@@ -1,31 +1,236 @@
-interface FetchOptions extends RequestInit {
-    headers?: Record<string, string>;
-}
+import { API_URL_COMP, API_URL_CONT, API_URL_DOC, API_URL_ING, API_URL_LOG, API_URL_PROSEG } from "@/constants/env.constant";
+import axios from "axios";
 
-const fetchWithToken = async (API_URL: string, endpoint: string, token?: string, email?: string, options: FetchOptions = {}): Promise<any> => {
-    const headers: Record<string, string> = {
-        "Content-Type": "application/json",
-        ...options.headers, // Permite agregar otros encabezados si es necesario
-    };
+export const Api_Proseg = axios.create({
+  baseURL: API_URL_PROSEG,
+});
+export const Api_Log = axios.create({
+  baseURL: API_URL_LOG,
+});
+export const Api_Comp = axios.create({
+  baseURL: API_URL_COMP,
+});
+export const Api_Doc = axios.create({
+  baseURL: API_URL_DOC,
+});
+export const Api_Cont = axios.create({
+  baseURL: API_URL_CONT,
+});
+export const Api_Ing = axios.create({
+  baseURL: API_URL_ING,
+});
+export const ApiLogin = axios.create({
+  baseURL: API_URL_PROSEG,
+});
 
-    if (token) {
-        headers["Authorization"] = `Bearer ${token}`;
+// Agrega un interceptor para todas las solicitudes
+Api_Proseg.interceptors.request.use((config) => {
+
+
+    return config;
+});
+
+// Agrega un interceptor para todas las respuestas
+Api_Proseg.interceptors.response.use(
+  (response) => {
+    // Si la respuesta fue exitosa, simplemente la devolvemos
+    return response;
+  },
+  (error) => {
+    // Si hubo un error, lo verificamos
+    if (error.response && error.response.status === 401) {
+      // Aquí puedes manejar el error 401 como prefieras
+      // Por ejemplo, podrías redirigir al usuario a la página de inicio de sesión
+      console.log("Error 401: No autorizado");
+
+      // Maneja el cierre de sesión directamente aquí
+     
     }
 
-    if (email) {
-        headers["Auth-User"] = email;
+    // Si quieres seguir lanzando el error después de manejarlo, asegúrate de devolver un Promise rechazado
+    return Promise.reject(error);
+  }
+);
+/* Api_Log.interceptors.request.use((config) => {
+  const token = getAuthTokenFromCookies("token");
+  const email = getAuthTokenFromCookies("email");
+
+  if (token) {
+    config.headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  if (email) {
+    config.headers["Auth-User"] = email;
+  }
+
+  return config;
+});
+
+// Agrega un interceptor para todas las respuestas
+Api_Log.interceptors.response.use(
+  (response) => {
+    // Si la respuesta fue exitosa, simplemente la devolvemos
+    return response;
+  },
+  (error) => {
+    // Si hubo un error, lo verificamos
+    if (error.response && error.response.status === 401) {
+      // Aquí puedes manejar el error 401 como prefieras
+      // Por ejemplo, podrías redirigir al usuario a la página de inicio de sesión
+      console.log("Error 401: No autorizado");
+
+      // Maneja el cierre de sesión directamente aquí
+     
     }
 
-    const response = await fetch(`${API_URL}${endpoint}`, {
-        ...options,
-        headers: headers,
-    });
+    // Si quieres seguir lanzando el error después de manejarlo, asegúrate de devolver un Promise rechazado
+    return Promise.reject(error);
+  }
+);
+Api_Comp.interceptors.request.use((config) => {
+  const token = getAuthTokenFromCookies("token");
+  const email = getAuthTokenFromCookies("email");
 
-    if (!response.ok) {
-        throw new Error("Network response was not ok");
+  if (token) {
+    config.headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  if (email) {
+    config.headers["Auth-User"] = email;
+  }
+
+  return config;
+});
+
+// Agrega un interceptor para todas las respuestas
+Api_Comp.interceptors.response.use(
+  (response) => {
+    // Si la respuesta fue exitosa, simplemente la devolvemos
+    return response;
+  },
+  (error) => {
+    // Si hubo un error, lo verificamos
+    if (error.response && error.response.status === 401) {
+      // Aquí puedes manejar el error 401 como prefieras
+      // Por ejemplo, podrías redirigir al usuario a la página de inicio de sesión
+      console.log("Error 401: No autorizado");
+
+      // Maneja el cierre de sesión directamente aquí
+     
     }
 
-    return response.json(); // Retorna los datos en formato JSON
-};
+    // Si quieres seguir lanzando el error después de manejarlo, asegúrate de devolver un Promise rechazado
+    return Promise.reject(error);
+  }
+);
+Api_Doc.interceptors.request.use((config) => {
+  const token = getAuthTokenFromCookies("token");
+  const email = getAuthTokenFromCookies("email");
 
-export default fetchWithToken;
+  if (token) {
+    config.headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  if (email) {
+    config.headers["Auth-User"] = email;
+  }
+
+  return config;
+});
+
+// Agrega un interceptor para todas las respuestas
+Api_Doc.interceptors.response.use(
+  (response) => {
+    // Si la respuesta fue exitosa, simplemente la devolvemos
+    return response;
+  },
+  (error) => {
+    // Si hubo un error, lo verificamos
+    if (error.response && error.response.status === 401) {
+      // Aquí puedes manejar el error 401 como prefieras
+      // Por ejemplo, podrías redirigir al usuario a la página de inicio de sesión
+      console.log("Error 401: No autorizado");
+
+      // Maneja el cierre de sesión directamente aquí
+     
+    }
+
+    // Si quieres seguir lanzando el error después de manejarlo, asegúrate de devolver un Promise rechazado
+    return Promise.reject(error);
+  }
+);
+
+Api_Doc.interceptors.request.use((config) => {
+  const token = getAuthTokenFromCookies("token");
+  const email = getAuthTokenFromCookies("email");
+
+  if (token) {
+    config.headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  if (email) {
+    config.headers["Auth-User"] = email;
+  }
+
+  return config;
+});
+
+// Agrega un interceptor para todas las respuestas
+Api_Doc.interceptors.response.use(
+  (response) => {
+    // Si la respuesta fue exitosa, simplemente la devolvemos
+    return response;
+  },
+  (error) => {
+    // Si hubo un error, lo verificamos
+    if (error.response && error.response.status === 401) {
+      // Aquí puedes manejar el error 401 como prefieras
+      // Por ejemplo, podrías redirigir al usuario a la página de inicio de sesión
+      console.log("Error 401: No autorizado");
+
+      // Maneja el cierre de sesión directamente aquí
+     
+    }
+
+    // Si quieres seguir lanzando el error después de manejarlo, asegúrate de devolver un Promise rechazado
+    return Promise.reject(error);
+  }
+);
+
+Api_Ing.interceptors.request.use((config) => {
+  const token = getAuthTokenFromCookies("token");
+  const email = getAuthTokenFromCookies("email");
+
+  if (token) {
+    config.headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  if (email) {
+    config.headers["Auth-User"] = email;
+  }
+
+  return config;
+});
+
+// Agrega un interceptor para todas las respuestas
+Api_Ing.interceptors.response.use(
+  (response) => {
+    // Si la respuesta fue exitosa, simplemente la devolvemos
+    return response;
+  },
+  (error) => {
+    // Si hubo un error, lo verificamos
+    if (error.response && error.response.status === 401) {
+      // Aquí puedes manejar el error 401 como prefieras
+      // Por ejemplo, podrías redirigir al usuario a la página de inicio de sesión
+      console.log("Error 401: No autorizado");
+
+      // Maneja el cierre de sesión directamente aquí
+     
+    }
+
+    // Si quieres seguir lanzando el error después de manejarlo, asegúrate de devolver un Promise rechazado
+    return Promise.reject(error);
+  }
+
+); */

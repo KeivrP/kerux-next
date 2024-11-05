@@ -1,49 +1,17 @@
 
 'use client';
 import React, { useEffect, useMemo, useState } from "react";
-import { handleSignOut } from "@/app/actions/authActions";
-import { Button } from "./ui/button";
-import Image from "next/image";
-import { useSession } from "next-auth/react";
-import { getMenuUser } from "@/server/session/api";
-import SubMenu from "./ui/sidebar/sub-menu";
+import { useMenu } from "@/server/session/useSession";
 
 const Navbar = () => {
   const [menus, setMenus] = useState([]);
-  const { data: session, update } = useSession();
-
-  const token = useMemo(() => {
-    if (session) {
-      return session.user.token;
-    }
-  }, [session]);
-
-  const email = useMemo(() => {
-    if (session) {
-      return session.user.email;
-    }
-  }, [session]);
-
-  console.log("menus", menus);
-
+  const { data, isLoading } = useMenu();
+ 
   useEffect(() => {
-    const fetchMenus = async () => {
-      if (token && email) {
-        try {
-          const menus = await getMenuUser({ token, email });
-          setMenus(menus);
-        }
-        catch (e) {
-          console.error(e);
-        }
-
-        // Do something with menus
-      }
-    };
-
-    fetchMenus();
-  }, [token, email]);
-
+    if (data) {
+      setMenus(data);
+    }
+  } , [data]);
 
   const getMenuIcon = (codmenu) => {
     switch (codmenu) {

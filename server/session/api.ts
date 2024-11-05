@@ -1,12 +1,14 @@
+import { API_URL_PROSEG } from "@/constants/env.constant";
+import { Api_Proseg } from "../API";
+
 export interface UserLogin {
   email: string,
   password: string,
 }
 
-const VITE_APP_API_URL_PROSEG =  process.env.NEXT_PUBLIC_API_URL_PROSEG;
 
 export const getUserLogin = async (user: UserLogin) => {
-  const response = await fetch(`${VITE_APP_API_URL_PROSEG}/login`, {
+  const response = await fetch(`${API_URL_PROSEG}/login`, {
       method: "POST",
       headers: {
           "Content-Type": "application/json",
@@ -22,55 +24,53 @@ export const getUserLogin = async (user: UserLogin) => {
   return data;
 };
 
-export const getMenuUser = async ({token, email}) => {
-  console.log("sss",process.env.NEXT_PUBLIC_API_URL_PROSEG);
-  const headers: Record<string, string> = {
-      "Content-Type": "application/json",
-  };
 
-  if (token) {
-      headers["Authorization"] = `Bearer ${token}`;
-  }
+export const getMenuUser = async ({ token, email }) => {
+    try {
+        console.log('getMenuUser');
+        
+        const headers: Record<string, string> = {
+            "Content-Type": "application/json",
+        };
 
-  if (email) {
-      headers["Auth-User"] = email;
-  }
-console.log("headers", headers, token, email);
-  const response = await fetch(`${VITE_APP_API_URL_PROSEG}/menu_users`, {
-      method: "GET",
-      headers,
-  });
+        if (token) {
+            headers["Authorization"] = `Bearer ${token}`;
+        }
 
-  if (!response.ok) {
-      throw new Error("Network response was not ok");
-  }
+        if (email) {
+            headers["Auth-User"] = email;
+        }
 
-  const data = await response.json();
-  return data;
-}
+        const response = await Api_Proseg.get('/menu_users', { headers });
+        console.log(response, 'response');
+        if (response.status !== 200) {
+            throw new Error("Network response was not ok");
+        }
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching menu user:', error);
+        throw error;
+    }
+};
 
-export const getSubMenuUser = async ({token, email, codmenu}) => {
-  const headers: Record<string, string> = {
-      "Content-Type": "application/json",
-  };
+export const getSubMenuUser = async ({ token, email, codmenu }) => {
+    const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+    };
 
-  if (token) {
-      headers["Authorization"] = `Bearer ${token}`;
-  }
+    if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+    }
 
-  if (email) {
-      headers["Auth-User"] = email;
-  }
-console.log("headers", headers, token, email);
-  const response = await fetch(`${VITE_APP_API_URL_PROSEG}/menu_users/show?codmenu=${codmenu}`, {
-      method: "GET",
-      headers,
-  });
+    if (email) {
+        headers["Auth-User"] = email;
+    }
 
-  if (!response.ok) {
-      throw new Error("Network response was not ok");
-  }
+    const response = await Api_Proseg.get(`/menu_users/show?codmenu=${codmenu}`, { headers });
 
-  const data = await response.json();
-  return data;
-}
+    if (response.status !== 200) {
+        throw new Error("Network response was not ok");
+    }
+
+    return response.data;
+};

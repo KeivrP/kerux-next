@@ -1,8 +1,9 @@
 'use client';
 import { useQuery } from "@tanstack/react-query";
-import { getUserLogin, UserLogin } from "./api";
+import { getMenuUser, getUserLogin, UserLogin } from "./api";
 
 import { useMutation } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 
 export const useSignIn = () => {
 
@@ -18,10 +19,14 @@ export const useSignIn = () => {
 }
 
 
-export const useMenu = ({email, password}: UserLogin) => {
+export const useMenu = () => {
+    const {data: session} = useSession();
+    const token = session?.user.token;
+    const email = session?.user?.email;
+    console.log(token, email, 'token, email');
     return useQuery({
-      queryKey: ['Login', { email }],
-      queryFn: async () => await getUserLogin({email, password}),
-      staleTime: 1000 * 60 * 5,
+      queryKey: ['menu', session],
+      queryFn: async () => await getMenuUser({ token, email }),
     });
   };
+
