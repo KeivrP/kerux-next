@@ -1,8 +1,18 @@
 import { handleSignOut } from '@/app/actions/authActions';
-import { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import Image from 'next/image';
+import { useMemo, useState } from 'react';
 
 const MenuAvatar = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const { data: session, update } = useSession();
+
+    const user = useMemo(() => {
+        if (session) {
+            return session.user.name?.toString();
+        }
+    }, [session]);
+
 
     return (
         <div className="relative">
@@ -14,12 +24,14 @@ const MenuAvatar = () => {
                 onClick={() => setDropdownOpen(!dropdownOpen)}
             >
                 <span className="sr-only">Open user menu</span>
-                <img
+                <Image
                     className="w-8 h-8 me-2 rounded-full"
                     src="https://avatar.iran.liara.run/public/3"
                     alt="user photo"
+                    width={32}
+                    height={32}
                 />
-                Bonnie Green
+                {user}
                 <svg
                     className="w-2.5 h-2.5 ms-3"
                     aria-hidden="true"
@@ -39,9 +51,8 @@ const MenuAvatar = () => {
 
             <div
                 id="dropdownAvatarName"
-                className={`absolute ${
-                    dropdownOpen ? 'block' : 'hidden'
-                } top-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600`}
+                className={`absolute ${dropdownOpen ? 'block' : 'hidden'
+                    } top-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600`}
             >
                 <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
                     <div className="font-medium">Pro User</div>
@@ -77,14 +88,14 @@ const MenuAvatar = () => {
                     </li>
                 </ul>
                 <div className="py-2">
-                <form action={handleSignOut}>
-                    <button
-                        type="submit"
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                    >
-                        Sign out
-                    </button>
-                </form>
+                    <form action={handleSignOut}>
+                        <button
+                            type="submit"
+                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                        >
+                            Sign out
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

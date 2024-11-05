@@ -22,7 +22,7 @@ export default function Home() {
         </CardHeader>
         <CardContent>
           <CardTitle className="mb-2 text-2xl font-bold">
-            Welcome, {session?.user?.name}
+            Welcomess, {session?.user?.name}
           </CardTitle>
           <p className="text-muted-foreground">
             If you are learning something valuable from this video, please like

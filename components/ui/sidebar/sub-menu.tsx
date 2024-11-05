@@ -1,36 +1,33 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import Image from 'next/image';
-import { getSubMenuUser } from '@/server/session/api';
-import { useSession } from 'next-auth/react';
 import MenuAvatar from './menu-avatar';
+import { completdMenus, MenuItemUser } from './sidebar-utils';
+import { useMenu } from '@/server/session/useSession';
+import ModuleItem from './module';
+import Image from 'next/image';
 
 export interface SubMenuItem {
     label: string;
     path: string;
 }
 
-export interface MenuItemUser {
-    menu: string;
-    submenu: SubMenuItem[];
-}
 
-export interface SubMenuProps {
-    codmenu: string;
-
-}
-
-const SubMenu = ({ codmenu, }: SubMenuProps) => {
-
-    const [menus, setMenus] = useState<MenuItemUser[]>([]);
-    const { data: session, update } = useSession();
+const SubMenu = ({ isOpen }: { isOpen: boolean }) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [menus, setMenus] = useState<MenuItemUser[]>([]);
+    const { data, isLoading } = useMenu();
 
-    
+
+    useEffect(() => {
+        if (data) {
+            const menuFin = completdMenus(data);
+            setMenus(menuFin);
+        }
+    }, [data, isLoading]);
+
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            const navElement = document.querySelector('nav');
-            if (navElement && !navElement.contains(event.target as Node)) {
+            if (dropdownOpen && !document.getElementById('full-width-megamenu')?.contains(event.target as Node)) {
                 setDropdownOpen(false);
             }
         };
@@ -39,93 +36,63 @@ const SubMenu = ({ codmenu, }: SubMenuProps) => {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, []);
-
-    const token = useMemo(() => {
-        if (session) {
-            return session.user.token;
-        }
-    }, [session]);
-
-    const email = useMemo(() => {
-        if (session) {
-            return session.user.email;
-        }
-    }, [session]);
-
-
-    console.log("codmenu", codmenu, token, email);
-
-    useEffect(() => {
-        const fetchMenus = async () => {
-            if (token && email) {
-                try {
-                    const menus = await getSubMenuUser({ token, email, codmenu });
-                    setMenus(menus);
-                }
-                catch (e) {
-                    console.error(e);
-                }
-
-                // Do something with menus
-            }
-        };
-
-        fetchMenus();
-    }, [token, email, codmenu]);
-
-    console.log("menus", menus);
+    }, [dropdownOpen]);
 
     return (
-        <nav className="bg-white border-gray-200 dark:bg-gray-900 fixed w-full">
-            <div className="flex flex-wrap items-center justify-between max-w-screen-xl mx-auto p-4">
-                <a href="https://flowbite.com" className="flex items-center space-x-3 rtl:space-x-reverse">
-                    <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="Flowbite Logo" />
-                    <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
+        <nav style={{
+            marginLeft: isOpen ? '18.2rem' : '6.2rem',
+            minWidth: isOpen ? 'calc(100% - 18.2rem)' : 'calc(100% - 6.2rem)',
+            transition: 'margin-left 0.2s ease-in-out, min-width 0.2s ease-in-out',
+
+        }} className={`fixed top-0 left-0 flex border-gray-200  border-b py-3 bg-white border-b-default border-solid border-prime-gray-200`}>
+            <div className="w-full flex flex-row p-2 px-4 justify-between">
+
+
+                <div className="hidden lg:flex lg:pl-8 gap-4" id="megamenu-cta">
+                <a href="/" className="flex items-center " >
+                    <Image src="/KeruxLogoBlue.png" alt="Kerux Logo" width={200} height={200} />
                 </a>
-                <div className="flex items-center md:order-2 space-x-1 md:space-x-2 rtl:space-x-reverse">
-                    <MenuAvatar />
 
-                    <button data-collapse-toggle="mega-menu-icons" type="button" className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="mega-menu-icons" aria-expanded="false">
-                        <span className="sr-only">Open main menu</span>
-                        <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" />
-                        </svg>
-                    </button>
-                </div>
-                <div id="mega-menu-icons" className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1">
-                    <ul className="flex flex-col mt-4 font-medium md:flex-row md:mt-0 md:space-x-8 rtl:space-x-reverse">
+                    <ul className="flex lg:items-center gap-y-4 flex-col my-4 lg:my-0 lg:flex-row">
 
 
-                        {menus.map((menu, index) => (
-                            <>
 
-                                <button key={index} onClick={() => setDropdownOpen(!dropdownOpen)} id="mega-menu-icons-dropdown-button" className="flex items-center justify-between w-full py-2 px-3 font-medium text-gray-900 border-b border-gray-100 md:w-auto hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-600 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700">
-                                    {menu.menu}
-                                    <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
-                                    </svg>
-                                </button>
-                                <div id="mega-menu-icons-dropdown" className={`absolute grid ${dropdownOpen ? 'block' : 'hidden'} top-20 w-auto grid-cols-2 text-sm bg-white border border-gray-100 rounded-lg shadow-md dark:border-gray-700 md:grid-cols-5 dark:bg-gray-700`}>
-                                    <ul className="space-y-4" aria-labelledby="mega-menu-icons-dropdown-button">
-                                        {menu.submenu.map((submenu, index) => (
-                                            <li key={index}>
-                                                <a href={submenu.path} className="flex items-center text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 group">
-                                                    <span className="sr-only">{submenu.label}</span>
-                                                    <svg className="w-3 h-3 me-2 text-gray-400 dark:text-gray-500 group-hover:text-blue-600 dark:group-hover:text-blue-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                                                    </svg>
-                                                    {submenu.label}
-                                                </a>
-                                            </li>
-                                        ))}
-                                    </ul>
+                        <li className="">
+                            <button onClick={() => setDropdownOpen(!dropdownOpen)} data-target="full-width-megamenu" className="dropdown-toggle flex items-center justify-between text-gray-500 text-sm text-center lg:text-base font-medium hover:text-prime-blue-700 transition-all duration-500 mb-2 lg:mr-6 lg:mb-0 mr-auto lg:text-left  lg:m-0">Modulos <svg className="w-3 h-2 ml-1.5 " width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 1L3.58579 3.58579C4.25245 4.25245 4.58579 4.58579 5 4.58579C5.41421 4.58579 5.74755 4.25245 6.41421 3.58579L9 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                            </button>
+
+
+                            {dropdownOpen && (
+                                <div
+                                    id="full-width-megamenu"
+                                    aria-labelledby="full-width-megamenu"
+                                    className="dropdown-menu animate-fade w-auto z-10 sm:absolute top-full  bg-white rounded-lg shadow-[0px_15px_30px_0px_rgba(16,24,40,0.1)] lg:px-10 xl:px-8 md:px-5 p-4 max-w-screen-2xl xl:py-8 lg:py-4 md:py-2"
+                                >
+                                    {/* <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4"> */}
+                                    <div className="grid grid-cols-1 gap-3">
+                                        <ul className="text-sm text-gray-700" aria-labelledby="dropdownLargeButton">
+                                            <h6 className="font-medium text-sm text-gray-500 mb-2">Módulos Kerux</h6>
+                                            {menus.map((menu) => (
+
+                                                <ModuleItem key={menu.path} item={menu} />
+                                            )
+                                            )
+
+                                            }
+                                        </ul>
+                                        {/* Add more columns or content as needed */}
+                                    </div>
                                 </div>
-                            </>
-
-                        ))}
+                            )}
+                        </li>
 
                     </ul>
+                </div>
+
+                <div className=''>
+                    <MenuAvatar />
                 </div>
             </div>
         </nav>
