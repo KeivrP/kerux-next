@@ -27,7 +27,7 @@ const Dropdown = ({ title, submenu, open, setOpen }: IDropdown) => {
     return (
         <li>
             <a onClick={toggleDropdown} className="cursor-pointer">
-                <div className="flex-col flex p-3 bg-white rounded-lg h-fit">
+                <div className="flex-col flex p-3 bg-transparent rounded-lg h-fit">
                     <div className="h-5 gap-3 flex">
                         <div className={`ml-${open ? "0" : "1"} animate-scale duration-300`}>
                             <svg
@@ -48,7 +48,7 @@ const Dropdown = ({ title, submenu, open, setOpen }: IDropdown) => {
                             </svg>
                         </div>
                         {open && (
-                            <h2 className="text-gray-500 text-sm font-medium leading-snug">
+                            <h2 className="text-white text-sm font-medium leading-snug">
                                 {title}
                             </h2>
                         )}
@@ -62,10 +62,10 @@ const Dropdown = ({ title, submenu, open, setOpen }: IDropdown) => {
                         <a
                             key={item.label}
                             onClick={()=> router.push(item.path.toLocaleLowerCase())} // Assuming 'path' contains the link URL
-                            className="inline-flex items-center gap-x-2  py-3 px-4 text-sm font-semibold bg-white border-gray-300 text-gray-900 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg cursor-pointer hover:text-indigo-600"
+                            className="inline-flex items-center gap-x-2  py-3 px-4 text-sm font-semibold bg-transparent border-gray-300 text-gray-900 border-l -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg cursor-pointer hover:text-indigo-600"
                         >
-                            <div className="group flex justify-between w-full text-sm">
-                                {item.label}
+                            <div className="group flex justify-between w-full text-white text-sm ">
+                               * {item.label}
 
                             </div>
                         </a>

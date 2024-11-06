@@ -62,6 +62,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     jwt({ token, user }) {
       if (user) {
         token = { ...token, ...user };
+     
       }
       return token;
     },

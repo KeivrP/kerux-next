@@ -1,6 +1,7 @@
 "use server";
 
 import { signIn, signOut } from "@/auth";
+import { removeAuthTokenCookie } from "@/lib/cookies"; // Ensure this import is correct
 import { AuthError } from "next-auth";
 
 export async function handleCredentialsSignin({ email, password }: {
@@ -27,5 +28,7 @@ export async function handleCredentialsSignin({ email, password }: {
 }
 
 export async function handleSignOut() {
+    removeAuthTokenCookie("token");
+    removeAuthTokenCookie("email");
     await signOut();
 }

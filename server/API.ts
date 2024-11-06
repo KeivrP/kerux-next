@@ -1,4 +1,12 @@
-import { API_URL_COMP, API_URL_CONT, API_URL_DOC, API_URL_ING, API_URL_LOG, API_URL_PROSEG } from "@/constants/env.constant";
+import {
+  API_URL_COMP,
+  API_URL_CONT,
+  API_URL_DOC,
+  API_URL_ING,
+  API_URL_LOG,
+  API_URL_PROSEG,
+} from "@/constants/env.constant";
+import { getAuthTokenFromCookies, removeAuthTokenCookie } from "@/lib/cookies";
 import axios from "axios";
 
 export const Api_Proseg = axios.create({
@@ -23,11 +31,21 @@ export const ApiLogin = axios.create({
   baseURL: API_URL_PROSEG,
 });
 
-// Agrega un interceptor para todas las solicitudes
-Api_Proseg.interceptors.request.use((config) => {
+Api_Proseg.interceptors.request.use(async (config) => {
+  const token = await getAuthTokenFromCookies('email');
+  const email = await getAuthTokenFromCookies("token");
 
+  console.log(token, "token");
 
-    return config;
+  if (token) {
+    config.headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  if (email) {
+    config.headers["Auth-User"] = email;
+  }
+
+  return config;
 });
 
 // Agrega un interceptor para todas las respuestas
@@ -44,7 +62,9 @@ Api_Proseg.interceptors.response.use(
       console.log("Error 401: No autorizado");
 
       // Maneja el cierre de sesión directamente aquí
-     
+      removeAuthTokenCookie("token");
+      removeAuthTokenCookie("email");
+      removeAuthTokenCookie("authjs.session-token");
     }
 
     // Si quieres seguir lanzando el error después de manejarlo, asegúrate de devolver un Promise rechazado

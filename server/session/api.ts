@@ -1,14 +1,10 @@
 import { API_URL_PROSEG } from "@/constants/env.constant";
 import { Api_Proseg } from "../API";
+import { setAuthTokenInCookies } from "@/lib/cookies";
 
 export interface UserLogin {
   email: string;
   password: string;
-}
-
-export interface session {
-  token: string;
-  email: string;
 }
 
 export const getUserLogin = async (user: UserLogin) => {
@@ -25,26 +21,15 @@ export const getUserLogin = async (user: UserLogin) => {
   }
 
   const data = await response.json();
+  console.log(data, "data");
+  setAuthTokenInCookies("token", data.correo, { path: "/" });
+  setAuthTokenInCookies("email", data.token, { path: "/" });
   return data;
 };
 
-export const getMenuUser = async ({ token, email }: session) => {
+export const getMenuUser = async () => {
   try {
-    console.log("getMenuUser");
-
-    const headers: Record<string, string> = {
-      "Content-Type": "application/json",
-    };
-
-    if (token) {
-      headers["Authorization"] = `Bearer ${token}`;
-    }
-
-    if (email) {
-      headers["Auth-User"] = email;
-    }
-
-    const response = await Api_Proseg.get("/menu_users", { headers });
+    const response = await Api_Proseg.get("/menu_users");
     if (response.status !== 200) {
       throw new Error("Network response was not ok");
     }
@@ -54,25 +39,10 @@ export const getMenuUser = async ({ token, email }: session) => {
     throw error;
   }
 };
-export const getSubMenuUser = async ({ token, email, codmenu }) => {
+export const getSubMenuUser = async ({ codmenu }: { codmenu: string }) => {
   try {
-    const headers: Record<string, string> = {
-      "Content-Type": "application/json",
-    };
-
-    if (token) {
-      headers["Authorization"] = `Bearer ${token}`;
-    }
-
-    if (email) {
-      headers["Auth-User"] = email;
-    }
-
     const response = await Api_Proseg.get(
-      `/menu_users/show?codmenu=${codmenu}`,
-      {
-        headers,
-      }
+      `/menu_users/show?codmenu=${codmenu}`
     );
 
     if (response.status !== 200) {

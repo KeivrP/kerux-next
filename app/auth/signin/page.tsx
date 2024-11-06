@@ -105,11 +105,6 @@ export default function SignIn() {
                             />
                         </form>
                     </Form>
-
-                    <span className="text-sm text-gray-500 text-center block my-2">
-                        or
-                    </span>
-
                 </CardContent>
             </Card>
         </div>
