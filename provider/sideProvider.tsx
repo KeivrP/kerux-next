@@ -11,7 +11,7 @@ const SideContext = createContext<any>(null);
 export const SideProvider = ({ children }: SideProviderProps) => {
     return (
         <SideContext.Provider value={null}>
-            <Navbar >
+            <Navbar>
                 {children}
             </Navbar>
         </SideContext.Provider>

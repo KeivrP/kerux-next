@@ -10,7 +10,6 @@ export interface MenuItemUser {
 export type CodMenu = 'MENUCNT' | 'MENUCOM' | 'MENUDOC' | 'MENUING' | 'MENULOG';
 
 export const getLabel = (codmenu: CodMenu): string => {
-    console.log('getLabel codmenu:', codmenu); // Log para depuración
     switch (codmenu) {
         case 'MENUCNT':
             return 'Contratos';
@@ -28,7 +27,6 @@ export const getLabel = (codmenu: CodMenu): string => {
 };
 
 export const getPath = (codmenu: CodMenu): string => {
-    console.log('getPath codmenu:', codmenu); // Log para depuración
     switch (codmenu) {
         case 'MENUCNT':
             return '/menucnt';
@@ -1126,6 +1124,21 @@ export const getMenuIcon = (codmenu: CodMenu): JSX.Element => {
             );
         default:
             return <></>;
+    }
+};
+
+export const MenuIcon = ({ menu }: {menu: string}) => {
+    switch (menu) {
+        case "Tablas":
+            return <svg className="w-5 h-5" /* SVG para Tablas */ />;
+        case "Documentos":
+            return <svg className="w-5 h-5" /* SVG para Documentos */ />;
+        case "Consultas":
+            return <svg className="w-5 h-5" /* SVG para Consultas */ />;
+        case "Reportes":
+            return <svg className="w-5 h-5" /* SVG para Reportes */ />;
+        default:
+            return null;
     }
 };
 

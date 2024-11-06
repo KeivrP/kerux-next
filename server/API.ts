@@ -32,10 +32,8 @@ export const ApiLogin = axios.create({
 });
 
 Api_Proseg.interceptors.request.use(async (config) => {
-  const token = await getAuthTokenFromCookies('email');
+  const token = await getAuthTokenFromCookies("email");
   const email = await getAuthTokenFromCookies("token");
-
-  console.log(token, "token");
 
   if (token) {
     config.headers["Authorization"] = `Bearer ${token}`;
@@ -60,20 +58,19 @@ Api_Proseg.interceptors.response.use(
       // Aquí puedes manejar el error 401 como prefieras
       // Por ejemplo, podrías redirigir al usuario a la página de inicio de sesión
       console.log("Error 401: No autorizado");
-
-      // Maneja el cierre de sesión directamente aquí
       removeAuthTokenCookie("token");
       removeAuthTokenCookie("email");
       removeAuthTokenCookie("authjs.session-token");
+      // Maneja el cierre de sesión directamente aquí
     }
 
     // Si quieres seguir lanzando el error después de manejarlo, asegúrate de devolver un Promise rechazado
     return Promise.reject(error);
   }
 );
-/* Api_Log.interceptors.request.use((config) => {
-  const token = getAuthTokenFromCookies("token");
-  const email = getAuthTokenFromCookies("email");
+Api_Log.interceptors.request.use(async (config) => {
+   const token = await getAuthTokenFromCookies("email");
+  const email = await getAuthTokenFromCookies("token");
 
   if (token) {
     config.headers["Authorization"] = `Bearer ${token}`;
@@ -98,18 +95,19 @@ Api_Log.interceptors.response.use(
       // Aquí puedes manejar el error 401 como prefieras
       // Por ejemplo, podrías redirigir al usuario a la página de inicio de sesión
       console.log("Error 401: No autorizado");
-
+      removeAuthTokenCookie("token");
+      removeAuthTokenCookie("email");
+      removeAuthTokenCookie("authjs.session-token");
       // Maneja el cierre de sesión directamente aquí
-     
     }
 
     // Si quieres seguir lanzando el error después de manejarlo, asegúrate de devolver un Promise rechazado
     return Promise.reject(error);
   }
 );
-Api_Comp.interceptors.request.use((config) => {
-  const token = getAuthTokenFromCookies("token");
-  const email = getAuthTokenFromCookies("email");
+Api_Comp.interceptors.request.use(async (config) => {
+   const token = await getAuthTokenFromCookies("email");
+  const email = await getAuthTokenFromCookies("token");
 
   if (token) {
     config.headers["Authorization"] = `Bearer ${token}`;
@@ -134,18 +132,19 @@ Api_Comp.interceptors.response.use(
       // Aquí puedes manejar el error 401 como prefieras
       // Por ejemplo, podrías redirigir al usuario a la página de inicio de sesión
       console.log("Error 401: No autorizado");
-
+      removeAuthTokenCookie("token");
+      removeAuthTokenCookie("email");
+      removeAuthTokenCookie("authjs.session-token");
       // Maneja el cierre de sesión directamente aquí
-     
     }
 
     // Si quieres seguir lanzando el error después de manejarlo, asegúrate de devolver un Promise rechazado
     return Promise.reject(error);
   }
 );
-Api_Doc.interceptors.request.use((config) => {
-  const token = getAuthTokenFromCookies("token");
-  const email = getAuthTokenFromCookies("email");
+Api_Doc.interceptors.request.use(async (config) => {
+   const token = await getAuthTokenFromCookies("email");
+  const email = await getAuthTokenFromCookies("token");
 
   if (token) {
     config.headers["Authorization"] = `Bearer ${token}`;
@@ -170,9 +169,10 @@ Api_Doc.interceptors.response.use(
       // Aquí puedes manejar el error 401 como prefieras
       // Por ejemplo, podrías redirigir al usuario a la página de inicio de sesión
       console.log("Error 401: No autorizado");
-
+      removeAuthTokenCookie("token");
+      removeAuthTokenCookie("email");
+      removeAuthTokenCookie("authjs.session-token");
       // Maneja el cierre de sesión directamente aquí
-     
     }
 
     // Si quieres seguir lanzando el error después de manejarlo, asegúrate de devolver un Promise rechazado
@@ -180,9 +180,9 @@ Api_Doc.interceptors.response.use(
   }
 );
 
-Api_Doc.interceptors.request.use((config) => {
-  const token = getAuthTokenFromCookies("token");
-  const email = getAuthTokenFromCookies("email");
+Api_Doc.interceptors.request.use(async (config) => {
+   const token = await getAuthTokenFromCookies("email");
+  const email = await getAuthTokenFromCookies("token");
 
   if (token) {
     config.headers["Authorization"] = `Bearer ${token}`;
@@ -207,9 +207,10 @@ Api_Doc.interceptors.response.use(
       // Aquí puedes manejar el error 401 como prefieras
       // Por ejemplo, podrías redirigir al usuario a la página de inicio de sesión
       console.log("Error 401: No autorizado");
-
+      removeAuthTokenCookie("token");
+      removeAuthTokenCookie("email");
+      removeAuthTokenCookie("authjs.session-token");
       // Maneja el cierre de sesión directamente aquí
-     
     }
 
     // Si quieres seguir lanzando el error después de manejarlo, asegúrate de devolver un Promise rechazado
@@ -217,9 +218,9 @@ Api_Doc.interceptors.response.use(
   }
 );
 
-Api_Ing.interceptors.request.use((config) => {
-  const token = getAuthTokenFromCookies("token");
-  const email = getAuthTokenFromCookies("email");
+Api_Ing.interceptors.request.use(async (config) => {
+   const token = await getAuthTokenFromCookies("email");
+  const email = await getAuthTokenFromCookies("token");
 
   if (token) {
     config.headers["Authorization"] = `Bearer ${token}`;
@@ -244,13 +245,13 @@ Api_Ing.interceptors.response.use(
       // Aquí puedes manejar el error 401 como prefieras
       // Por ejemplo, podrías redirigir al usuario a la página de inicio de sesión
       console.log("Error 401: No autorizado");
-
+      removeAuthTokenCookie("token");
+      removeAuthTokenCookie("email");
+      removeAuthTokenCookie("authjs.session-token");
       // Maneja el cierre de sesión directamente aquí
-     
     }
 
     // Si quieres seguir lanzando el error después de manejarlo, asegúrate de devolver un Promise rechazado
     return Promise.reject(error);
   }
-
-); */
+);

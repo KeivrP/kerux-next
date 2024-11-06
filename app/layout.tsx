@@ -4,6 +4,7 @@ import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import QueryProvider from "@/provider/query-provider";
+import ThemeProvider from "@/utils/ThemeProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,14 +21,18 @@ export default function RootLayout({
 }>) {
   return (
     <QueryProvider pageProps={""}>
+
       <SessionProvider>
-        <html lang="es">
-          <body className={inter.className}>
-            {children}
-            <TailwindIndicator />
-          </body>
-        </html>
+        <ThemeProvider>
+          <html lang="es">
+            <body className={`min-h-screen ${inter.className}`}>
+              {children}
+              <TailwindIndicator />
+            </body>
+          </html>
+        </ThemeProvider>
       </SessionProvider>
+
     </QueryProvider>
   );
 }

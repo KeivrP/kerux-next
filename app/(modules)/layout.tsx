@@ -1,3 +1,4 @@
+import Container from "@/lib/container";
 import { SideProvider } from "@/provider/sideProvider";
 import { Metadata } from "next";
 import React from "react";
@@ -14,7 +15,10 @@ const Layout = ({
 }>) => {
   return (
     <SideProvider>
-      <div style={{ height: "10vh" }}>{children}</div>
+      <Container>
+
+        {children}
+      </Container>
     </SideProvider>
   );
 };

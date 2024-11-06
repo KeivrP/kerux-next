@@ -10,7 +10,7 @@ export default function Home() {
     { name: 'Módulo 4', icon: '⚙️' },
     { name: 'Módulo 5', icon: '📈' },
   ];  return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-center bg-gray-100">
     <h1 className="text-3xl font-bold mb-8">¡Bienvenido a la Aplicación!</h1>
     <h1 className="text-3xl font-bold mb-8">{session?.user.name}</h1>
     <div className="flex flex-wrap justify-center">

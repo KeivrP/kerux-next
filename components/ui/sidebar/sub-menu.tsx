@@ -46,7 +46,7 @@ const SubMenu = ({ isOpen }: { isOpen: boolean }) => {
         minWidth: isOpen ? "calc(100% - 18.2rem)" : "calc(100% - 6.2rem)",
         transition: "margin-left 0.2s ease-in-out, min-width 0.2s ease-in-out",
       }}
-      className={`fixed flex border-gray-200  border-b py-3 bg-white border-b-default border-solid border-prime-gray-200`}
+      className={`fixed flex border-gray-200  border-b py-3 bg-white border-b-default h-16 border-solid border-prime-gray-200`}
     >
       <div className="w-full flex flex-row p-2 px-4 justify-between">
         <div className="hidden lg:flex lg:pl-8 gap-4" id="megamenu-cta">
@@ -119,7 +119,7 @@ const SubMenu = ({ isOpen }: { isOpen: boolean }) => {
                 <div
                   id="full-width-megamenu"
                   aria-labelledby="full-width-megamenu"
-                  className="dropdown-menu animate-fade w-auto z-10 sm:absolute top-full  bg-white rounded-lg shadow-[0px_15px_30px_0px_rgba(16,24,40,0.1)] lg:px-10 xl:px-8 md:px-5 p-4 max-w-screen-2xl xl:py-8 lg:py-4 md:py-2"
+                  className="dropdown-menu animate-fade w-auto z-50 sm:absolute top-full  bg-white rounded-lg shadow-[0px_15px_30px_0px_rgba(16,24,40,0.1)] lg:px-10 xl:px-8 md:px-5 p-4 max-w-screen-2xl xl:py-8 lg:py-4 md:py-2"
                 >
                   {/* <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4"> */}
                   <div className="grid grid-cols-1 gap-3">
