@@ -21,9 +21,8 @@ export const getUserLogin = async (user: UserLogin) => {
   }
 
   const data = await response.json();
-  console.log(data, "data");
-  setAuthTokenInCookies("token", data.correo, { path: "/" });
-  setAuthTokenInCookies("email", data.token, { path: "/" });
+  setAuthTokenInCookies("token", data.correo, { path: "/", secure: true });
+  setAuthTokenInCookies("email", data.token, { path: "/", secure: true });
   return data;
 };
 
@@ -48,7 +47,6 @@ export const getSubMenuUser = async ({ codmenu }: { codmenu: string }) => {
     if (response.status !== 200) {
       throw new Error("Network response was not ok");
     }
-    console.log(response, "response");
 
     return response.data;
   } catch (error) {

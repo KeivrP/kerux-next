@@ -2,8 +2,9 @@
 
 import { useQueryClient } from '@tanstack/react-query';
 import { usePathname } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { MenuIcon } from './sidebar/sidebar-utils';
+import { useSubMenu } from '@/server/session/useSession';
 
 interface MenuItem {
     path: string;
@@ -22,35 +23,38 @@ interface FindMenuItemResult {
 
 const findMenuItem = (menuData: Menu[] | undefined, pathname: string): FindMenuItemResult | null => {
     if (!menuData) {
-        return null; // Retornar null si no hay datos
+        return null; // Return null if no data
     }
 
-    const pathToFind = pathname.toUpperCase(); // Convertir a mayúsculas para coincidir
+    const pathToFind = pathname.toUpperCase(); // Convert to uppercase for matching
 
     for (const menu of menuData) {
         for (const item of menu.submenu) {
             if (item.path === pathToFind) {
-                return { menu: menu.menu, label: item.label }; // Retornar el resultado encontrado
+                return { menu: menu.menu, label: item.label }; // Return found result
             }
         }
     }
-    return null; // Retornar null si no se encuentra el item
+    return null; // Return null if item not found
 };
 
 const Breadcrumbs: React.FC = () => {
     const pathname = usePathname();
     const pathnames = pathname.split('/').filter((x) => x);
-    const queryClient = useQueryClient();
+    const { data: menu, isLoading } = useSubMenu(pathnames[0].toLocaleUpperCase());
+
     const [data, setData] = useState<FindMenuItemResult | null>(null);
 
-    useEffect(() => {
-        // Acceder a la caché de la consulta
-        const cachedData = queryClient.getQueryData(["submenu", pathnames[0].toLocaleUpperCase()]);
-        const menuItem = findMenuItem(cachedData as Menu[], pathname);
-        setData(menuItem); // Actualizar el estado con los datos encontrados
-    }, [pathname, pathnames, queryClient]); // Dependencias: se ejecuta cuando pathname o queryClient cambian
+    // Memoize the menu item finding to avoid unnecessary recalculations
+    const menuItem = useMemo(() => findMenuItem(menu as Menu[], pathname), [menu, pathname]);
 
-    // Manejo de estado cuando no se encuentran datos
+    useEffect(() => {
+        if (!isLoading) {
+            setData(menuItem); // Update state only when not loading
+        }
+    }, [menuItem, isLoading]); // Only depend on menuItem and isLoading
+
+    // Handle state when no data is found
     if (!data) {
         return (
             <nav className="flex py-4" aria-label="Breadcrumb">
@@ -64,8 +68,8 @@ const Breadcrumbs: React.FC = () => {
             <ol className="inline-flex items-center space-x-1 md:space-x-3">
                 <li className="inline-flex items-center">
                     <div className="dropdown relative inline-flex">
-                        <button id="dropdown-default" type="button" className="dropdown-toggle inline-flex justify-center items-center gap-3 text-base font-medium text-gray-900 hover:text-[#142f62] bg-transparent whitespace-nowrap" disabled>
-                            <MenuIcon menu={data.menu} />
+                        <button id="dropdown-default" type="button" className="dropdown-toggle inline-flex justify-center items-center text-base font-medium text-gray-900 hover:text-[#142f62] bg-transparent whitespace-nowrap" disabled>
+                            <MenuIcon menu={data.menu} size='25' color='#142F62' />
                             {data.menu}
                         </button>
                     </div>

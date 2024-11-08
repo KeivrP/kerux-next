@@ -97,12 +97,7 @@ export const CollapsibleRow: React.FC<CollapsibleRowProps> = ({
                 </IconButton>
               )}
               <Typography
-                component="span"
-                style={{
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  fontSize: "0.75rem",
-                }}
+                className=" whitespace-nowrap text-xs leading-6 font-medium text-gray-900"
               >
                 {vRow.content}
               </Typography>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MenuItemUser } from './sidebar-utils';
+import { CodMenu, getColor, MenuItemUser } from './sidebar-utils';
 import { useRouter } from 'next/navigation'
 
 interface ModuleItemProps {
@@ -13,9 +13,9 @@ const ModuleItem: React.FC<ModuleItemProps> = ({ item, onClick }) => {
   return (
     <li>
       <button
-        className="px-3 py-5 transition-all w-full duration-500 hover:bg-gray-50 hover:rounded-xl flex items-center"
+        className="px-3 py-5 transition-all w-full duration-500 hover:rounded-xl flex items-center hover:bg-[#5680cf]"
         onClick={() => router.push(item.path.toLocaleLowerCase())}      >
-        <div className="bg-orange-50 rounded-lg w-12 h-12 flex items-center justify-center">
+        <div className={`rounded-lg w-12 h-12 flex items-center justify-center`} style={{ backgroundColor: getColor(item.menu as CodMenu) }}>
           {item.icon}
         </div>
         <div className="ml-4 w-4/5">

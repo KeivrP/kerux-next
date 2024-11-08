@@ -6,7 +6,6 @@ export const useSignIn = () => {
   return useMutation({
     mutationFn: ({ data }: { data: UserLogin }) => getUserLogin(data),
     onSuccess: (res) => {
-      console.log();
     },
     onError: (error) => {
       console.error("Error updating Compradores:", error);

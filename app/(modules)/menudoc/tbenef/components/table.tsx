@@ -12,6 +12,8 @@ import ActionCardHeader from "@/components/card/actionCardHeader";
 import FilterButton, { Filter } from "@/components/button/FilterButton";
 import { Button, Typography } from "@mui/material";
 import OrderButton, { Order } from "@/components/button/OrderButton";
+import { ConfirmDialog } from "@/components/modal/confirmDialog";
+import { useBackdrop } from "@/components/backdrop/backdrop";
 
 
 export const TbenefTable = () => {
@@ -24,18 +26,18 @@ export const TbenefTable = () => {
   ]);
   const [filter, setFilter] = useState<Filter[]>([]);
   const [count, setCount] = useState(0);
-/*   const { handleLoading } = useBackdrop();
- */
+  const { handleLoading } = useBackdrop();
+
   /* ------------------ USEEFFECT PARA TRAER LA DATA DE LA BD ----------------- */
 
 
-  const { mutate, isLoading: deleteLoading, isSuccess } = useDeleteBenef();
+  const { mutate, isSuccess } = useDeleteBenef();
 
-/*   useEffect(() => {
-    if (deleteLoading) {
+  useEffect(() => {
+    if (isSuccess) {
       handleLoading("", true);
     } else handleLoading("", false);
-  }, [deleteLoading, handleLoading]); */
+  }, [isSuccess, handleLoading]);
 
   const { data, isLoading } = useQueryData({
     entity: "beneficiarios",
@@ -147,17 +149,7 @@ export const TbenefTable = () => {
               },
             ],
 
-            collapsed: () => [
-              /*  { name: "Tipo de Documento de reserva", content: row.tipodocres },
-              {
-                name: "Tipo de Documento de reserva previa",
-                content: row.tipodocrespre,
-              },
-              {
-                name: "Tipo de Docuemnto de aumento de reserva",
-                content: row.tipodocaumres,
-              }, */
-            ],
+            collapsed: () => [],
           }}
         ></BaseTable>
         <BaseTablePagination
@@ -168,6 +160,13 @@ export const TbenefTable = () => {
           handleChangeRowsPerPage={handleChangeRowsPerPage}
         ></BaseTablePagination>
        </div>
+       <ConfirmDialog
+        mode={"delete"}
+        open={openDialog}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+        text={`¿Estas seguro que deseas eliminar el beneficiario ${rows.find((row) => row.numbenef == deleteRowId)?.numbenef}?`}
+      />
     </>
   );
 };

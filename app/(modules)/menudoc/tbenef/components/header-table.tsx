@@ -2,11 +2,11 @@
 'use client'
 import { IconButton, Tooltip, useTheme } from "@mui/material";
 import { HeadersName } from "@/components/table-material/genericTable";
-import { OpenInNewWindowIcon } from "@radix-ui/react-icons";
-import { DeleteIcon } from "lucide-react";
+
 import { Beneficiariolist } from "../tbenef-types";
 import { Filter } from "@/components/button/FilterButton";
 import { Order } from "@/components/button/OrderButton";
+import { DeleteIcon, OpenIcon } from "@/components/icons/table-icon";
 
 export const columnsFilter: Filter[] = [
   { id: "BENEFICIARIOS.numbenef", type: "number", column: "Numero del Benef", value: "" },
@@ -39,7 +39,7 @@ export const columnsHeaders: HeadersName[] = [
     align: "center",
     minWidth: 140,
   },
-  { label: "Acciones", icon: null, align: "center",  },
+  { label: "Acciones", icon: null, align: "center", },
 ];
 
 export const Acciones = ({
@@ -77,7 +77,7 @@ export const Acciones = ({
           color="primary"
           size="small"
         >
-          <OpenInNewWindowIcon style={{ fontSize: 20 }} />
+          <OpenIcon />
         </IconButton>
       </Tooltip>
 
@@ -90,9 +90,10 @@ export const Acciones = ({
           color="primary"
           size="small"
         >
-          <DeleteIcon style={{ fontSize: 20 }} />
+          <DeleteIcon />
         </IconButton>
       </Tooltip>
+
     </div>
   );
 };

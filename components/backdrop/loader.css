@@ -1,0 +1,59 @@
+ 
+  /*sss */
+  @keyframes loader_5191 {
+    from {
+      opacity: 0;
+    }
+  
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .square {
+  
+    background: #141B2C;
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+  }
+  
+  #sq1 {
+  
+    margin-top: -25px;
+    margin-left: -25px;
+    animation: loader_5191 675ms ease-in-out 0s infinite alternate;
+  }
+  
+  #sq2 {
+    width: 12px;
+    height: 12px;
+   top: calc(50vh - 3px);
+    left: calc(50vw - 3px);
+    
+  }
+  
+  #sq3 {
+  
+    margin-top: -25px;
+    margin-left: 15px;
+    animation: loader_5191 675ms ease-in-out 150ms infinite;
+  }
+  
+  #sq4 {
+  
+    margin-top: 15px;
+    margin-left: -25px;
+   animation: loader_5191 675ms ease-in-out 150ms infinite;
+  }
+  
+  #sq5 {
+  
+    margin-top: 15px;
+    margin-left: 15px;
+   animation: loader_5191 675ms ease-in-out 0s infinite alternate;
+  }
+  
+  

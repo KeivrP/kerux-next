@@ -24,7 +24,7 @@ const Navbar = ({ children }: { children: ReactNode }) => {
   return (
 
     <div className="h-screen flex flex-col">
-      <header className="flex h-16 bg-gray-200">
+      <header className="sticky h-16 bg-gray-200">
         <SubMenu isOpen={open} />
       </header>
       <aside className="fixed top-0 left-0 z-50 flex">
@@ -98,8 +98,6 @@ const Navbar = ({ children }: { children: ReactNode }) => {
                   <ul key={i} className="flex-col gap-1 flex">
                     <Dropdown
                       title={item.menu}
-                      path=""
-                      icon=""
                       submenu={item.submenu}
                       open={open}
                       setOpen={() => setOpen(!open)}
@@ -122,7 +120,7 @@ const Navbar = ({ children }: { children: ReactNode }) => {
           {children}
         </div>
       </div>
-      <footer className="flex h-10 bg-gray-200"></footer>
+      
 
     </div>
   );

@@ -23,9 +23,7 @@ export const StyledTableCell = withStyles((theme: Theme) => ({
     width: "auto",
     maxWidth: "26.5vw",
     maxHeight: "1vh",
-    borderBottom: `1px solid rgba(9, 10, 14, 0.50)`,
-    borderLeft: `1px solid rgba(9, 10, 14, 0.50)`,
-    borderRight: `1px solid rgba(9, 10, 14, 0.50)`,
+   
 
   },
 }))(TableCell) as React.ComponentType<StyledTableCellProps>;

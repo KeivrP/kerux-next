@@ -12,13 +12,13 @@ export type CodMenu = 'MENUCNT' | 'MENUCOM' | 'MENUDOC' | 'MENUING' | 'MENULOG';
 export const getLabel = (codmenu: CodMenu): string => {
     switch (codmenu) {
         case 'MENUCNT':
-            return 'Contratos';
+            return 'Contabilidad';
         case 'MENUCOM':
             return 'Adquisiciones';
         case 'MENUDOC':
             return 'Documentos';
         case 'MENUING':
-            return 'Financeiro';
+            return 'Ingresos';
         case 'MENULOG':
             return 'Control de suministro';
         default:
@@ -1127,16 +1127,18 @@ export const getMenuIcon = (codmenu: CodMenu): JSX.Element => {
     }
 };
 
-export const MenuIcon = ({ menu }: {menu: string}) => {
+export const MenuIcon = ({ menu, color = "currentColor", size = "1em" }: { menu: string, color?: string, size?: string }) => {
     switch (menu) {
         case "Tablas":
-            return <svg className="w-5 h-5" /* SVG para Tablas */ />;
-        case "Documentos":
-            return <svg className="w-5 h-5" /* SVG para Documentos */ />;
+            return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24"><path fill={color} d="M2 5.25A3.25 3.25 0 0 1 5.25 2h10a3.25 3.25 0 0 1 3.25 3.25V10a1 1 0 0 1-1 1H11v6.5a1 1 0 0 1-1 1H5.25A3.25 3.25 0 0 1 2 15.25zm15 0a1.75 1.75 0 0 0-1.75-1.75H11v6h6zM9.5 3.5H5.25A1.75 1.75 0 0 0 3.5 5.25V9.5h6zm-6 11.75c0 .966.784 1.75 1.75 1.75H9.5v-6h-6zm9-.5a2.25 2.25 0 0 1 2.25-2.25h5A2.25 2.25 0 0 1 22 14.75v5A2.25 2.25 0 0 1 19.75 22h-5a2.25 2.25 0 0 1-2.25-2.25z"/></svg>;
         case "Consultas":
-            return <svg className="w-5 h-5" /* SVG para Consultas */ />;
+            return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24"><path fill={color} d="M5.676 10.595h2.052v5.244a5.9 5.9 0 0 1-2.052-2.088zm18.179 10.836a.504.504 0 0 1 0 .708l-1.716 1.716a.504.504 0 0 1-.708 0l-4.248-4.248l-.007-.007c-.02-.02-.028-.045-.043-.066a10.74 10.74 0 0 1-6.334 2.065C4.835 21.599 0 16.764 0 10.799S4.835 0 10.8 0s10.799 4.835 10.799 10.8c0 2.369-.772 4.553-2.066 6.333c.025.017.052.028.074.05zm-5.028-10.632a8.015 8.015 0 1 0-8.028 8.028h.024a8.016 8.016 0 0 0 8.004-8.028m-4.86 4.98a6 6 0 0 0 2.04-2.184v-1.764h-2.04zm-4.5.948q.664.085 1.332.072q.6.037 1.2 0V7.692H9.468z" /></svg>;
+        case "Documentos":
+            return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 16 16"><path fill={color} fillRule="evenodd" d="M13.5 6v5.5h-8v-10H9v2.75C9 5.216 9.784 6 10.75 6zm-3-4.379L13.379 4.5H10.75a.25.25 0 0 1-.25-.25zM5 0a1 1 0 0 0-1 1v2H2.25C1.56 3 1 3.56 1 4.25v10.5c0 .69.56 1.25 1.25 1.25h8.25c.69 0 1.25-.56 1.25-1.25v-1.67l-.004-.08H14a1 1 0 0 0 1-1V4.414a1 1 0 0 0-.293-.707L11.293.293A1 1 0 0 0 10.586 0zM4 12V4.5H2.5v10h7.75v-1.42q0-.04.004-.08H5a1 1 0 0 1-1-1" clipRule="evenodd"/></svg>;
         case "Reportes":
-            return <svg className="w-5 h-5" /* SVG para Reportes */ />;
+            return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 32 32"><path fill={color} d="M8 2a3 3 0 0 0-3 3v10.837a3.5 3.5 0 0 1 1.5-.337H7V5a1 1 0 0 1 1-1h9v5a3 3 0 0 0 3 3h5v15a1 1 0 0 1-1 1h-5.587a3.25 3.25 0 0 1-1.43 2H24a3 3 0 0 0 3-3V10.828a3 3 0 0 0-.879-2.12l-5.828-5.83A3 3 0 0 0 18.172 2zm16.586 8H20a1 1 0 0 1-1-1V4.414zM6.5 17a2 2 0 0 0-2 2v1h-.25A2.25 2.25 0 0 0 2 22.25v5c0 .966.784 1.75 1.75 1.75h.75a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2h.75A1.75 1.75 0 0 0 17 27.25v-5A2.25 2.25 0 0 0 14.75 20h-.25v-1a2 2 0 0 0-2-2zM6 20v-1a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1zm0 6.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5V29a.5.5 0 0 1-.5.5h-6A.5.5 0 0 1 6 29z"/></svg>;
+        case "Actualización":
+            return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 48 48"><g fill="none" stroke={color} stroke-linecap="round" stroke-linejoin="round" stroke-width="4"><path d="M24 44c11.046 0 20-8.954 20-20S35.046 4 24 4S4 12.954 4 24s8.954 20 20 20"/><path d="M33.542 27c-1.274 4.057-5.064 7-9.542 7s-8.268-2.943-9.542-7v6m19.084-18v6c-1.274-4.057-5.064-7-9.542-7s-8.268 2.943-9.542 7"/></g></svg>;
         default:
             return null;
     }
@@ -1152,4 +1154,22 @@ export const completdMenus = (codmenu: { codmenu: string }[]) => {
             icon: getMenuIcon(menu.codmenu as CodMenu),
         };
     });
+};
+
+
+export const getColor = (label: CodMenu): string => {
+    switch (label) {
+        case "MENUCOM":
+            return "rgba(58, 17, 149, 0.5)";
+        case "MENULOG":
+            return "rgba(73, 158, 143, 0.5)";
+        case "MENUCNT":
+            return "rgba(131, 18, 18, 0.5)";
+        case "MENUING":
+            return "rgba(233, 152, 21, 0.5)";
+        case "MENUDOC":
+            return "rgba(33, 89, 35, 0.5)";
+        default:
+            return "rgba(0, 0, 0, 0.5)";
+    }
 };

@@ -170,7 +170,8 @@ const FilterButton = ({
             <X fontSize="small" />
           </IconButton>
         )}
-        <Filter color="primary" />
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#142F62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-filter"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" /></svg>
+
         <Typography variant="body1">Filtrar</Typography>
       </IconButton>
       {/* Menú que muestra los filtros */}
