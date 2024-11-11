@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import Skeleton from '@mui/material/Skeleton';
-import { SkeletonList } from "../."
+import { SkeletonList } from "./list";
 
 /*
 Parameters:

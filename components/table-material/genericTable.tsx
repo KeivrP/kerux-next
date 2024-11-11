@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/display-name */
 import React, { useState, useEffect } from "react";
-import { Table, Tooltip, Typography, useTheme } from "@mui/material";
+import { Table, Tooltip, Typography } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
@@ -12,7 +13,7 @@ import { withStyles, makeStyles } from "@mui/styles";
 import { coerce, ConditionalWrapper } from "@/utils/main";
 import { SkeletonTable } from "../skeleton/table";
 import { CollapsedRow, CollapsibleRow, VisibleRow } from "./collapsibleRow";
-
+import Checkbox from "../checkbox/checkbox";
 
 export interface HeadersName {
   label: string;
@@ -24,6 +25,7 @@ export interface HeadersName {
   font?: string;
   tooltip?: string;
   border?: boolean;
+  width?: number;
 }
 
 interface BaseTableProps {
@@ -41,11 +43,11 @@ interface BaseTableProps {
 }
 
 const useStyles = makeStyles(() => ({
-
   container: {
     maxHeight: "90%",
     height: "90%",
     width: "100%",
+    maxWidth: "90%",
   },
   actions: {
     // display:"flex",
@@ -53,13 +55,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const CustomTableHead = withStyles((theme) => ({
+const CustomTableHead = withStyles(() => ({
   root: {
-    backgroundColor: '#d9e2ff',
+    backgroundColor: "#d9e2ff",
     position: "sticky",
     top: 0,
     zIndex: 1,
-    border: 1
+    border: 1,
   },
 }))(TableHead);
 
@@ -73,7 +75,7 @@ export const BaseTable: React.FC<BaseTableProps> = React.memo(
     children,
     addCheckboxColumn = false, // Default value for addCheckboxColumn is true
   }) => {
-    const classes = useStyles();
+    useStyles();
     const { t } = useTranslation();
     const [headers, setHeaders] = useState<HeadersName[]>([]);
     const [selectedRows, setSelectedRows] = useState<number[]>([]);
@@ -84,105 +86,102 @@ export const BaseTable: React.FC<BaseTableProps> = React.memo(
       } else {
         setHeaders(parentHeaders || [{ label: "", icon: null }]); // Update the type to HeadersName[]
       }
-    }, [rows, parentHeaders]);
+    }, [parentHeaders]);
 
     useEffect(() => {
       if (onSelectionChange) {
         onSelectionChange(selectedRows);
       }
-    }, [selectedRows, onSelectionChange]);
+    }, [selectedRows]);
 
     return (
       <>
         <TableContainer
           elevation={0}
           component={Paper}
-          className="table-auto min-w-full rounded-xl border"
-          style={{ height: "80%" }} // Added height of 90%
+          className="table-auto min-w-6 rounded-xl border overflow-x-auto"
+          style={{ height: "80%", maxWidth: "100%" }} // Added height of 90% and maxWidth 100%
         >
-          <Table className="table-auto min-w-full rounded-xl">
+          <Table className="table-auto min-w-6 rounded-xl">
             <CustomTableHead>
               <TableRow>
-          {addCheckboxColumn && ( // Add this condition to check if checkbox column should be added
-            <TableCell align="center">
-              <div className="flex items-center py-5 px-5">
-                <input
-            type="checkbox"
-            className="w-5 h-5 appearance-none border border-gray-300 rounded-md mr-2 hover:border-indigo-500 hover:bg-indigo-100 checked:bg-no-repeat checked:bg-center checked:border-indigo-500 checked:bg-indigo-100"
-            checked={selectedRows.length === rows.length}
-            onChange={() =>
-              setSelectedRows(
-                selectedRows.length === rows.length
-                  ? []
-                  : rows.map((_, index) => index)
-              )
-            }
-                />
-              </div>
-            </TableCell>
-          )}
-          {headers.map((header, index) => (
-            <Tooltip title={header.tooltip} key={index}>
-              <TableCell
-                align={header.align}
-                style={{
-            minWidth: header.minWidth,
-            backgroundColor: header.color,
-            padding: header.padding,
-            border: header.border
-              ? `1px solid rgba(9, 10, 14, 0.50)`
-              : "",
-            zIndex: 1, // Asegúrate de que la celda se superponga a las demás
-                }}
-                className="p-4  whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"
-              >
-                <Typography
-            className="whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"
-                >
-            {header.icon ? (
-              <>
-                <div
-                  style={{
-              display: "inline-block",
-              verticalAlign: "middle",
-                  }}
-                >
-                  {header.icon}
-                </div>
-                <div style={{ display: "inline-block" }}>
-                  {t(header.label)}
-                </div>
-              </>
-            ) : (
-              t(header.label)
-            )}
-                </Typography>
-              </TableCell>
-            </Tooltip>
-          ))}
+                {addCheckboxColumn && ( // Add this condition to check if checkbox column should be added
+                  <TableCell align="center">
+                    <div className="flex items-center py-2 px-2">
+                      <Checkbox
+                        onChange={() =>
+                          setSelectedRows(
+                            selectedRows.length === rows.length
+                              ? []
+                              : rows.map((_, index) => index)
+                          )
+                        }
+                        checked={selectedRows.length === rows.length}
+                      />
+                    </div>
+                  </TableCell>
+                )}
+                {headers.map((header, index) => (
+                  <Tooltip title={header.tooltip} key={index}>
+                    <TableCell
+                      align={header.align}
+                      style={{
+                        width: header.width,
+                        minWidth: header.minWidth,
+                        backgroundColor: header.color,
+                        padding: header.padding,
+                        border: header.border
+                          ? `1px solid rgba(9, 10, 14, 0.50)`
+                          : "",
+                        zIndex: 1, // Asegúrate de que la celda se superponga a las demás
+                      }}
+                      className="p-4  whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize"
+                    >
+                      <Typography className="whitespace-nowrap text-sm leading-6 font-semibold text-gray-900 capitalize">
+                        {header.icon ? (
+                          <>
+                            <div
+                              style={{
+                                display: "inline-block",
+                                verticalAlign: "middle",
+                              }}
+                            >
+                              {header.icon}
+                            </div>
+                            <div style={{ display: "inline-block" }}>
+                              {t(header.label)}
+                            </div>
+                          </>
+                        ) : (
+                          t(header.label)
+                        )}
+                      </Typography>
+                    </TableCell>
+                  </Tooltip>
+                ))}
               </TableRow>
             </CustomTableHead>
             <TableBody>
               <ConditionalWrapper
-          condition={loading}
-          wrapper={() => (
-            <SkeletonTable
-              columns={coerce(
-                headers.length + (addCheckboxColumn ? 1 : 0),
-                1,
-                100
-              )}
-              rows={10}
-            />
-          )}
+                condition={loading}
+                wrapper={() => (
+                  <SkeletonTable
+                    columns={coerce(
+                      headers.length + (addCheckboxColumn ? 1 : 0),
+                      1,
+                      100
+                    )}
+                    rows={10}
+                  />
+                )}
               >
-          {rows.map((row, index) => (
-            <CollapsibleRow
-              key={index}
-              visible={collapsible?.visible(row) || []}
-              collapsed={collapsible?.collapsed(row) || []}
-            />
-          ))}
+                {rows.map((row, index) => (
+                  <CollapsibleRow
+                    key={index}
+                    visible={collapsible?.visible(row) || []}
+                    collapsed={collapsible?.collapsed(row) || []}
+                  />
+                ))}
               </ConditionalWrapper>
             </TableBody>
           </Table>

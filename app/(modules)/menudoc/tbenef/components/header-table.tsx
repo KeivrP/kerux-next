@@ -54,46 +54,47 @@ export const Acciones = ({
   const theme = useTheme();
 
   return (
-    <div
-      style={{
-        color: theme.palette.primary.main,
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        gap: "10px",
-        paddingLeft: "16px",
-        paddingRight: "16px",
-      }}
-    >
-      <Tooltip
-        sx={{
-          backgroundColor: theme.palette.background.default,
-          borderRadius: "50%",
+    <span>
+      <span
+        style={{
+          color: theme.palette.primary.main,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: "10px",
+          paddingLeft: "16px",
+          paddingRight: "16px",
         }}
-        title="Abrir"
       >
-        <IconButton
-          onClick={() => onEdit(row.numbenef)}
-          color="primary"
-          size="small"
+        <Tooltip
+          sx={{
+            backgroundColor: theme.palette.background.default,
+            borderRadius: "50%",
+          }}
+          title="Abrir"
         >
-          <OpenIcon />
-        </IconButton>
-      </Tooltip>
+          <IconButton
+            onClick={() => onEdit(row.numbenef)}
+            color="primary"
+            size="small"
+          >
+            <OpenIcon />
+          </IconButton>
+        </Tooltip>
 
-      <Tooltip
-        sx={{ backgroundColor: theme.palette.background.default }}
-        title="Eliminar"
-      >
-        <IconButton
-          onClick={() => onDelete(row.numbenef)}
-          color="primary"
-          size="small"
+        <Tooltip
+          sx={{ backgroundColor: theme.palette.background.default }}
+          title="Eliminar"
         >
-          <DeleteIcon />
-        </IconButton>
-      </Tooltip>
-
-    </div>
+          <IconButton
+            onClick={() => onDelete(row.numbenef)}
+            color="primary"
+            size="small"
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+      </span>
+    </span>
   );
 };

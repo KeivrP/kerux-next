@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useState } from "react";
 import {
   Collapse,
@@ -8,14 +8,11 @@ import {
   Tooltip,
   useTheme,
   Typography,
-  Grid,
 } from "@mui/material";
 import { ConditionalWrapperTable } from "@/utils/main";
-import { KeyboardIcon } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { StyledTableCell } from "./styledTableCell";
 import { makeStyles } from "@mui/styles";
-
-//import { AsteriskIcon } from "../../icons/adqIcons/AsteriskIcon";
 
 // Define los estilos para la fila colapsable
 const useRowStyles = makeStyles({
@@ -90,17 +87,23 @@ export const CollapsibleRow: React.FC<CollapsibleRowProps> = ({
               align={vRow.align || "center"}
               onClick={vRow.handleCollapse ? toggle : vRow.action || rowAction}
             >
-              {/* Icono para expandir o contraer la fila colapsable */}
-              {vRow.handleCollapse && (
-                <IconButton aria-label="expand row" size="small">
-                  {open ? <KeyboardIcon /> : <KeyboardIcon />}
-                </IconButton>
+              {vRow.handleCollapse ? (
+                <div className="flex items-center">
+                  {/* Icono para expandir o contraer la fila colapsable */}
+
+                  <IconButton aria-label="expand row" size="small">
+                    {open ? <ChevronUp /> : <ChevronDown />}
+                  </IconButton>
+
+                  <Typography className="whitespace-nowrap text-xs leading-6 font-medium text-gray-900 ml-2">
+                    {vRow.content}
+                  </Typography>
+                </div>
+              ) : (
+                <Typography className="whitespace-nowrap text-xs leading-6 font-medium text-gray-900 ml-2">
+                  {vRow.content}
+                </Typography>
               )}
-              <Typography
-                className=" whitespace-nowrap text-xs leading-6 font-medium text-gray-900"
-              >
-                {vRow.content}
-              </Typography>
             </StyledTableCell>
           </ConditionalWrapperTable>
         ))}
@@ -126,18 +129,27 @@ export const CollapsibleRow: React.FC<CollapsibleRowProps> = ({
                 ? collapsed.map((cRow) => {
                     return (
                       !!cRow.content && (
-                        <Grid container alignItems="center">
-                          <Grid item mt={2}>
-                            <Typography style={{fontSize: 12}} component="span">
+                        <div
+                          key={`cRow-${cRow.name}`}
+                          className="flex items-center mt-2"
+                        >
+                          <div>
+                            <Typography
+                              style={{ fontSize: 12 }}
+                              component="span"
+                            >
                               <b>{cRow.name}</b>:
                             </Typography>
-                          </Grid>
-                          <Grid item mt={2} ml={0.5}>
-                            <Typography style={{fontSize: 12}} component="span">
+                          </div>
+                          <div className="ml-1">
+                            <Typography
+                              style={{ fontSize: 12 }}
+                              component="span"
+                            >
                               {cRow.content}
                             </Typography>
-                          </Grid>
-                        </Grid>
+                          </div>
+                        </div>
                       )
                     );
                   })

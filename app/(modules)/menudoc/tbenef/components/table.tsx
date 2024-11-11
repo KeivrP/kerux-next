@@ -1,7 +1,5 @@
 'use client'
 import React, { useCallback, useEffect, useState } from "react";
-
-
 import { Beneficiariolist } from "../tbenef-types";
 import { useDeleteBenef } from "../hook/useBenef";
 import { useQueryData } from "@/server/fetch-data";
@@ -9,12 +7,10 @@ import { BaseTable } from "@/components/table-material/genericTable";
 import { BaseTablePagination } from "@/components/table-material/baseTablePagination";
 import { Acciones, columnsFilter, columnsHeaders, columnsOrder } from "./header-table";
 import ActionCardHeader from "@/components/card/actionCardHeader";
-import FilterButton, { Filter } from "@/components/button/FilterButton";
-import { Button, Typography } from "@mui/material";
-import OrderButton, { Order } from "@/components/button/OrderButton";
+import { Filter } from "@/components/button/FilterButton";
+import { Order } from "@/components/button/OrderButton";
 import { ConfirmDialog } from "@/components/modal/confirmDialog";
-import { useBackdrop } from "@/components/backdrop/backdrop";
-
+import SimpleBackdrop from "@/components/backdrop/backdrop";
 
 export const TbenefTable = () => {
 
@@ -22,22 +18,15 @@ export const TbenefTable = () => {
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [rows, setRows] = useState<Beneficiariolist[]>([]);
   const [order, setOrder] = useState<Order[]>([
-    { column: "N°", id: "numbenef", operator: "DESC" },
+    { column: "N°", id: "BENEFICIARIOS.numbenef", operator: "DESC" },
   ]);
   const [filter, setFilter] = useState<Filter[]>([]);
   const [count, setCount] = useState(0);
-  const { handleLoading } = useBackdrop();
 
   /* ------------------ USEEFFECT PARA TRAER LA DATA DE LA BD ----------------- */
 
 
-  const { mutate, isSuccess } = useDeleteBenef();
-
-  useEffect(() => {
-    if (isSuccess) {
-      handleLoading("", true);
-    } else handleLoading("", false);
-  }, [isSuccess, handleLoading]);
+  const { mutate, isPending, isSuccess } = useDeleteBenef();
 
   const { data, isLoading } = useQueryData({
     entity: "beneficiarios",
@@ -69,6 +58,7 @@ export const TbenefTable = () => {
     },
     []
   );
+
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [deleteRowId, setDeleteRowId] = useState<number>(0);
 
@@ -98,23 +88,16 @@ export const TbenefTable = () => {
 
   return (
     <>
-      <ActionCardHeader isAddButtonVisible={true}>
-        <FilterButton
-          columns={columnsFilter}
-          onApplyFilter={(a) => setFilter(a)}
-        />
-        <OrderButton columns={columnsOrder} onApplyOrder={(a) => setOrder(a)} />
-        <Button
-          onClick={() => console.log("Añadir")}
-          variant="contained"
-          color="primary"
-          disabled={false}
-          sx={{ textTransform: "none" }}
-        >
-          <Typography variant="h3">+ AÑADIR</Typography>
-        </Button>
-      </ActionCardHeader>
-      <br />
+      <ActionCardHeader 
+        add={() => {console.log('anadir')}} 
+        onApplyFilter={(filters) => setFilter(filters)}
+        columnsFilter={columnsFilter}
+        onApplyOrder={(orders) => setOrder(orders)}
+        columnsOrder={columnsOrder}
+        setFilter={setFilter}
+        setOrder={setOrder}
+      />
+
       <div
         style={{
           height: "71vh",
@@ -167,6 +150,7 @@ export const TbenefTable = () => {
         onCancel={handleCancelDelete}
         text={`¿Estas seguro que deseas eliminar el beneficiario ${rows.find((row) => row.numbenef == deleteRowId)?.numbenef}?`}
       />
+      <SimpleBackdrop show={isPending} />
     </>
   );
 };

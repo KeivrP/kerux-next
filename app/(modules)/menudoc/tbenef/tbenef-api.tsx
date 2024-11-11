@@ -1,5 +1,4 @@
 import { Api_Doc } from "@/server/API";
-import { useQuery } from "@tanstack/react-query";
 
 export const deleteBenef = async (id: number) => {
     try {
