@@ -4,12 +4,13 @@ import { capitalize } from "lodash";
 import { TextField, Typography } from "@mui/material";
 import { ConditionalWrapper, formatCurrency } from "@/utils/main";
 import { SkeletonInput } from "@/components/skeleton/detail";
+import { FormContextProps } from "../hcdocorg-utils";
 
-interface FieldMiddleProps {
+interface FieldMiddleProps extends FormContextProps {
   isLoading: boolean;
 }
 
-function FieldMiddle({ isLoading }: FieldMiddleProps) {
+function FieldMiddle({ isLoading, formData: data, }: FieldMiddleProps) {
 
   const Detalle = useMemo(() => {
     return data?.cabiddoc;

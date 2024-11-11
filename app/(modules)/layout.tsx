@@ -1,4 +1,5 @@
 import Container from "@/lib/container";
+import { FormProviderHcdocorg } from "@/provider/hcdocorg-provider";
 import { SideProvider } from "@/provider/sideProvider";
 import { Metadata } from "next";
 import React from "react";
@@ -14,12 +15,13 @@ const Layout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    
-    <SideProvider>
-      <Container>
 
-        {children}
-      </Container>
+    <SideProvider>
+      <FormProviderHcdocorg>
+        <Container>
+          {children}
+        </Container>
+      </FormProviderHcdocorg>
     </SideProvider>
   );
 };

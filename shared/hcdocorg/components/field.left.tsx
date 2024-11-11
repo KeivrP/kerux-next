@@ -1,143 +1,128 @@
-import { Grid, Box, TextField, Typography } from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
+import { DatePicker } from "@nextui-org/date-picker";
 import { useMemo } from "react";
-import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { ConditionalWrapper } from "@/utils/main";
 import { SkeletonInput } from "@/components/skeleton/detail";
+import { FormContextProps } from "../hcdocorg-utils";
+import { Input } from "@/components/ui/input";
+import Grid from '@mui/material/Grid2';
+import { BadgeRev } from "@/components/badge/badge-act";
 
-interface FieldLeftProps {
-  isLoading: boolean;
+
+interface FieldLeftProps extends FormContextProps {
+  isLoading?: boolean;
+
 }
 
-function FieldLeft({ isLoading }: FieldLeftProps) {
+// FieldLeft Component
+function FieldLeft({ formData, setFormData, initialData, isLoading = false }: FieldLeftProps) {
   const Detalle = useMemo(() => {
-    return data?.cabiddoc;
-  }, [data]);
+    return formData?.cabiddoc;
+  }, [formData]);
 
   return (
-    <div className="flex flex-wrap -mx-2">
-      <div className="w-full sm:w-1/4 px-2 mb-4">
+    <Grid container spacing={2}>
+      <Grid size={4}>
         <Typography variant="h3" sx={{ marginBottom: 1 }}>
           Id Doc.
         </Typography>
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-          <TextField
+          <Input
             value={Detalle.iddoc}
             id="outlined-size-small"
             defaultValue="Small"
-            size="small"
-            fullWidth
-            InputProps={{
-              readOnly: true,
-              style: {},
-            }}
+            readOnly
           />
         </ConditionalWrapper>
-      </div>
-      <div className="w-full sm:w-1/4 px-2 mb-4">
+      </Grid>
+      <Grid size={4}>
         <Typography variant="h3" sx={{ marginBottom: 1 }}>
           Tipo
         </Typography>
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-          <TextField
+          <Input
             value={Detalle.tipodoc}
             id="outlined-size-small"
             defaultValue="Small"
-            size="small"
-            fullWidth
-            InputProps={{
-              readOnly: true,
-              style: {},
-            }}
+            readOnly
           />
         </ConditionalWrapper>
-      </div>
-      <div className="w-full sm:w-1/2 px-2 mb-4">
+      </Grid>
+      <Grid size={4}>
         <Box paddingTop={3.5}>
           <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-            <TextField
+            <Input
               value={
                 Detalle.TipoDocumento ? Detalle.TipoDocumento.desctipodoc : ""
               }
               id="outlined-size-small"
               defaultValue="Small"
-              size="small"
-              fullWidth
-              InputProps={{
-                readOnly: true,
-                style: {},
-              }}
+              readOnly
             />
           </ConditionalWrapper>
         </Box>
-      </div>
-      <div className="w-full px-2 mb-4">
+      </Grid>
+
+      <Grid size={12}>
         <Typography variant="h3" sx={{ marginBottom: 1 }}>
           Descripción
         </Typography>
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-          <TextField
+          <Input
             value={Detalle.descdoc}
             id="outlined-size-small"
             defaultValue="Small"
-            size="small"
-            fullWidth
-            InputProps={{
-              readOnly: true,
-              style: {},
-            }}
+            readOnly
           />
         </ConditionalWrapper>
-      </div>
-      <div className="w-full px-2 mb-4">
+      </Grid>
+      <Grid size={12}>
         <Typography variant="h3" sx={{ marginBottom: 1 }}>
           Descripción Extendida
         </Typography>
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-          <TextField
+          <Input
             value={Detalle.descdocext ? Detalle.descdocext : ""}
-            fullWidth
-            maxRows={5}
-            multiline
-            InputProps={{
-              readOnly: true,
-            }}
+            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            readOnly
           />
         </ConditionalWrapper>
-      </div>
-      <div className="w-full sm:w-5/12 px-2 mb-4">
+      </Grid>
+      <Grid size={4}>
         <Typography variant="h3" sx={{ marginBottom: 1 }}>
           Fecha del Documento
         </Typography>
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
+
           <DatePicker
+            className="max-w-[284px]"
+            isDisabled
             defaultValue={Detalle.fecref ? dayjs(Detalle.fecref) : null}
-            readOnly
-            slotProps={{ textField: { size: "small" } }}
           />
         </ConditionalWrapper>
-      </div>
-      <div className="w-full sm:w-5/12 px-2 mb-4">
+      </Grid>
+      <Grid size={4}>
         <Typography variant="h3" sx={{ marginBottom: 1 }}>
           Fecha del Registro
         </Typography>
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
           <DatePicker
             defaultValue={Detalle.fecdoc ? dayjs(Detalle.fecdoc) : null}
-            readOnly
-            slotProps={{ textField: { size: "small" } }}
+            className="max-w-[284px]"
+            isDisabled
           />
         </ConditionalWrapper>
-      </div>
-      <div className="w-full sm:w-2/12 px-2 mb-4">
+      </Grid>
+      <Grid size={4}>
         <Typography variant="h3" sx={{ marginBottom: 2 }}>
           Reverso
         </Typography>
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-          {/* {ChipStatusRevDoc(Detalle.indreverso)} */}
+          <BadgeRev status={Detalle.indreverso} />
         </ConditionalWrapper>
-      </div>
-    </div>
+      </Grid>
+    </Grid>
   );
 }
 

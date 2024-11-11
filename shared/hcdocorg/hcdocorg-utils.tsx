@@ -69,7 +69,13 @@ export interface Detevento {
   descripcion: string;
 }
 
-export const initialState: IHcdorcorg = {
+export interface FormContextProps {
+  formData: IHcdorcorg
+  setFormData: React.Dispatch<React.SetStateAction<IHcdorcorg>>
+  initialData: IHcdorcorg
+}
+
+export const initialStateHcdorcorg: IHcdorcorg = {
   cabiddoc: {
     iddoc: 0,
     tipodoc: "",

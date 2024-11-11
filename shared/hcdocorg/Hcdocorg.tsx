@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useMemo, useState } from "react";
 
 import { Paper, Typography, useTheme } from "@mui/material";
@@ -16,6 +17,12 @@ import { formatDate } from "@/utils/main";
 import { useReject, useReprocess } from "./hooks/useHcdocorg";
 import BreadcumbsGlobal from "@/components/breadcrumbs/breadcrumbs-file";
 import ButtonForms from "@/components/button/buttonForms";
+import { useHcdocorgForm } from "./hcdocorg-form";
+import { IHcdorcorg } from "./hcdocorg-utils";
+import { useFormContextHcdocorg } from "@/provider/hcdocorg-provider";
+import { capitalize } from "lodash";
+import Grid from '@mui/material/Grid2';
+
 
 interface HcdocorgProps {
   open: boolean;
@@ -30,10 +37,13 @@ const Hcdocorg: React.FC<HcdocorgProps> = ({
   row,
   actionDisabled,
 }) => {
+
   const theme = useTheme();
 
-/*   const maxEvento = useMemo(() => file?.detmaxevento, [file]);
- */  const [loading, handleLoading] = useState<boolean>(false);
+  const [loading, handleLoading] = useState<boolean>(false);
+
+  const { formData, setFormData, initialData } = useFormContextHcdocorg();
+  const maxEvento = useMemo(() => formData?.detmaxevento, [formData]);
   const [historyRows, setHistoryRows] = useState<number[]>([]); // Establece el valor inicial de historyRows como [row]
   const [selectedRow, setSelectedRow] = useState(0);
   const [docuRow, setDocuRow] = useState<number>(0);
@@ -84,7 +94,7 @@ const Hcdocorg: React.FC<HcdocorgProps> = ({
 
   useEffect(() => {
     if (data) {
-      console.log(data);
+      setFormData(data);
     }
   }, [data]);
 
@@ -101,6 +111,7 @@ const Hcdocorg: React.FC<HcdocorgProps> = ({
     }
   }, [loadingRechzar, loadingReprocesar]);
 
+
   return (
     <ModalDialog
       dialogOpen={open}
@@ -114,110 +125,98 @@ const Hcdocorg: React.FC<HcdocorgProps> = ({
         },
       }}
     >
-      <>
-      
-      </>
-    
+      <div style={{ padding: '0 16px' }}>
+        <Grid container spacing={3} justifyContent='space-between'>
+          <Grid size={2}>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <RouteIcon />
+              <Typography variant="body2" style={{ marginLeft: '8px' }}>Ruta Id Doc.</Typography>
+              <BreadcumbsGlobal
+                numbers={historyRows}
+                onNumberClick={handleNumberClick}
+              />
+            </div>
+          </Grid>
+          <Grid size={2}>
+          </Grid>
+
+          {!actionDisabled && (
+            <><Grid size={2}>
+              <ButtonForms
+                onClick={() => {
+                  createReprocesar({ iddoc: row });
+                }}
+                sx={{ color: theme.palette.alert.main }}
+              >
+                <XIcon size={16} />
+                <Typography variant="caption">Rechazar</Typography>
+              </ButtonForms>
+
+              <ButtonForms
+                onClick={() => {
+                  createReprocesar({ iddoc: row });
+                }}
+                sx={{ color: theme.palette.success.main }}
+              >
+                <RectangleHorizontalIcon size={16} />
+                <Typography variant="caption">Reprocesar</Typography>
+              </ButtonForms>
+            </Grid></>
+          )}
+        </Grid>
+        <Grid container spacing={3}>
+          <Grid size={6}>
+            <FieldLeft formData={formData} setFormData={setFormData} initialData={initialData} isLoading={isLoading} />
+          </Grid>
+          <Grid size={6}>
+            <FieldRight
+              onIdCambio={rowHijo}
+              isLoading={isLoading}
+              actionDisabled={actionDisabled}
+              setFormData={setFormData} initialData={initialData} formData={formData}
+            />
+          </Grid>
+        </Grid>
+        <Grid container spacing={3}>
+          <Grid size={12}>
+            <TextDivider> Información Monetaria</TextDivider>
+            <FieldMiddle isLoading={isLoading} formData={formData} initialData={initialData} setFormData={setFormData} />
+          </Grid>
+          <Grid size={12}>
+            <TextDivider> Eventos </TextDivider>
+            <Typography
+              color={theme.palette.primary.dark}
+              style={{ textTransform: "capitalize", fontWeight: 600 }}
+            >
+              <div
+                style={{
+                  display: "inline-block",
+                  verticalAlign: "middle",
+                }}
+              >
+                <EraserIcon />
+              </div>
+              <div style={{ display: "inline-block", marginLeft: 5 }}>
+                El evento está  {maxEvento?.descstsevento} por{" "}
+                {capitalize(maxEvento?.CodSisDest?.descripcion)} - desde el{" "}
+                {maxEvento?.fecsts ? formatDate(maxEvento?.fecsts) : ""}
+              </div>
+            </Typography>
+            <Grid size={12}>
+              <Paper elevation={3} style={{ borderRadius: 10, marginTop: 2 }}>
+                <FieldTables setFormData={setFormData} initialData={initialData} formData={formData} isLoading={isLoading} />
+              </Paper>
+            </Grid>
+          </Grid>
+
+        </Grid>
+
+
+      </div>
+
+
     </ModalDialog>
   );
 };
 
 export default Hcdocorg;
-
-
-{/* <>
-<div className="flex flex-row justify-between items-center px-20 mb-12">
-  <div>
-    <div className="flex flex-row justify-start items-center space-x-8">
-      <div>
-        <RouteIcon />
-      </div>
-      <div>
-        <Typography variant="body2">Ruta Id Doc.</Typography>
-      </div>
-      <div>
-        <BreadcumbsGlobal
-          numbers={historyRows}
-          onNumberClick={handleNumberClick}
-        />
-      </div>
-    </div>
-  </div>
-  <div>
-    <div className="flex">
-      {!actionDisabled && (
-        <>
-          <div>
-            <ButtonForms
-              onClick={() => {
-                createReprocesar({ iddoc: [row] });
-              }}
-              sx={{ color: theme.palette.alert.main}}
-            >
-              <XIcon
-                size={16}
-              />
-              <Typography variant="caption">Rechazar</Typography>
-            </ButtonForms>
-          </div>
-          <div>
-            <ButtonForms
-              onClick={() => createRechazar({ iddoc: [row] })}
-              sx={{ color: theme.palette.primary.main}}
-            >
-              <RectangleHorizontalIcon
-               size={16}
-              />
-              <Typography variant="caption">Reprocesar</Typography>
-            </ButtonForms>
-          </div>
-        </>
-      )}
-    </div>
-  </div>
-</div>
-<div className="flex flex-row px-20 space-x-20">
-  <div className="w-1/2">
-    <FieldLeft isLoading={isLoading} />
-  </div>
-  <div className="w-1/2">
-    <FieldRight
-      onIdCambio={rowHijo}
-      isLoading={isLoading}
-      actionDisabled={actionDisabled}
-    />
-  </div>
-  <div className="w-full mt-[-16px]">
-    <TextDivider> Información Monetaria</TextDivider>
-  </div>
-  <div className="w-full mt-[-16px]">
-    <FieldMiddle isLoading={isLoading} />
-  </div>
-  <div className="w-full mt-[-16px]">
-    <TextDivider> Eventos </TextDivider>
-  </div>
-  <div className="w-full mt-[-16px]">
-    <Typography
-      color={theme.palette.primary.dark}
-      style={{ textTransform: "capitalize", fontWeight: 600 }}
-    >
-      <div
-        style={{
-          display: "inline-block",
-          verticalAlign: "middle",
-        }}
-      >
-        <EraserIcon />
-      </div>
-      <div style={{ display: "inline-block", marginLeft: 5 }}>
-        El evento está {/* {maxEvento?.descstsevento} por{" "}
-        {capitalize(maxEvento?.CodSisDest?.descripcion)} - desde el{" "}
-        {maxEvento?.fecsts ? formatDate(maxEvento?.fecsts) : ""}
-      </div>
-    </Typography>
-    <Paper elevation={3} style={{ borderRadius: 10, marginTop: 2 }}>
-      <FieldTables isLoading={isLoading} />
-    </Paper>
-  </div>
-</div>
-</> */}

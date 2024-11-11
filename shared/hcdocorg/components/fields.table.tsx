@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
-import { columnsHeadersHcdocorg, Detevento } from "../hcdocorg-utils";
-import { IconButton, Tooltip } from "@mui/material";
+import { columnsHeadersHcdocorg, Detevento, FormContextProps } from "../hcdocorg-utils";
+import { IconButton, Tooltip, useTheme } from "@mui/material";
 import { NetworkIcon } from "lucide-react";
 import { BaseTable } from "@/components/table-material/genericTable";
 import { formatDate } from "@/utils/main";
+import BadgeTipodoc from "@/components/badge/badge-estatus";
+import BadgeModule from "@/components/badge/badge-mod";
 
-interface FielTablesProps {
+interface FielTablesProps extends FormContextProps {
   isLoading: boolean;
 }
 
-function FieldTables({ isLoading }: FielTablesProps) {
+function FieldTables({ isLoading, formData: data, initialData, setFormData }: FielTablesProps) {
   const [rows, setRows] = useState<Detevento[]>([]);
   const theme = useTheme();
   useEffect(() => {
@@ -80,12 +82,12 @@ function FieldTables({ isLoading }: FielTablesProps) {
         collapsible={{
           visible: (row) => [
             { content: row.idevento, align: "center" },
-            { content: ChipStatusDoc(row.tipoevento), align: "center" },
+            { content: <BadgeTipodoc tipo={row.tipoevento} />, align: "center" },
             { content: formatDate(row.fecevento), align: "center" },
-            { content: destinyIconFunc(row.codsisgen), align: "center" },
-            { content: ChipStatusDoc(row.stsevento), align: "center" },
+            { content: <BadgeModule codmenu={row.codsisgen}/>, align: "center" },
+            { content: <BadgeTipodoc tipo = {row.stsevento}/>, align: "center" },
             { content: formatDate(row.fecsts), align: "center" },
-            { content: destinyIconFunc(row.codsisdest), align: "center" },
+            { content: <BadgeModule codmenu={row.codsisdest}/>, align: "center" },
             {
               content: acciones(),
               action: () => null,

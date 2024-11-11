@@ -7,11 +7,13 @@ import { ConditionalWrapper, formatDate } from "@/utils/main";
 import { Box, Chip, IconButton, TextField, Tooltip, Typography, useTheme } from "@mui/material";
 import { capitalize } from "lodash";
 import { useEffect, useMemo, useState } from "react";
+import { FormContextProps } from "../hcdocorg-utils";
+import BadgeModule from "@/components/badge/badge-mod";
 
 /* import { ChipStatusDoc } from "../../../../../../shared/components/dataDisplay/chipCustomDoc";
  */
 
-interface FieldRightProps {
+interface FieldRightProps extends FormContextProps{
   onIdCambio: (nuevoId: number) => void; // Una función que recibe un nuevo ID como argumento y lo pasa al componente padre
   isLoading: boolean;
   actionDisabled: boolean;
@@ -21,6 +23,9 @@ function FieldRight({
   onIdCambio,
   isLoading,
   actionDisabled,
+  formData: data,
+  setFormData,
+  initialData,
 }: FieldRightProps) {
   const theme = useTheme();
   const [selectedId, setSelectedId] = useState<number>(0);
@@ -52,7 +57,7 @@ function FieldRight({
         <Typography variant="h3" className="mb-1">
       Origen
         </Typography>
-        {destinyIconFunc(Detalle.origen)}
+        <BadgeModule codmenu={Detalle.origen} />
       </div>
       <div className="col-span-5.5">
         <Box className="pt-3.5">
