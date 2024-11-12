@@ -55,7 +55,8 @@ export const Acciones = ({
   const theme = useTheme();
 
   return (
-    <div
+    <span>
+            <span
       style={{
         color: theme.palette.primary.main,
         display: "flex",
@@ -94,6 +95,7 @@ export const Acciones = ({
           <DeleteIcon />
         </IconButton>
       </Tooltip>
-    </div>
+    </span>
+    </span>
   );
 };

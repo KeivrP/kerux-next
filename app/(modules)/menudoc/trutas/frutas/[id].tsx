@@ -1,22 +1,17 @@
 import { TextField } from "@mui/material";
 
 import { useEffect, useState } from "react";
-import { PasoRutas } from "../../trutas-types";
 import { useQueryData } from "@/server/fetch-data";
-import ModalDialog from "@/components/modal/modalDialog";
 import TextDivider from "@/components/ui/textDivider";
 import { FrutasTable } from "./components/table";
+import { PasoRutas } from "../trutas-types";
 
 interface FrutasViewProps {
-  open: boolean;
-  handleClose: () => void;
-  row: string;
+
 }
 
 export const FrutasView: React.FC<FrutasViewProps> = ({
-  open,
-  handleClose,
-  row,
+
 }) => {
   const [rows, setRows] = useState<PasoRutas[]>([]);
   const [ruta, setRuta] = useState<{ codruta: string; descruta: string }>({
@@ -27,8 +22,8 @@ export const FrutasView: React.FC<FrutasViewProps> = ({
   const { data, isLoading, refetch } = useQueryData({
     entity: "pasos_rutas",
     api: "doc",
-    type: row,
-    dependency: [row],
+    type: '0',
+    dependency: [0],
   });
 
   useEffect(() => {
@@ -37,13 +32,7 @@ export const FrutasView: React.FC<FrutasViewProps> = ({
   }, [data]);
 
   return (
-    <ModalDialog
-      dialogOpen={open}
-      handleClose={handleClose}
-      title="Ficha de las rutas"
-      disableCancelButton={true} // Pass the prop to disable the cancel button
-      width="md"
-    >
+
     <div className="p-6 flex flex-col gap-4">
       <div>
         <TextDivider>Codigo de la Ruta</TextDivider>
@@ -67,6 +56,5 @@ export const FrutasView: React.FC<FrutasViewProps> = ({
         />
       </div>
     </div>
-    </ModalDialog>
   );
 };

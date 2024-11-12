@@ -18,7 +18,6 @@ import {
 } from "./header-table";
 import { ConfirmDialog } from "@/components/modal/confirmDialog";
 import EditTrutas from "./edit";
-import { FrutasView } from "./(frutas)/frutas";
 
 export const TrutasTable = () => {
   const [page, setPage] = useState(0);
@@ -37,6 +36,7 @@ export const TrutasTable = () => {
   const [rowSelected, setRowSelected] = useState<Rutalist | null>(null);
   const [ruta, setRuta] = useState<string | null>(null);
   const [deleteRowId, setDeleteRowId] = useState<string>("");
+
 
   /* ------------------ USEEFFECT PARA TRAER LA DATA DE LA BD ----------------- */
 
@@ -116,7 +116,8 @@ export const TrutasTable = () => {
   const handleOpen = (codruta: string) => {
     if (codruta) {
       setOpenModal(true);
-      setRuta(codruta);
+      //router.push(`/menudoc/trutas/frutas/${codruta}`);
+
     }
   };
 
@@ -190,13 +191,6 @@ export const TrutasTable = () => {
         onClose={() => setDrawerOpen(false)}
         refetch={refetch}
       />
-      {ruta && (
-        <FrutasView
-          open={openModal}
-          handleClose={() => setOpenModal(false)}
-          row={ruta}
-        />
-      )}
 
       <SimpleBackdrop show={isPendingData} />
     </>

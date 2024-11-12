@@ -9,15 +9,15 @@ export function BadgeAct({ status }: BadgeActProps) {
   switch (status) {
     case "S":
       return (
-        <div className="flex justify-center items-center">
+        <span className="flex justify-center items-center">
           <CircleCheck className="text-emerald-500" />
-        </div>
+        </span>
       );
     case "N":
       return (
-        <div className="flex justify-center items-center">
+        <span className="flex justify-center items-center">
           <CircleMinus className="text-red-500" />
-        </div>
+        </span>
       );
     default:
       return null;

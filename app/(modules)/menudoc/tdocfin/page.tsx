@@ -4,7 +4,7 @@ import Breadcrumbs from "@/components/breadcrumbs/breadcumbs";
 import Loader from "@/components/backdrop/loader";
 import { TdocfinTable } from "./components/table";
 
-const TbenefPage = () => {
+const Page = () => {
   return (
     <Suspense fallback={<Loader/>}>
       <Container maxWidth="xl">
@@ -15,4 +15,4 @@ const TbenefPage = () => {
   );
 };
 
-export default TbenefPage;
+export default Page;
