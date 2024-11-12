@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import * as _ from "lodash";
 
 
@@ -106,7 +106,6 @@ export function calculateDays(fecha: string) {
       }
     });
   }
-
 
   
       

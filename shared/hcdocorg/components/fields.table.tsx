@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { columnsHeadersHcdocorg, Detevento, FormContextProps } from "../hcdocorg-utils";
+import {
+  columnsHeadersHcdocorg,
+  Detevento,
+  FormContextProps,
+} from "../hcdocorg-utils";
 import { IconButton, Tooltip, useTheme } from "@mui/material";
 import { NetworkIcon } from "lucide-react";
 import { BaseTable } from "@/components/table-material/genericTable";
@@ -11,7 +15,12 @@ interface FielTablesProps extends FormContextProps {
   isLoading: boolean;
 }
 
-function FieldTables({ isLoading, formData: data, initialData, setFormData }: FielTablesProps) {
+function FieldTables({
+  isLoading,
+  formData: data,
+  initialData,
+  setFormData,
+}: FielTablesProps) {
   const [rows, setRows] = useState<Detevento[]>([]);
   const theme = useTheme();
   useEffect(() => {
@@ -20,11 +29,10 @@ function FieldTables({ isLoading, formData: data, initialData, setFormData }: Fi
     }
   }, [data]);
 
-  const acciones = () => {
+  /*   const acciones = () => {
     return (
       <div
         style={{
-          /*color: theme.palette.primary.main*/
           display: "flex",
           justifyContent: "space-around",
           alignItems: "center",
@@ -61,7 +69,7 @@ function FieldTables({ isLoading, formData: data, initialData, setFormData }: Fi
 
             onClick={() => {
               {
-              } // Actualiza el estado con el ID de la fila seleccionada
+              } 
             }}
             color="primary"
             size="small"
@@ -71,7 +79,7 @@ function FieldTables({ isLoading, formData: data, initialData, setFormData }: Fi
         </Tooltip>
       </div>
     );
-  };
+  }; */
 
   return (
     <>
@@ -82,17 +90,26 @@ function FieldTables({ isLoading, formData: data, initialData, setFormData }: Fi
         collapsible={{
           visible: (row) => [
             { content: row.idevento, align: "center" },
-            { content: <BadgeTipodoc tipo={row.tipoevento} />, align: "center" },
-            { content: formatDate(row.fecevento), align: "center" },
-            { content: <BadgeModule codmenu={row.codsisgen}/>, align: "center" },
-            { content: <BadgeTipodoc tipo = {row.stsevento}/>, align: "center" },
-            { content: formatDate(row.fecsts), align: "center" },
-            { content: <BadgeModule codmenu={row.codsisdest}/>, align: "center" },
             {
+              content: <BadgeTipodoc tipo={row.tipoevento} />,
+              align: "center",
+            },
+            { content: formatDate(row.fecevento), align: "center" },
+            {
+              content: <BadgeModule codmenu={row.codsisgen} />,
+              align: "center",
+            },
+            { content: <BadgeTipodoc tipo={row.stsevento} />, align: "center" },
+            { content: formatDate(row.fecsts), align: "center" },
+            {
+              content: <BadgeModule codmenu={row.codsisdest} />,
+              align: "center",
+            },
+            /*  {
               content: acciones(),
               action: () => null,
               disableTooltip: true,
-            },
+            }, */
           ],
 
           collapsed: () => [],

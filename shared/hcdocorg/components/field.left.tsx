@@ -1,29 +1,27 @@
-import { Box, TextField, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { DatePicker } from "@nextui-org/date-picker";
 import { useMemo } from "react";
-import dayjs from "dayjs";
 import { ConditionalWrapper } from "@/utils/main";
 import { SkeletonInput } from "@/components/skeleton/detail";
 import { FormContextProps } from "../hcdocorg-utils";
 import { Input } from "@/components/ui/input";
-import Grid from '@mui/material/Grid2';
-import { BadgeRev } from "@/components/badge/badge-act";
-
+import Grid from "@mui/material/Grid2";
+import { BadgeAct } from "@/components/badge/badge-act";
+import { parseDate } from "@internationalized/date";
 
 interface FieldLeftProps extends FormContextProps {
   isLoading?: boolean;
-
 }
 
 // FieldLeft Component
-function FieldLeft({ formData, setFormData, initialData, isLoading = false }: FieldLeftProps) {
+function FieldLeft({ formData, isLoading = false }: FieldLeftProps) {
   const Detalle = useMemo(() => {
     return formData?.cabiddoc;
   }, [formData]);
 
   return (
     <Grid container spacing={2}>
-      <Grid size={4}>
+      <Grid size={3}>
         <Typography variant="h3" sx={{ marginBottom: 1 }}>
           Id Doc.
         </Typography>
@@ -36,7 +34,7 @@ function FieldLeft({ formData, setFormData, initialData, isLoading = false }: Fi
           />
         </ConditionalWrapper>
       </Grid>
-      <Grid size={4}>
+      <Grid size={3}>
         <Typography variant="h3" sx={{ marginBottom: 1 }}>
           Tipo
         </Typography>
@@ -49,7 +47,7 @@ function FieldLeft({ formData, setFormData, initialData, isLoading = false }: Fi
           />
         </ConditionalWrapper>
       </Grid>
-      <Grid size={4}>
+      <Grid size={6}>
         <Box paddingTop={3.5}>
           <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
             <Input
@@ -94,11 +92,10 @@ function FieldLeft({ formData, setFormData, initialData, isLoading = false }: Fi
           Fecha del Documento
         </Typography>
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-
           <DatePicker
             className="max-w-[284px]"
             isDisabled
-            defaultValue={Detalle.fecref ? dayjs(Detalle.fecref) : null}
+            defaultValue={Detalle.fecref ? parseDate(Detalle.fecref) : null}
           />
         </ConditionalWrapper>
       </Grid>
@@ -108,7 +105,7 @@ function FieldLeft({ formData, setFormData, initialData, isLoading = false }: Fi
         </Typography>
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
           <DatePicker
-            defaultValue={Detalle.fecdoc ? dayjs(Detalle.fecdoc) : null}
+            defaultValue={Detalle.fecdoc ? parseDate(Detalle.fecdoc) : null}
             className="max-w-[284px]"
             isDisabled
           />
@@ -119,7 +116,13 @@ function FieldLeft({ formData, setFormData, initialData, isLoading = false }: Fi
           Reverso
         </Typography>
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-          <BadgeRev status={Detalle.indreverso} />
+          <BadgeAct
+            status={
+              Detalle.indreverso === "S" || Detalle.indreverso === "N"
+                ? Detalle.indreverso
+                : "N"
+            }
+          />
         </ConditionalWrapper>
       </Grid>
     </Grid>

@@ -12,17 +12,19 @@ import FieldMiddle from "./components/field.middle";
 import { useQueryData } from "@/server/fetch-data";
 import ModalDialog from "@/components/modal/modalDialog";
 import TextDivider from "@/components/ui/textDivider";
-import { EraserIcon, RectangleHorizontalIcon, RouteIcon, XIcon } from "lucide-react";
+import {
+  EraserIcon,
+  RectangleHorizontalIcon,
+  RouteIcon,
+  XIcon,
+} from "lucide-react";
 import { formatDate } from "@/utils/main";
 import { useReject, useReprocess } from "./hooks/useHcdocorg";
 import BreadcumbsGlobal from "@/components/breadcrumbs/breadcrumbs-file";
 import ButtonForms from "@/components/button/buttonForms";
-import { useHcdocorgForm } from "./hcdocorg-form";
-import { IHcdorcorg } from "./hcdocorg-utils";
 import { useFormContextHcdocorg } from "@/provider/hcdocorg-provider";
 import { capitalize } from "lodash";
-import Grid from '@mui/material/Grid2';
-
+import Grid from "@mui/material/Grid2";
 
 interface HcdocorgProps {
   open: boolean;
@@ -37,7 +39,6 @@ const Hcdocorg: React.FC<HcdocorgProps> = ({
   row,
   actionDisabled,
 }) => {
-
   const theme = useTheme();
 
   const [loading, handleLoading] = useState<boolean>(false);
@@ -111,7 +112,6 @@ const Hcdocorg: React.FC<HcdocorgProps> = ({
     }
   }, [loadingRechzar, loadingReprocesar]);
 
-
   return (
     <ModalDialog
       dialogOpen={open}
@@ -125,62 +125,77 @@ const Hcdocorg: React.FC<HcdocorgProps> = ({
         },
       }}
     >
-      <div style={{ padding: '0 16px' }}>
-        <Grid container spacing={3} justifyContent='space-between'>
+      <div style={{ padding: "26px"  }}>
+        <Grid container spacing={3} justifyContent="space-between">
           <Grid size={2}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div style={{ display: "flex", alignItems: "center" }}>
               <RouteIcon />
-              <Typography variant="body2" style={{ marginLeft: '8px' }}>Ruta Id Doc.</Typography>
+              <Typography variant="body2" style={{ marginLeft: "8px" }}>
+                Ruta Id Doc.
+              </Typography>
               <BreadcumbsGlobal
                 numbers={historyRows}
                 onNumberClick={handleNumberClick}
               />
             </div>
           </Grid>
-          <Grid size={2}>
-          </Grid>
+          <Grid size={2}></Grid>
 
           {!actionDisabled && (
-            <><Grid size={2}>
-              <ButtonForms
-                onClick={() => {
-                  createReprocesar({ iddoc: row });
-                }}
-                sx={{ color: theme.palette.alert.main }}
-              >
-                <XIcon size={16} />
-                <Typography variant="caption">Rechazar</Typography>
-              </ButtonForms>
+            <>
+              <Grid size={2}>
+                <ButtonForms
+                  onClick={() => {
+                    createReprocesar({ iddoc: row });
+                  }}
+                  sx={{ color: theme.palette.alert.main }}
+                >
+                  <XIcon size={16} />
+                  <Typography variant="h2">Rechazar</Typography>
+                </ButtonForms>
 
-              <ButtonForms
-                onClick={() => {
-                  createReprocesar({ iddoc: row });
-                }}
-                sx={{ color: theme.palette.success.main }}
-              >
-                <RectangleHorizontalIcon size={16} />
-                <Typography variant="caption">Reprocesar</Typography>
-              </ButtonForms>
-            </Grid></>
+                <ButtonForms
+                  onClick={() => {
+                    createReprocesar({ iddoc: row });
+                  }}
+                  sx={{ color: theme.palette.success.main }}
+                >
+                  <RectangleHorizontalIcon size={16} />
+                  <Typography variant="h2">Reprocesar</Typography>
+                </ButtonForms>
+              </Grid>
+            </>
           )}
         </Grid>
         <Grid container spacing={3}>
           <Grid size={6}>
-            <FieldLeft formData={formData} setFormData={setFormData} initialData={initialData} isLoading={isLoading} />
+            <FieldLeft
+              formData={formData}
+              setFormData={setFormData}
+              initialData={initialData}
+              isLoading={isLoading}
+            />
           </Grid>
           <Grid size={6}>
             <FieldRight
               onIdCambio={rowHijo}
               isLoading={isLoading}
               actionDisabled={actionDisabled}
-              setFormData={setFormData} initialData={initialData} formData={formData}
+              setFormData={setFormData}
+              initialData={initialData}
+              formData={formData}
             />
           </Grid>
         </Grid>
         <Grid container spacing={3}>
           <Grid size={12}>
             <TextDivider> Información Monetaria</TextDivider>
-            <FieldMiddle isLoading={isLoading} formData={formData} initialData={initialData} setFormData={setFormData} />
+            <FieldMiddle
+              isLoading={isLoading}
+              formData={formData}
+              initialData={initialData}
+              setFormData={setFormData}
+            />
           </Grid>
           <Grid size={12}>
             <TextDivider> Eventos </TextDivider>
@@ -197,24 +212,24 @@ const Hcdocorg: React.FC<HcdocorgProps> = ({
                 <EraserIcon />
               </div>
               <div style={{ display: "inline-block", marginLeft: 5 }}>
-                El evento está  {maxEvento?.descstsevento} por{" "}
+                El evento está {maxEvento?.descstsevento} por{" "}
                 {capitalize(maxEvento?.CodSisDest?.descripcion)} - desde el{" "}
                 {maxEvento?.fecsts ? formatDate(maxEvento?.fecsts) : ""}
               </div>
             </Typography>
             <Grid size={12}>
               <Paper elevation={3} style={{ borderRadius: 10, marginTop: 2 }}>
-                <FieldTables setFormData={setFormData} initialData={initialData} formData={formData} isLoading={isLoading} />
+                <FieldTables
+                  setFormData={setFormData}
+                  initialData={initialData}
+                  formData={formData}
+                  isLoading={isLoading}
+                />
               </Paper>
             </Grid>
           </Grid>
-
         </Grid>
-
-
       </div>
-
-
     </ModalDialog>
   );
 };

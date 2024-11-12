@@ -39,14 +39,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   menu: {
     width: "35.5625rem", // Cambia esto al tamaño que prefieras
     borderRadius: "10px", // Ajusta el radio del borde según lo necesites
-    margin: '2px', // Ajusta el margen según lo necesites
+    margin: "2px", // Ajusta el margen según lo necesites
   },
   title: {
-    backgroundColor: '#e7edf3', // Cambia esto al color que prefieras
+    backgroundColor: "#e7edf3", // Cambia esto al color que prefieras
     padding: 5,
     fontWeight: 400,
     fontSize: "1rem",
-    color: '#575E71', // Añade un poco de espacio alrededor del título
+    color: "#575E71", // Añade un poco de espacio alrededor del título
   },
 }));
 
@@ -170,7 +170,20 @@ const FilterButton = ({
             <X fontSize="small" />
           </IconButton>
         )}
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#142F62" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-filter"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" /></svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#142F62"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-filter"
+        >
+          <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+        </svg>
 
         <Typography variant="body1">Filtrar</Typography>
       </IconButton>
@@ -469,10 +482,7 @@ const FilterButton = ({
           >
             <Grid item>
               {filters.length !== columns.length && (
-                <ButtonForms
-                  color={theme.palette.secondary.main}
-                  onClick={handleAddFilter}
-                >
+                <ButtonForms color="secondary" onClick={handleAddFilter}>
                   <CirclePlus />
                   Añadir otro campo
                 </ButtonForms>
@@ -492,10 +502,7 @@ const FilterButton = ({
           >
             <Grid item>
               {filters.length > 0 && (
-                <ButtonForms
-                  color={theme.palette.secondary.main}
-                  onClick={handleRemoveAllFilter}
-                >
+                <ButtonForms color="secondary" onClick={handleRemoveAllFilter}>
                   <Trash fontSize="small" /> Quitar todos
                 </ButtonForms>
               )}

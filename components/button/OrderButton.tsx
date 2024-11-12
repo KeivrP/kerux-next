@@ -204,7 +204,7 @@ const OrderButton = ({
           <MenuItem>
             <Grid item>
               <ButtonForms
-                color={theme.palette.secondary.main}
+                color="secondary"
                 onClick={handleAddOrder}
               >
                 <CirclePlus />
@@ -224,7 +224,7 @@ const OrderButton = ({
             <Grid item>
               {orders.length > 0 && (
                 <ButtonForms
-                  color={theme.palette.secondary.main}
+                  color="secondary"
                   onClick={handleRemoveAllOrders}
                 >
                   <X fontSize="small" /> Quitar todos

@@ -1,19 +1,31 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 
 import { OpenIcon } from "@/components/icons/table-icon";
 import { SkeletonInput } from "@/components/skeleton/detail";
 import { BaseTable } from "@/components/table-material/genericTable";
 import TextDivider from "@/components/ui/textDivider";
 import { ConditionalWrapper, formatDate } from "@/utils/main";
-import { Box, Chip, IconButton, TextField, Tooltip, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Chip,
+  IconButton,
+  TextField,
+  Tooltip,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { capitalize } from "lodash";
 import { useEffect, useMemo, useState } from "react";
 import { FormContextProps } from "../hcdocorg-utils";
 import BadgeModule from "@/components/badge/badge-mod";
+import Grid from "@mui/material/Grid2";
+import BadgeTipodoc from "@/components/badge/badge-estatus";
+import { Input } from "@/components/ui/input";
 
 /* import { ChipStatusDoc } from "../../../../../../shared/components/dataDisplay/chipCustomDoc";
  */
 
-interface FieldRightProps extends FormContextProps{
+interface FieldRightProps extends FormContextProps {
   onIdCambio: (nuevoId: number) => void; // Una función que recibe un nuevo ID como argumento y lo pasa al componente padre
   isLoading: boolean;
   actionDisabled: boolean;
@@ -52,192 +64,170 @@ function FieldRight({
   }, [Detalle]);
 
   return (
-    <div className="grid grid-cols-12 gap-2">
-      <div className="col-span-1">
-        <Typography variant="h3" className="mb-1">
-      Origen
-        </Typography>
+    <Grid container spacing={2}>
+      <Grid size={1} mt={2}>
         <BadgeModule codmenu={Detalle.origen} />
-      </div>
-      <div className="col-span-5.5">
-        <Box className="pt-3.5">
-      <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-        <TextField
-          value={
-        Detalle.SistemaOrigen
-          ? capitalize(Detalle.SistemaOrigen.descripcion)
-          : ""
-          }
-          id="outlined-size-small"
-          defaultValue="Small"
-          size="small"
-          fullWidth
-          InputProps={{
-        readOnly: true,
-        style: {
-          // estilos
-        },
-          }}
-        />
-      </ConditionalWrapper>
-        </Box>
-      </div>
-      <div className="col-span-5.5">
+      </Grid>
+      <Grid size={5.5}>
+        <Typography variant="h3">Origen</Typography>{" "}
+        <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
+          <Input
+            value={
+              Detalle.SistemaOrigen
+                ? capitalize(Detalle.SistemaOrigen.descripcion)
+                : ""
+            }
+            id="outlined-size-small"
+            defaultValue="Small"
+            readOnly
+          />
+        </ConditionalWrapper>
+      </Grid>
+      <Grid size={5.5}>
         <Typography variant="h3" className="mb-1">
-      Referencia
+          Referencia
         </Typography>
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-      <TextField
-        value={Detalle.refdoc}
-        id="outlined-size-small"
-        defaultValue="Small"
-        size="small"
-        fullWidth
-        InputProps={{
-          readOnly: true,
-          style: {
-        // estilos
-          },
-        }}
-      />
+          <Input
+            value={Detalle.refdoc}
+            id="outlined-size-small"
+            defaultValue="Small"
+            readOnly
+          />
         </ConditionalWrapper>
-      </div>
-      <div className="col-span-12">
+      </Grid>
+      <Grid size={12}>
         <Typography variant="h3" className="mb-1">
-      Estatus{"     "}
-{/*       {ChipStatusDoc(Detalle.stsdoc)}
- */}        </Typography>
+          Estatus
+          <BadgeTipodoc tipo={Detalle.stsdoc} />
+        </Typography>
         {Detalle.mensaje && !actionDisabled && (
-      <Box
-        className="bg-pending-light rounded-md p-2"
-      >
-        <Typography>
-          <b>Mensaje:</b> {Detalle.mensaje}
-        </Typography>
-      </Box>
-        )}
-      </div>
-      <div className="col-span-12">
-        <TextDivider>Documentos Relacionados</TextDivider>
-      </div>
-      {RowReferencia > 0 && (
-        <div className="col-span-12">
-      <Typography variant="h3" className="mb-1">
-        Referencia{" "}
-        <Chip
-          label={RowReferencia}
-          className="bg-primary-main text-transparency-main px-1 mx-1"
-        />
-        <Tooltip
-          className="bg-background-default rounded-full"
-          title="Abrir"
-        >
-          <IconButton
-        onClick={() => {
-          setSelectedId(RowReferencia ? RowReferencia : 0); // Actualiza el estado con el ID de la fila seleccionada
-        }}
-        color="primary"
-        size="small"
-          >
-        <OpenIcon />
-          </IconButton>
-        </Tooltip>
-      </Typography>
-        </div>
-      )}
-      <div className="col-span-12">
-        <Typography variant="h3" className="mb-1">
-      Dependientes
-        </Typography>
-        <div
-      style={{
-        height: RowDependientes.length === 0 ? "0rem" : "9.5rem",
-        width: "100%",
-      }}
-        >
-      <BaseTable
-        loading={isLoading}
-        rows={RowDependientes}
-        headers={[
-          {
-        label: "Id.Doc",
-        align: "center",
-        color: theme.palette.transparency.main,
-        padding: "0.25rem",
-          },
-          {
-        label: "Tipo",
-        align: "center",
-        color: theme.palette.transparency.main,
-        padding: "0.25rem",
-          },
-          {
-        label: "Reverso",
-        align: "center",
-        color: theme.palette.transparency.main,
-        padding: "0.25rem",
-          },
-          {
-        label: "Fecha",
-        align: "center",
-        color: theme.palette.transparency.main,
-        padding: "0.25rem",
-          },
-          {
-        label: "Abrir",
-        align: "center",
-        color: theme.palette.transparency.main,
-        padding: "0.25rem",
-          },
-        ]}
-        collapsible={{
-          visible: (row) => [
-        { content: row.iddoc, align: "center" },
-        { content: row.tipodoc, align: "center" },
-        {
-          content: row.indreverso,
-          align: "center",
-        },
-        {
-          content: formatDate(row.fecdoc),
-          align: "center",
-        },
-        {
-          content: (
-            <Tooltip
-          className="bg-background-default rounded-full"
-          title="Abrir"
-            >
-          <IconButton
-            onClick={() => {
-              setSelectedId(row.iddoc); // Actualiza el estado con el ID de la fila seleccionada
-            }}
-            color="primary"
-            size="small"
-          >
-            <OpenIcon />
-          </IconButton>
-            </Tooltip>
-          ),
-          align: "center",
-        },
-          ],
-          collapsed: () => [],
-        }}
-      >
-        {RowDependientes.length === 0 && (
-          <Box
-        className="bg-grey-300 rounded-md p-2 flex justify-center"
-          >
-        <Typography variant="caption" align="center">
-          ESTE DOCUMENTO NO CUENTA CON DEPENDENCIAS
-        </Typography>
+          <Box className="bg-amber-300 rounded-md p-2">
+            <Typography>
+              <b>Mensaje:</b> {Detalle.mensaje}
+            </Typography>
           </Box>
         )}
-      </BaseTable>
-        </div>
-      </div>
-    </div>
+      </Grid>
+      <Grid size={12}>
+        <TextDivider>Documentos Relacionados</TextDivider>
+      </Grid>
+      {RowReferencia > 0 && (
+        <Grid size={12}>
+          <Typography variant="h3" className="mb-1">
+            Referencia{" "}
+            <Chip
+              label={RowReferencia}
+              className="bg-primary-main text-transparency-main px-1 mx-1"
+            />
+            <Tooltip
+              className="bg-background-default rounded-full"
+              title="Abrir"
+            >
+              <IconButton
+                onClick={() => {
+                  setSelectedId(RowReferencia ? RowReferencia : 0); // Actualiza el estado con el ID de la fila seleccionada
+                }}
+                color="primary"
+                size="small"
+              >
+                <OpenIcon />
+              </IconButton>
+            </Tooltip>
+          </Typography>
+        </Grid>
+      )}
+      <Grid size={12}>
+        <Typography variant="h3" className="mb-1">
+          Dependientes
+        </Typography>
+        <Grid
+          style={{
+            height: RowDependientes.length === 0 ? "0rem" : "9.5rem",
+            width: "100%",
+          }}
+        >
+          <BaseTable
+            loading={isLoading}
+            rows={RowDependientes}
+            headers={[
+              {
+                label: "Id.Doc",
+                align: "center",
+                color: theme.palette.transparency.main,
+                padding: "0.25rem",
+              },
+              {
+                label: "Tipo",
+                align: "center",
+                color: theme.palette.transparency.main,
+                padding: "0.25rem",
+              },
+              {
+                label: "Reverso",
+                align: "center",
+                color: theme.palette.transparency.main,
+                padding: "0.25rem",
+              },
+              {
+                label: "Fecha",
+                align: "center",
+                color: theme.palette.transparency.main,
+                padding: "0.25rem",
+              },
+              {
+                label: "Abrir",
+                align: "center",
+                color: theme.palette.transparency.main,
+                padding: "0.25rem",
+              },
+            ]}
+            collapsible={{
+              visible: (row) => [
+                { content: row.iddoc, align: "center" },
+                { content: row.tipodoc, align: "center" },
+                {
+                  content: row.indreverso,
+                  align: "center",
+                },
+                {
+                  content: formatDate(row.fecdoc),
+                  align: "center",
+                },
+                {
+                  content: (
+                    <Tooltip
+                      className="bg-background-default rounded-full"
+                      title="Abrir"
+                    >
+                      <IconButton
+                        onClick={() => {
+                          setSelectedId(row.iddoc); // Actualiza el estado con el ID de la fila seleccionada
+                        }}
+                        color="primary"
+                        size="small"
+                      >
+                        <OpenIcon />
+                      </IconButton>
+                    </Tooltip>
+                  ),
+                  align: "center",
+                },
+              ],
+              collapsed: () => [],
+            }}
+          >
+            {RowDependientes.length === 0 && (
+              <Box className="bg-gray-500rounded-md p-2 flex justify-center">
+                <Typography variant="caption" align="center">
+                  ESTE DOCUMENTO NO CUENTA CON DEPENDENCIAS
+                </Typography>
+              </Box>
+            )}
+          </BaseTable>
+        </Grid>
+      </Grid>
+    </Grid>
   );
 }
 
