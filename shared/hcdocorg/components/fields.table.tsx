@@ -5,7 +5,7 @@ import {
   FormContextProps,
 } from "../hcdocorg-utils";
 import { IconButton, Tooltip, useTheme } from "@mui/material";
-import { NetworkIcon } from "lucide-react";
+import { CircleSlash, RefreshCcw } from "lucide-react";
 import { BaseTable } from "@/components/table-material/genericTable";
 import { formatDate } from "@/utils/main";
 import BadgeTipodoc from "@/components/badge/badge-estatus";
@@ -18,8 +18,6 @@ interface FielTablesProps extends FormContextProps {
 function FieldTables({
   isLoading,
   formData: data,
-  initialData,
-  setFormData,
 }: FielTablesProps) {
   const [rows, setRows] = useState<Detevento[]>([]);
   const theme = useTheme();
@@ -29,7 +27,7 @@ function FieldTables({
     }
   }, [data]);
 
-  /*   const acciones = () => {
+  const acciones = () => {
     return (
       <div
         style={{
@@ -46,7 +44,7 @@ function FieldTables({
           title=""
         >
           <IconButton
-          disabled={true}
+            disabled={true}
             onClick={() => {
               {
               }
@@ -54,7 +52,8 @@ function FieldTables({
             color="primary"
             size="small"
           >
-            <NetworkIcon  />
+            <CircleSlash size={18} />
+
           </IconButton>
         </Tooltip>
         <Tooltip
@@ -65,21 +64,21 @@ function FieldTables({
           title=""
         >
           <IconButton
-                    disabled={true}
+            disabled={true}
 
             onClick={() => {
               {
-              } 
+              }
             }}
             color="primary"
             size="small"
           >
-            <NetworkIcon fontSize="small" />
+            <RefreshCcw size={18} />
           </IconButton>
         </Tooltip>
       </div>
     );
-  }; */
+  };
 
   return (
     <>
@@ -105,11 +104,11 @@ function FieldTables({
               content: <BadgeModule codmenu={row.codsisdest} />,
               align: "center",
             },
-            /*  {
+            {
               content: acciones(),
               action: () => null,
               disableTooltip: true,
-            }, */
+            },
           ],
 
           collapsed: () => [],

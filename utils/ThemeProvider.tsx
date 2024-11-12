@@ -9,9 +9,9 @@ import {
 import { esES } from "@mui/material/locale";
 import { TypographyOptions } from "@mui/material/styles/createTypography";
 // Importar la fuente Inter
-<style>
+{/* <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
-</style>;
+</style>; */}
 
 interface ThemeProviderProps {
   children: ReactNode;

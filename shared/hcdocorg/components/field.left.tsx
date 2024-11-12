@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import { DatePicker } from "@nextui-org/date-picker";
 import { useMemo } from "react";
 import { ConditionalWrapper } from "@/utils/main";
@@ -15,6 +15,7 @@ interface FieldLeftProps extends FormContextProps {
 
 // FieldLeft Component
 function FieldLeft({ formData, isLoading = false }: FieldLeftProps) {
+  const theme = useTheme();
   const Detalle = useMemo(() => {
     return formData?.cabiddoc;
   }, [formData]);
@@ -22,7 +23,7 @@ function FieldLeft({ formData, isLoading = false }: FieldLeftProps) {
   return (
     <Grid container spacing={2}>
       <Grid size={3}>
-        <Typography variant="h3" sx={{ marginBottom: 1 }}>
+        <Typography variant="h3" sx={{ marginBottom: 1, color: theme.palette.primary.main }}>
           Id Doc.
         </Typography>
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
@@ -35,7 +36,7 @@ function FieldLeft({ formData, isLoading = false }: FieldLeftProps) {
         </ConditionalWrapper>
       </Grid>
       <Grid size={3}>
-        <Typography variant="h3" sx={{ marginBottom: 1 }}>
+        <Typography variant="h3" sx={{ marginBottom: 1, color: theme.palette.primary.main }}>
           Tipo
         </Typography>
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
@@ -63,7 +64,7 @@ function FieldLeft({ formData, isLoading = false }: FieldLeftProps) {
       </Grid>
 
       <Grid size={12}>
-        <Typography variant="h3" sx={{ marginBottom: 1 }}>
+        <Typography variant="h3" sx={{ marginBottom: 1, color: theme.palette.primary.main }}>
           Descripción
         </Typography>
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
@@ -76,7 +77,7 @@ function FieldLeft({ formData, isLoading = false }: FieldLeftProps) {
         </ConditionalWrapper>
       </Grid>
       <Grid size={12}>
-        <Typography variant="h3" sx={{ marginBottom: 1 }}>
+        <Typography variant="h3" sx={{ marginBottom: 1, color: theme.palette.primary.main }}>
           Descripción Extendida
         </Typography>
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
@@ -87,8 +88,8 @@ function FieldLeft({ formData, isLoading = false }: FieldLeftProps) {
           />
         </ConditionalWrapper>
       </Grid>
-      <Grid size={4}>
-        <Typography variant="h3" sx={{ marginBottom: 1 }}>
+      <Grid size={5.3}>
+        <Typography variant="h3" sx={{ marginBottom: 1, color: theme.palette.primary.main }}>
           Fecha del Documento
         </Typography>
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
@@ -99,8 +100,8 @@ function FieldLeft({ formData, isLoading = false }: FieldLeftProps) {
           />
         </ConditionalWrapper>
       </Grid>
-      <Grid size={4}>
-        <Typography variant="h3" sx={{ marginBottom: 1 }}>
+      <Grid size={5.3}>
+        <Typography variant="h3" sx={{ marginBottom: 1, color: theme.palette.primary.main }}>
           Fecha del Registro
         </Typography>
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
@@ -111,19 +112,21 @@ function FieldLeft({ formData, isLoading = false }: FieldLeftProps) {
           />
         </ConditionalWrapper>
       </Grid>
-      <Grid size={4}>
-        <Typography variant="h3" sx={{ marginBottom: 2 }}>
+      <Grid size={1} offset={{ xs: 4, md: 0 }}>
+        <Typography variant="h3" sx={{ marginBottom: 2, color: theme.palette.primary.main, textAlign: 'left' }}>
           Reverso
         </Typography>
-        <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-          <BadgeAct
-            status={
-              Detalle.indreverso === "S" || Detalle.indreverso === "N"
-                ? Detalle.indreverso
-                : "N"
-            }
-          />
-        </ConditionalWrapper>
+        <Box display="flex" justifyContent="center">
+          <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
+            <BadgeAct
+              status={
+                Detalle.indreverso === "S" || Detalle.indreverso === "N"
+                  ? Detalle.indreverso
+                  : "N"
+              }
+            />
+          </ConditionalWrapper>
+        </Box>
       </Grid>
     </Grid>
   );

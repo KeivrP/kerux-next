@@ -13,8 +13,10 @@ import { useQueryData } from "@/server/fetch-data";
 import ModalDialog from "@/components/modal/modalDialog";
 import TextDivider from "@/components/ui/textDivider";
 import {
+  CircleSlash,
   EraserIcon,
   RectangleHorizontalIcon,
+  RefreshCcw,
   RouteIcon,
   XIcon,
 } from "lucide-react";
@@ -125,12 +127,12 @@ const Hcdocorg: React.FC<HcdocorgProps> = ({
         },
       }}
     >
-      <div style={{ padding: "26px"  }}>
-        <Grid container spacing={3} justifyContent="space-between">
-          <Grid size={2}>
+      <div style={{ padding: "26px" }}>
+        <Grid container spacing={3} marginBottom={2} justifyContent="space-between">
+          <Grid size={{xl: 9.5, lg: 8 }}>
             <div style={{ display: "flex", alignItems: "center" }}>
               <RouteIcon />
-              <Typography variant="body2" style={{ marginLeft: "8px" }}>
+              <Typography variant="body2" style={{ marginLeft: "8px", marginRight: '8px', color: theme.palette.primary.main }}>
                 Ruta Id Doc.
               </Typography>
               <BreadcumbsGlobal
@@ -139,19 +141,17 @@ const Hcdocorg: React.FC<HcdocorgProps> = ({
               />
             </div>
           </Grid>
-          <Grid size={2}></Grid>
-
           {!actionDisabled && (
             <>
-              <Grid size={2}>
+              <Grid size={{xl: 2.5, lg: 3 }}>
                 <ButtonForms
                   onClick={() => {
                     createReprocesar({ iddoc: row });
                   }}
                   sx={{ color: theme.palette.alert.main }}
                 >
-                  <XIcon size={16} />
-                  <Typography variant="h2">Rechazar</Typography>
+                  <CircleSlash size={18} />
+                  <Typography variant="h3" marginLeft={1}>Rechazar</Typography>
                 </ButtonForms>
 
                 <ButtonForms
@@ -160,14 +160,14 @@ const Hcdocorg: React.FC<HcdocorgProps> = ({
                   }}
                   sx={{ color: theme.palette.success.main }}
                 >
-                  <RectangleHorizontalIcon size={16} />
-                  <Typography variant="h2">Reprocesar</Typography>
+                  <RefreshCcw size={18}  />
+                  <Typography variant="h3" marginLeft={1}>Reprocesar</Typography>
                 </ButtonForms>
               </Grid>
             </>
           )}
         </Grid>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} marginBottom={2}>
           <Grid size={6}>
             <FieldLeft
               formData={formData}

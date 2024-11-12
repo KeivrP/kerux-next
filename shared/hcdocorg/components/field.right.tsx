@@ -9,7 +9,6 @@ import {
   Box,
   Chip,
   IconButton,
-  TextField,
   Tooltip,
   Typography,
   useTheme,
@@ -21,9 +20,7 @@ import BadgeModule from "@/components/badge/badge-mod";
 import Grid from "@mui/material/Grid2";
 import BadgeTipodoc from "@/components/badge/badge-estatus";
 import { Input } from "@/components/ui/input";
-
-/* import { ChipStatusDoc } from "../../../../../../shared/components/dataDisplay/chipCustomDoc";
- */
+import { BadgeAct } from "@/components/badge/badge-act";
 
 interface FieldRightProps extends FormContextProps {
   onIdCambio: (nuevoId: number) => void; // Una función que recibe un nuevo ID como argumento y lo pasa al componente padre
@@ -34,10 +31,7 @@ interface FieldRightProps extends FormContextProps {
 function FieldRight({
   onIdCambio,
   isLoading,
-  actionDisabled,
   formData: data,
-  setFormData,
-  initialData,
 }: FieldRightProps) {
   const theme = useTheme();
   const [selectedId, setSelectedId] = useState<number>(0);
@@ -65,11 +59,11 @@ function FieldRight({
 
   return (
     <Grid container spacing={2}>
-      <Grid size={1} mt={2}>
+      <Grid size={1} mt={3}>
         <BadgeModule codmenu={Detalle.origen} />
       </Grid>
       <Grid size={5.5}>
-        <Typography variant="h3">Origen</Typography>{" "}
+        <Typography variant="h3" sx={{ marginBottom: 1, color: theme.palette.primary.main }}>Origen</Typography>
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
           <Input
             value={
@@ -84,7 +78,7 @@ function FieldRight({
         </ConditionalWrapper>
       </Grid>
       <Grid size={5.5}>
-        <Typography variant="h3" className="mb-1">
+        <Typography variant="h3" sx={{ marginBottom: 1, color: theme.palette.primary.main }}>
           Referencia
         </Typography>
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
@@ -97,24 +91,24 @@ function FieldRight({
         </ConditionalWrapper>
       </Grid>
       <Grid size={12}>
-        <Typography variant="h3" className="mb-1">
-          Estatus
-          <BadgeTipodoc tipo={Detalle.stsdoc} />
+        <Typography variant="h3" sx={{ marginBottom: 1, color: theme.palette.primary.main }}>
+          <div style={{ gap: 1 }}>
+            Estatus
+            <BadgeTipodoc tipo={Detalle.stsdoc} />
+          </div>
         </Typography>
-        {Detalle.mensaje && !actionDisabled && (
-          <Box className="bg-amber-300 rounded-md p-2">
-            <Typography>
-              <b>Mensaje:</b> {Detalle.mensaje}
-            </Typography>
-          </Box>
-        )}
+        <Box sx={{ bgcolor: theme.palette.pending.light, padding: 1, borderRadius: 1 }}>
+          <Typography>
+            <b>Mensaje:</b> {Detalle.mensaje}
+          </Typography>
+        </Box>
       </Grid>
       <Grid size={12}>
         <TextDivider>Documentos Relacionados</TextDivider>
       </Grid>
       {RowReferencia > 0 && (
         <Grid size={12}>
-          <Typography variant="h3" className="mb-1">
+          <Typography variant="h3" sx={{ marginBottom: 1, color: theme.palette.primary.main }}>
             Referencia{" "}
             <Chip
               label={RowReferencia}
@@ -154,31 +148,26 @@ function FieldRight({
               {
                 label: "Id.Doc",
                 align: "center",
-                color: theme.palette.transparency.main,
                 padding: "0.25rem",
               },
               {
                 label: "Tipo",
                 align: "center",
-                color: theme.palette.transparency.main,
                 padding: "0.25rem",
               },
               {
                 label: "Reverso",
                 align: "center",
-                color: theme.palette.transparency.main,
                 padding: "0.25rem",
               },
               {
                 label: "Fecha",
                 align: "center",
-                color: theme.palette.transparency.main,
                 padding: "0.25rem",
               },
               {
                 label: "Abrir",
                 align: "center",
-                color: theme.palette.transparency.main,
                 padding: "0.25rem",
               },
             ]}
@@ -187,7 +176,7 @@ function FieldRight({
                 { content: row.iddoc, align: "center" },
                 { content: row.tipodoc, align: "center" },
                 {
-                  content: row.indreverso,
+                  content: <BadgeAct status={row.indreverso} />,
                   align: "center",
                 },
                 {
@@ -218,8 +207,8 @@ function FieldRight({
             }}
           >
             {RowDependientes.length === 0 && (
-              <Box className="bg-gray-500rounded-md p-2 flex justify-center">
-                <Typography variant="caption" align="center">
+              <Box sx={{ bgcolor: theme.palette.background.default, alignItems: 'center', padding: 0.5, borderRadius: 1 }}>
+                <Typography variant="h4" align="center">
                   ESTE DOCUMENTO NO CUENTA CON DEPENDENCIAS
                 </Typography>
               </Box>
