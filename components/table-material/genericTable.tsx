@@ -107,7 +107,7 @@ export const BaseTable: React.FC<BaseTableProps> = React.memo(
               <TableRow>
                 {addCheckboxColumn && ( // Add this condition to check if checkbox column should be added
                   <TableCell align="center">
-                    <div className="flex items-center py-2 px-2">
+                    <div className=" items-center ">
                       <Checkbox
                         onChange={() =>
                           setSelectedRows(
