@@ -1,3 +1,4 @@
+'use client'
 import { TextField } from "@mui/material";
 
 import { useEffect, useState } from "react";
@@ -10,7 +11,7 @@ interface FrutasViewProps {
 
 }
 
-export const FrutasView: React.FC<FrutasViewProps> = ({
+const FrutasView: React.FC<FrutasViewProps> = ({
 
 }) => {
   const [rows, setRows] = useState<PasoRutas[]>([]);
@@ -58,3 +59,5 @@ export const FrutasView: React.FC<FrutasViewProps> = ({
     </div>
   );
 };
+
+export default FrutasView;

@@ -9,12 +9,12 @@ import ActionCardHeader from "@/components/card/actionCardHeader";
 
 import { ConfirmDialog } from "@/components/modal/confirmDialog";
 import { Acciones, columnsHeaders } from "./header-table";
-import { PasoRutas, TipoEventoOptions } from "../../../trutas-types";
+import { PasoRutas, TipoEventoOptions } from "../../trutas-types";
 import {
   useCreatePasoRuta,
   useDeletePasoRuta,
   useUpdatePasoRuta,
-} from "../../../hook/useRutas";
+} from "../../hook/useRutas";
 import EditFrutas from "./edit";
 
 interface FrutasTableProps {

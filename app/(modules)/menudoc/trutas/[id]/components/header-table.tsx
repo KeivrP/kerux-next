@@ -1,5 +1,5 @@
 import { HeadersName } from "@/components/table-material/genericTable";
-import { PasoRutas } from "../../../trutas-types";
+import { PasoRutas } from "../../trutas-types";
 import { IconButton, Tooltip, useTheme } from "@mui/material";
 import { DeleteIcon, EditIcon } from "@/components/icons/table-icon";
 
