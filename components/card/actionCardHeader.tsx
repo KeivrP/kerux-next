@@ -1,7 +1,7 @@
 import CardHead from "./cardHead";
 import FilterButton, { Filter } from "../button/FilterButton";
 import OrderButton, { Order } from "../button/OrderButton";
-import { Button, Typography } from "@mui/material";
+import { Button, ButtonProps, Typography } from "@mui/material";
 import React from "react";
 /* import { SearchInput } from "../searchInput"; */
 
@@ -17,7 +17,10 @@ interface ActionCardHeaderProps {
   isAddButtonVisible?: boolean;
   isAddFilterVisible?: boolean;
   isAddOrderVisible?: boolean;
-}
+  actions?: ButtonProps;
+  title?: string | React.ReactNode;
+}[];
+
 
 const ActionCardHeader = ({
   children = [],
@@ -26,9 +29,11 @@ const ActionCardHeader = ({
   setOrder,
   setFilter,
   add,
+  title,
   isAddButtonVisible = true,
   isAddFilterVisible = true, // Set the default value to true
   isAddOrderVisible = true, // Set the default value to true
+  actions,
 }: ActionCardHeaderProps) => {
   return (
     <>
@@ -53,11 +58,11 @@ const ActionCardHeader = ({
               <Button
                 onClick={() => add && add()}
                 variant="contained"
-                color="primary"
-                disabled={false}
+                color={actions?.color || "primary"}
+                disabled={actions?.disabled}
                 sx={{ textTransform: "none" }}
               >
-                <Typography variant="h3">+ AÑADIR</Typography>
+                <Typography variant="h3">{title || "+ AÑADIR"}</Typography>
               </Button>
             )}
           </div>

@@ -15,10 +15,8 @@ import TextDivider from "@/components/ui/textDivider";
 import {
   CircleSlash,
   EraserIcon,
-  RectangleHorizontalIcon,
   RefreshCcw,
   RouteIcon,
-  XIcon,
 } from "lucide-react";
 import { formatDate } from "@/utils/main";
 import { useReject, useReprocess } from "./hooks/useHcdocorg";
@@ -27,6 +25,7 @@ import ButtonForms from "@/components/button/buttonForms";
 import { useFormContextHcdocorg } from "@/provider/hcdocorg-provider";
 import { capitalize } from "lodash";
 import Grid from "@mui/material/Grid2";
+import SimpleBackdrop from "@/components/backdrop/backdrop";
 
 interface HcdocorgProps {
   open: boolean;
@@ -129,7 +128,7 @@ const Hcdocorg: React.FC<HcdocorgProps> = ({
     >
       <div style={{ padding: "26px" }}>
         <Grid container spacing={3} marginBottom={2} justifyContent="space-between">
-          <Grid size={{xl: 9.5, lg: 8 }}>
+          <Grid size={{ xl: 9.5, lg: 8 }}>
             <div style={{ display: "flex", alignItems: "center" }}>
               <RouteIcon />
               <Typography variant="body2" style={{ marginLeft: "8px", marginRight: '8px', color: theme.palette.primary.main }}>
@@ -143,10 +142,10 @@ const Hcdocorg: React.FC<HcdocorgProps> = ({
           </Grid>
           {!actionDisabled && (
             <>
-              <Grid size={{xl: 2.5, lg: 3 }}>
+              <Grid size={{ xl: 2.5, lg: 3 }}>
                 <ButtonForms
                   onClick={() => {
-                    createReprocesar({ iddoc: row });
+                    createReprocesar({ iddoc: [row] });
                   }}
                   sx={{ color: theme.palette.alert.main }}
                 >
@@ -156,11 +155,11 @@ const Hcdocorg: React.FC<HcdocorgProps> = ({
 
                 <ButtonForms
                   onClick={() => {
-                    createReprocesar({ iddoc: row });
+                    createReprocesar({ iddoc: [row] });
                   }}
                   sx={{ color: theme.palette.success.main }}
                 >
-                  <RefreshCcw size={18}  />
+                  <RefreshCcw size={18} />
                   <Typography variant="h3" marginLeft={1}>Reprocesar</Typography>
                 </ButtonForms>
               </Grid>
@@ -229,7 +228,9 @@ const Hcdocorg: React.FC<HcdocorgProps> = ({
             </Grid>
           </Grid>
         </Grid>
+        <SimpleBackdrop show={loading} />
       </div>
+
     </ModalDialog>
   );
 };

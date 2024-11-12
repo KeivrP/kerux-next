@@ -11,6 +11,7 @@ import { Filter } from "@/components/button/FilterButton";
 import { Order } from "@/components/button/OrderButton";
 import { ConfirmDialog } from "@/components/modal/confirmDialog";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
+import { BadgeAct } from "@/components/badge/badge-act";
 
 export const TbenefTable = () => {
 
@@ -88,8 +89,8 @@ export const TbenefTable = () => {
 
   return (
     <>
-      <ActionCardHeader 
-        add={() => {console.log('anadir')}} 
+      <ActionCardHeader
+        add={() => { console.log('anadir') }}
         onApplyFilter={(filters) => setFilter(filters)}
         columnsFilter={columnsFilter}
         onApplyOrder={(orders) => setOrder(orders)}
@@ -116,7 +117,7 @@ export const TbenefTable = () => {
               { content: row.nombre, align: "left" },
               { content: row.appabrev, align: "left" },
               {
-                content: row.indactivo,
+                content: <BadgeAct status={row.indactivo} />,
                 align: "center",
               },
               {
@@ -142,8 +143,8 @@ export const TbenefTable = () => {
           handlePageChange={handlePageChange}
           handleChangeRowsPerPage={handleChangeRowsPerPage}
         ></BaseTablePagination>
-       </div>
-       <ConfirmDialog
+      </div>
+      <ConfirmDialog
         mode={"delete"}
         open={openDialog}
         onConfirm={handleConfirmDelete}

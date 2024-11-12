@@ -28,7 +28,11 @@ type Params = {
   iddoc: number[];
 };
 
-export const TcevinvTable = () => {
+interface TcevinvTableProps {
+  codsis?: string;
+}
+
+export const TcevinvTable = ({ codsis }: TcevinvTableProps) => {
   const theme = useTheme();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
@@ -49,7 +53,8 @@ export const TcevinvTable = () => {
     entity: "eventos_admon",
     api: "doc",
     params: {
-      ua: "",
+      ua: undGenerica,
+      codsis: codsis,
       filter,
       order,
       page: page + 1,
@@ -138,7 +143,7 @@ export const TcevinvTable = () => {
           />
           <Button
             onClick={() => {
-              createRechazar({ iddoc: 7 }), setSelectedRows([]);
+              createRechazar(params), setSelectedRows([]);
             }}
             variant="contained"
             color="error"
@@ -150,7 +155,7 @@ export const TcevinvTable = () => {
 
           <Button
             onClick={() => {
-              createReprocesar({ iddoc: 8 }), setSelectedRows([]);
+              createReprocesar(params), setSelectedRows([]);
             }}
             variant="contained"
             color="primary"

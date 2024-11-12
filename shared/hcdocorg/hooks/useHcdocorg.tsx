@@ -1,10 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import { showNotification } from "@/components/toast/toast";
-import { rejectHistoy, reprocessHistory } from "../hcdocorg-api";
+import {  rejectHistory, reprocessHistory } from "../hcdocorg-api";
 
 export const useReject = () => {
   return useMutation({
-    mutationFn: ({ iddoc }: { iddoc: number }) => rejectHistoy(iddoc),
+    mutationFn: ({ iddoc }: { iddoc: number[] }) => rejectHistory(iddoc),
     onSuccess: (res) => {
       console.log(res)
       showNotification(res);
@@ -17,7 +17,7 @@ export const useReject = () => {
 
 export const useReprocess = () => {
     return useMutation({
-        mutationFn: ({ iddoc }: { iddoc: number }) => reprocessHistory(iddoc),
+        mutationFn: ({ iddoc }: { iddoc: number[] }) => reprocessHistory(iddoc),
         onSuccess: (res) => {
         console.log(res)
         showNotification(res);
