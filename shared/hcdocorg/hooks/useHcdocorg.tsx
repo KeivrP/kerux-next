@@ -6,7 +6,6 @@ export const useReject = () => {
   return useMutation({
     mutationFn: ({ iddoc }: { iddoc: number[] }) => rejectHistory(iddoc),
     onSuccess: (res) => {
-      console.log(res)
       showNotification(res);
     },
     onError: (error) => {
@@ -19,7 +18,6 @@ export const useReprocess = () => {
     return useMutation({
         mutationFn: ({ iddoc }: { iddoc: number[] }) => reprocessHistory(iddoc),
         onSuccess: (res) => {
-        console.log(res)
         showNotification(res);
         },
         onError: (error) => {

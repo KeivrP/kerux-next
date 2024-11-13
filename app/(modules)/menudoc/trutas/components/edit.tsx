@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { TextField, Typography } from "@mui/material";
 import { useCreateRuta, useUpdateRuta } from "../hook/useRutas";
 import ButtonForms from "@/components/button/buttonForms";
+import ModalDialog from "@/components/modal/modalDialog";
 
 interface EditTrutasProps {
   isOpen: boolean;
@@ -77,17 +78,16 @@ const EditTrutas: React.FC<EditTrutasProps> = ({
     });
   }, [row, reset]);
 
-  console.log(row);
   return (
     <div>
-      <TopDrawer
-        position="left"
+      <ModalDialog
+        width="xs"
         title={row ? "Editar ruta" : "Crear nueva ruta"}
-        isOpen={isOpen}
-        onClose={() => onClose(false)}
+        dialogOpen={isOpen}
+        handleClose={() => onClose(false)}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="mb-4">
+          <div className="p-4">
             <Typography variant="h3" color="primary">
               Codigo ruta
             </Typography>
@@ -109,7 +109,7 @@ const EditTrutas: React.FC<EditTrutasProps> = ({
             />
           </div>
 
-          <div className="mb-4">
+          <div className="mb-4 p-4">
             <Typography variant="h3" color="primary">
               Descripcion Ruta
             </Typography>
@@ -129,12 +129,12 @@ const EditTrutas: React.FC<EditTrutasProps> = ({
           <ButtonForms
             type="submit"
             title="Guardar"
-            className="bg-blue-950 text-white w-full hover:bg-blue-800 transition duration-200"
+            className="bg-blue-950 text-white ml-4 hover:bg-blue-800 transition duration-200"
           >
             Guardar
           </ButtonForms>
         </form>
-      </TopDrawer>
+      </ModalDialog>
     </div>
   );
 };

@@ -38,7 +38,7 @@ const ModalDialog: React.FC<BaseDialogProps> = ({
   confirm,
   formId,
   confirmText,
-  disableCancelButton,
+  disableCancelButton = true,
   ...otherProps
 }) => {
   return (

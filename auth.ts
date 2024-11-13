@@ -5,6 +5,7 @@ import { getUserLogin, UserLogin } from "./server/session/api";
 
 // Configuración de NextAuth
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  trustHost: true,
   providers: [
     // Proveedor de autenticación con credenciales personalizadas
     Credentials({
@@ -62,7 +63,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     jwt({ token, user }) {
       if (user) {
         token = { ...token, ...user };
-     
       }
       return token;
     },

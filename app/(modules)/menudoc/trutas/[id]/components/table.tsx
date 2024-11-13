@@ -52,8 +52,6 @@ export const FrutasTable: React.FC<FrutasTableProps> = ({
   }, [deleteLoading, updateLoading, createLoading]);
   const [isPendingData, handleLoading] = useState<boolean>(false);
 
-  console.log("isSuccessRuta", isPendingData, isDrawerOpen);
-
   useEffect(() => {
     if (deleteLoading) {
       handleLoading(true);
@@ -93,72 +91,72 @@ export const FrutasTable: React.FC<FrutasTableProps> = ({
   return (
     <>
       <ActionCardHeader
-        isAddFilterVisible={false}
-        isAddOrderVisible={false}
-        add={() => {
-          handleCreate();
-        }}
+      isAddFilterVisible={false}
+      isAddOrderVisible={false}
+      add={() => {
+        handleCreate();
+      }}
+      actions={{disabled: rows.some(row => row.codproxsis === "FIN")}}
       />
 
       <div
-        style={{
-          height: "35vh",
-          width: "100%",
-        }}
+      style={{
+        height: "35vh",
+        width: "100%",
+      }}
       >
-        <BaseTable
-          loading={isLoading}
-          rows={rows}
-          headers={columnsHeaders}
-          rowAction={(row) => console.log(row)}
-          collapsible={{
-            visible: (row) => [
-              { content: row.paso, align: "center" },
-              { content: row.codsisaprob, align: "center" },
-              {
-                content: TipoEventoOptions.find(
-                  (option: { value: string }) => option.value === row.tipoevento
-                )?.name,
-                align: "center",
-              },
-              { content: row.codproxsis, align: "center" },
-              {
-                content: (
-                  <Acciones
-                    row={row}
-                    onDelete={handleDelete}
-                    onEdit={handleEdit}
-                  />
-                ),
-                action: () => null,
-                disableTooltip: true,
-              },
-            ],
+      <BaseTable
+        loading={isLoading}
+        rows={rows}
+        headers={columnsHeaders}
+        rowAction={(row) => console.log(row)}
+        collapsible={{
+        visible: (row) => [
+          { content: row.paso, align: "center" },
+          { content: row.codsisaprob, align: "center" },
+          {
+          content: TipoEventoOptions.find(
+            (option: { value: string }) => option.value === row.tipoevento
+          )?.name,
+          align: "center",
+          },
+          { content: row.codproxsis, align: "center" },
+          {
+          content: (
+            <Acciones
+            row={row}
+            onDelete={handleDelete}
+            onEdit={handleEdit}
+            />
+          ),
+          action: () => null,
+          disableTooltip: true,
+          },
+        ],
 
-            collapsed: () => [],
-          }}
-        ></BaseTable>
+        collapsed: () => [],
+        }}
+      ></BaseTable>
       </div>
       <ConfirmDialog
-        mode={"delete"}
-        open={openDialog}
-        onConfirm={handleConfirmDelete}
-        onCancel={handleCancelDelete}
-        text={`¿Estas seguro que deseas eliminar la ruta ${
-          rows.find((row) => row.codruta)?.codruta
-        }?`}
+      mode={"delete"}
+      open={openDialog}
+      onConfirm={handleConfirmDelete}
+      onCancel={handleCancelDelete}
+      text={`¿Estas seguro que deseas eliminar la ruta ${
+        rows.find((row) => row.codruta)?.codruta
+      }?`}
       />
       <EditFrutas
-        id={id}
-        rows={rows}
-        isPending={handleLoading}
-        row={rowSelected}
-        isOpen={isDrawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        refetch={() => {
-          refetch();
-          console.log("aaa");
-        }}
+      id={id}
+      rows={rows}
+      isPending={handleLoading}
+      row={rowSelected}
+      isOpen={isDrawerOpen}
+      onClose={() => setDrawerOpen(false)}
+      refetch={() => {
+        refetch();
+      }}
       />
       <SimpleBackdrop show={isPendingData} />
     </>
