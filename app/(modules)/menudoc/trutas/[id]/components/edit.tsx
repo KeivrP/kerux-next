@@ -1,13 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import TopDrawer from "@/components/modal/top-drawe";
 import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Autocomplete, TextField, Typography } from "@mui/material";
+import { Autocomplete, TextField, Typography, useTheme } from "@mui/material";
 import { useCreatePasoRuta, useUpdatePasoRuta } from "../../hook/useRutas";
 import { PasoRutas, TipoEventoOptions } from "../../trutas-types";
 import { useQueryData } from "@/server/fetch-data";
-import { find } from "lodash";
+import Grid from "@mui/material/Grid2";
 import ButtonForms from "@/components/button/buttonForms";
 import ModalDialog from "@/components/modal/modalDialog";
 
@@ -46,12 +45,13 @@ const EditFrutas: React.FC<EditTrutasProps> = ({
     isSuccess: createSucces,
   } = useCreatePasoRuta();
 
+  const theme = useTheme();
+
   useEffect(() => {
     if (updateLoading || createLoading) {
       isPending(true);
     } else isPending(false);
   }, [updateLoading, createLoading, isPending]);
-
 
   const {
     register,
@@ -70,27 +70,43 @@ const EditFrutas: React.FC<EditTrutasProps> = ({
       descodproxsis: row?.descodproxsis || "",
     },
   });
-
-  useEffect(() => {
+  const initialFormValues = React.useMemo(() => {
     if (row) {
-      reset({
+      return {
         paso: row.paso,
         codsisaprob: row.codsisaprob,
         tipoevento: row.tipoevento,
         codproxsis: row.codproxsis,
-      });
-    } else {
+        descodsisaprob: row.descodsisaprob,
+        descodproxsis: row.descodproxsis,
+      };
+    } else if (rows.length > 0) {
       const findLastPaso = rows[rows.length - 1];
       if (findLastPaso) {
-        reset({
+        return {
           paso: Number(findLastPaso.paso) + 1,
           codsisaprob: findLastPaso.codproxsis,
           tipoevento: "",
           codproxsis: "",
-        });
+          descodsisaprob: findLastPaso.descodproxsis,
+          descodproxsis: "",
+        };
       }
     }
-  }, [row]);
+    return {
+      paso: 0,
+      codsisaprob: "",
+      tipoevento: "",
+      codproxsis: "",
+      codruta: "",
+      descodsisaprob: "",
+      descodproxsis: "",
+    };
+  }, [row, rows]);
+
+  useEffect(() => {
+    reset(initialFormValues);
+  }, [initialFormValues, reset]);
 
   useEffect(() => {
     if (isSuccess || createSucces) {
@@ -122,17 +138,16 @@ const EditFrutas: React.FC<EditTrutasProps> = ({
   return (
     <div>
       <ModalDialog
-        position="top"
-        height="19rem"
+   
         width="sm"
         title={row ? "Editar ruta" : "Crear nueva ruta"}
         dialogOpen={isOpen}
         handleClose={() => onClose(false)}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-wrap ">
-            <div className="w-full md:w-1/4 px-2 ">
-              <Typography variant="h3" color="primary" >
+          <Grid container spacing={2} padding={4}>
+            <Grid size={6}>
+              <Typography variant="h3" color="primary">
                 Paso
               </Typography>
               <TextField
@@ -152,9 +167,8 @@ const EditFrutas: React.FC<EditTrutasProps> = ({
                 error={!!errors.paso}
                 helperText={errors.paso?.message}
               />
-            </div>
-
-            <div className="w-full md:w-1/4 px-2 ">
+            </Grid>
+            <Grid size={6}>
               <Typography variant="h3" color="primary" sx={{ mb: 2 }}>
                 Sistema Origen
               </Typography>
@@ -185,9 +199,8 @@ const EditFrutas: React.FC<EditTrutasProps> = ({
                   />
                 )}
               />
-            </div>
-
-            <div className="w-full md:w-1/3 px-2 ">
+            </Grid>
+            <Grid size={6}>
               <Typography variant="h3" color="primary" sx={{ mb: 2 }}>
                 Tipo de Evento
               </Typography>
@@ -215,9 +228,8 @@ const EditFrutas: React.FC<EditTrutasProps> = ({
                   />
                 )}
               />
-            </div>
-
-            <div className="w-full md:w-1/4 px-2 ">
+            </Grid>
+            <Grid size={6}>
               <Typography variant="h3" color="primary" sx={{ mb: 2 }}>
                 Sistema Destino
               </Typography>
@@ -247,13 +259,16 @@ const EditFrutas: React.FC<EditTrutasProps> = ({
                   />
                 )}
               />
-            </div>
-          </div>
-          <div className="w-full flex justify-end mt-4">
-            <ButtonForms type='submit' title="Guardar" className="bg-blue-950 text-white w-40" >
-              Guardar
-            </ButtonForms>
-          </div>
+            </Grid>
+            <Grid size={12}>
+              <ButtonForms
+                type="submit"
+                sx={{ bgcolor: theme.palette.primary.main, color: "white" }}
+              >
+                Guardar
+              </ButtonForms>
+            </Grid>
+          </Grid>
         </form>
       </ModalDialog>
     </div>

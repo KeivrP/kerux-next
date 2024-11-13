@@ -88,7 +88,6 @@ export const TtipodocTable = () => {
   const handleEdit = (id: string) => {
     console.log(`Edit ${id}`);
   };
-  console.log(rows);
   return (
     <>
       <ActionCardHeader
