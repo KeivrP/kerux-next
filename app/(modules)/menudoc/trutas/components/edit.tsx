@@ -77,7 +77,6 @@ const EditTrutas: React.FC<EditTrutasProps> = ({
     });
   }, [row, reset]);
 
-  console.log(row);
   return (
     <div>
       <TopDrawer

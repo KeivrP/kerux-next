@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState, useMemo } from "react";
 import { MenuIcon } from "../ui/sidebar/sidebar-utils";
 import { useSubMenu } from "@/server/session/useSession";
@@ -42,6 +42,7 @@ const findMenuItem = (
 
 const Breadcrumbs: React.FC = () => {
   const pathname = usePathname();
+  const router = useRouter();
   const pathnameSplit = pathname.split("/").slice(0, 3).join("/");
   const pathnames = pathname.split("/").filter((x) => x);
   const { data: menu, isLoading } = useSubMenu(
@@ -105,9 +106,12 @@ const Breadcrumbs: React.FC = () => {
                 strokeLinecap="round"
               />
             </svg>
-            <span className="ml-1 text-base font-medium text-[#142F62] md:ml-2 whitespace-nowrap">
+            <button
+              onClick={() => router.push(pathnameSplit)}
+              className="ml-1 text-base font-medium text-[#142F62] md:ml-2 whitespace-nowrap"
+            >
               {data.label}
-            </span>
+            </button>
           </div>
         </li>
         <li aria-current="page">

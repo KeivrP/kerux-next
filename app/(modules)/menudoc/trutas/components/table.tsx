@@ -18,9 +18,12 @@ import {
 } from "./header-table";
 import { ConfirmDialog } from "@/components/modal/confirmDialog";
 import EditTrutas from "./edit";
+import { usePathname, useRouter } from "next/navigation";
 
 export const TrutasTable = () => {
   const [page, setPage] = useState(0);
+  const router = useRouter();
+  const pathname = usePathname();
   const [rowsPerPage, setRowsPerPage] = useState(25);
 
   const [rows, setRows] = useState<Rutalist[]>([]);
@@ -116,7 +119,7 @@ export const TrutasTable = () => {
   const handleOpen = (codruta: string) => {
     if (codruta) {
       setOpenModal(true);
-      //router.push(`/menudoc/trutas/frutas/${codruta}`);
+      router.push(`${pathname}/${codruta}`);
 
     }
   };

@@ -43,6 +43,8 @@ Api_Proseg.interceptors.request.use(async (config) => {
     config.headers["Auth-User"] = email;
   }
 
+  console.log(config)
+
   return config;
 });
 
@@ -58,9 +60,9 @@ Api_Proseg.interceptors.response.use(
       // Aquí puedes manejar el error 401 como prefieras
       // Por ejemplo, podrías redirigir al usuario a la página de inicio de sesión
       console.log("Error 401: No autorizado");
-      removeAuthTokenCookie("token");
+     /*  removeAuthTokenCookie("token");
       removeAuthTokenCookie("email");
-      removeAuthTokenCookie("authjs.session-token");
+      removeAuthTokenCookie("authjs.session-token"); */
       // Maneja el cierre de sesión directamente aquí
     }
 
@@ -95,9 +97,9 @@ Api_Log.interceptors.response.use(
       // Aquí puedes manejar el error 401 como prefieras
       // Por ejemplo, podrías redirigir al usuario a la página de inicio de sesión
       console.log("Error 401: No autorizado");
-      removeAuthTokenCookie("token");
+     /*  removeAuthTokenCookie("token");
       removeAuthTokenCookie("email");
-      removeAuthTokenCookie("authjs.session-token");
+      removeAuthTokenCookie("authjs.session-token"); */
       // Maneja el cierre de sesión directamente aquí
     }
 
@@ -132,9 +134,9 @@ Api_Comp.interceptors.response.use(
       // Aquí puedes manejar el error 401 como prefieras
       // Por ejemplo, podrías redirigir al usuario a la página de inicio de sesión
       console.log("Error 401: No autorizado");
-      removeAuthTokenCookie("token");
+     /*  removeAuthTokenCookie("token");
       removeAuthTokenCookie("email");
-      removeAuthTokenCookie("authjs.session-token");
+      removeAuthTokenCookie("authjs.session-token"); */
       // Maneja el cierre de sesión directamente aquí
     }
 
@@ -169,9 +171,9 @@ Api_Doc.interceptors.response.use(
       // Aquí puedes manejar el error 401 como prefieras
       // Por ejemplo, podrías redirigir al usuario a la página de inicio de sesión
       console.log("Error 401: No autorizado");
-      removeAuthTokenCookie("token");
+     /*  removeAuthTokenCookie("token");
       removeAuthTokenCookie("email");
-      removeAuthTokenCookie("authjs.session-token");
+      removeAuthTokenCookie("authjs.session-token"); */
       // Maneja el cierre de sesión directamente aquí
     }
 
@@ -207,9 +209,9 @@ Api_Doc.interceptors.response.use(
       // Aquí puedes manejar el error 401 como prefieras
       // Por ejemplo, podrías redirigir al usuario a la página de inicio de sesión
       console.log("Error 401: No autorizado");
-      removeAuthTokenCookie("token");
+     /*  removeAuthTokenCookie("token");
       removeAuthTokenCookie("email");
-      removeAuthTokenCookie("authjs.session-token");
+      removeAuthTokenCookie("authjs.session-token"); */
       // Maneja el cierre de sesión directamente aquí
     }
 
@@ -245,9 +247,9 @@ Api_Ing.interceptors.response.use(
       // Aquí puedes manejar el error 401 como prefieras
       // Por ejemplo, podrías redirigir al usuario a la página de inicio de sesión
       console.log("Error 401: No autorizado");
-      removeAuthTokenCookie("token");
+     /*  removeAuthTokenCookie("token");
       removeAuthTokenCookie("email");
-      removeAuthTokenCookie("authjs.session-token");
+      removeAuthTokenCookie("authjs.session-token"); */
       // Maneja el cierre de sesión directamente aquí
     }
 

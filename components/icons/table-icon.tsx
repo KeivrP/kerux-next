@@ -50,7 +50,7 @@ export default function LongMenu({ options, onOptionSelect }: LongMenuProps) {
     };
 
     return (
-        <div>
+        <span>
             <IconButton
                 aria-label="more"
                 id="long-button"
@@ -85,7 +85,7 @@ export default function LongMenu({ options, onOptionSelect }: LongMenuProps) {
                     </MenuItem>
                 ))}
             </Menu>
-        </div>
+        </span>
     );
 }
 

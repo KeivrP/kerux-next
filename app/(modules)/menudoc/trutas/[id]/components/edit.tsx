@@ -9,6 +9,7 @@ import { PasoRutas, TipoEventoOptions } from "../../trutas-types";
 import { useQueryData } from "@/server/fetch-data";
 import { find } from "lodash";
 import ButtonForms from "@/components/button/buttonForms";
+import ModalDialog from "@/components/modal/modalDialog";
 
 interface EditTrutasProps {
   isOpen: boolean;
@@ -51,7 +52,6 @@ const EditFrutas: React.FC<EditTrutasProps> = ({
     } else isPending(false);
   }, [updateLoading, createLoading, isPending]);
 
-  console.log(lst);
 
   const {
     register,
@@ -121,16 +121,17 @@ const EditFrutas: React.FC<EditTrutasProps> = ({
 
   return (
     <div>
-      <TopDrawer
+      <ModalDialog
         position="top"
         height="19rem"
+        width="sm"
         title={row ? "Editar ruta" : "Crear nueva ruta"}
-        isOpen={isOpen}
-        onClose={() => onClose(false)}
+        dialogOpen={isOpen}
+        handleClose={() => onClose(false)}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-wrap ">
-            <div className="w-full md:w-1/6 px-2 ">
+            <div className="w-full md:w-1/4 px-2 ">
               <Typography variant="h3" color="primary" >
                 Paso
               </Typography>
@@ -254,7 +255,7 @@ const EditFrutas: React.FC<EditTrutasProps> = ({
             </ButtonForms>
           </div>
         </form>
-      </TopDrawer>
+      </ModalDialog>
     </div>
   );
 };
