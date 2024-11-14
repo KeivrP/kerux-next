@@ -73,5 +73,6 @@ export const entities = {
     criterios: "/criterios_eval",
     tiposcomp_unidades: "/tiposcomp_unidades",
     compradores: "/compradores",
+    nivs_auts: '/nivs_auts'
   };
   
