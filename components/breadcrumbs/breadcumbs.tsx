@@ -63,8 +63,6 @@ const Breadcrumbs: React.FC = () => {
     }
   }, [menuItem, isLoading]); // Only depend on menuItem and isLoading
 
-  console.log("data", pathnameSplit);
-
   // Handle state when no data is found
   if (!data) {
     return (

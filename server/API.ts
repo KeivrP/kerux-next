@@ -43,7 +43,7 @@ Api_Proseg.interceptors.request.use(async (config) => {
     config.headers["Auth-User"] = email;
   }
 
-  console.log(config)
+  console.log(config, token)
 
   return config;
 });

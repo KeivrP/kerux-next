@@ -47,7 +47,6 @@ export const TrutasTable = () => {
 
   const [isPendingData, handleLoading] = useState<boolean>(false);
 
-  console.log("isSuccessRuta", isPendingData, isDrawerOpen);
 
   useEffect(() => {
     if (deleteLoading) {
