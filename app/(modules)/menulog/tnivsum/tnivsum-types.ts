@@ -9,6 +9,23 @@ export interface ITnivsum {
     nivelsum: string;
     dsp_desccosto: string;
     ccosto: string;
-    isNew?: boolean;
   }
+
+  export interface Root {
+    cabnivaut: Cabnivaut
+    detccostoniv: Detccostoniv[]
+  }
+  
+  export interface Cabnivaut {
+    nivelsum: string
+    descnivel: string
+    indgeneral: string
+  }
+  
+  export interface Detccostoniv {
+    nivelsum: string
+    ccosto: string
+    dsp_desccosto: string
+  }
+  
   

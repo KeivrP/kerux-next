@@ -146,8 +146,8 @@ export const TrutasTable = () => {
         <BaseTable
           loading={isLoading}
           rows={rows}
-          headers={columnsHeaders}
           rowAction={(row) => console.log(row)}
+          headers={columnsHeaders}
           collapsible={{
             visible: (row) => [
               { content: row.codruta, align: "center" },

@@ -27,14 +27,15 @@ export const updateNivsum = async (id: string, data: ITnivsum) => {
 }
 
 export const updateCcostoNivsum = async (id: string, ccosto: string, dataCcostoNiv: { ccosto: string }) => {
+    console.log(id, ccosto, dataCcostoNiv )
     try {
         const res = await Api_Log.put(`ccostos_nivs_crud/update`, {
             nivelsum: id,
-            ccosto: ccosto,
+            ccosto: ccosto ?? '',
             data_ccostoniv: dataCcostoNiv
         });
         return res.data;
-    } catch (error) {
+    } catch (error) {   
         console.log(error);
         throw error;
     }
