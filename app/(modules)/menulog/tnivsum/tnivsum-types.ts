@@ -2,8 +2,8 @@ export interface ITnivsum {
     nivelsum: string;
     descnivel: string;
     indgeneral: string;
-    raw_rnum_: number;
-    isNew: boolean;
+    raw_rnum_?: number;
+
   }
   export interface IFnivsum {
     nivelsum: string;

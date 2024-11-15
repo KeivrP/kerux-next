@@ -25,9 +25,9 @@ export const BaseTablePagination: React.FC<BaseTablePaginationProps> = ({
       <TablePagination
         component={"div"}
         rowsPerPageOptions={[25, 50, 100]}
-        count={totalRows}
+        count={totalRows ?? 0}
         rowsPerPage={rowsPerPage}
-        page={page}
+        page={page ?? 0}
 /*         maxPage={maxPage}
  */        SelectProps={{
           inputProps: { 'aria-label': 'Productos por página' },
