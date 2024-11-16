@@ -95,12 +95,12 @@ export const CollapsibleRow: React.FC<CollapsibleRowProps> = ({
                     {open ? <ChevronUp /> : <ChevronDown />}
                   </IconButton>
 
-                  <Typography className="whitespace-nowrap text-xs leading-6 font-medium text-gray-900 ml-2">
+                  <Typography className="whitespace-nowrap text-pretty text-xs leading-6 font-medium text-gray-900 ml-2">
                     {vRow.content}
                   </Typography>
                 </div>
               ) : (
-                <Typography className="whitespace-nowrap text-xs leading-6 font-medium text-gray-900 ml-2">
+                <Typography className="whitespace-nowrap text-xs text-pretty leading-6 font-medium text-gray-900 ml-2">
                   {vRow.content}
                 </Typography>
               )}

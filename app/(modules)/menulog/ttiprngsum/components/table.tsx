@@ -118,7 +118,7 @@ export const TtdocsumTable = () => {
                     handleChangeRowsPerPage={handleChangeRowsPerPage}
                 ></BaseTablePagination>
             </div>
-            <DataSheet isOpen={openDialog} onClose={setOpenDialog} row={row} />
+            <DataSheet isOpen={openDialog} onClose={setOpenDialog} row={row} refetch={refetch}/>
 
         </>
     );

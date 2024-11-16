@@ -140,7 +140,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
           {getIconByMode(mode)}
 
           <DialogTitle>
-            <Typography variant="h1" color={"primary"}>
+            <Typography variant="h2" color={"primary"}>
               {title}
             </Typography>
           </DialogTitle>

@@ -36,7 +36,7 @@ export const TcambiosTable = () => {
     } else handleLoading(false);
   }, [deleteLoading, handleLoading]);
 
-  const { data, isLoading } = useQueryData({
+  const { data, isLoading, refetch } = useQueryData({
     entity: "tcambioss",
     params: {
       page: page + 1,
@@ -47,6 +47,13 @@ export const TcambiosTable = () => {
     },
     dependency: [filter, order, page, rowsPerPage],
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      refetch();
+    }
+  }, [isSuccess, refetch]);
+
   useEffect(() => {
     setRows(data?.cambiolist || []);
     setCount(data?.total);
