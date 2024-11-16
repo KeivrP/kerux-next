@@ -2,17 +2,17 @@ import React, { Suspense } from "react";
 import { Container } from "@mui/material";
 import Breadcrumbs from "@/components/breadcrumbs/breadcumbs";
 import Loader from "@/components/backdrop/loader";
-import { TcevinvTable } from "@/shared/tcevinv/components/table";
+import { TsolsumTable } from "./components/table";
 
-const TbenefPage = () => {
+const Page = () => {
   return (
     <Suspense fallback={<Loader/>}>
       <Container maxWidth="xl">
         <Breadcrumbs />
-        <TcevinvTable codsis="LOG" />
+        <TsolsumTable />
       </Container>
     </Suspense>
   );
 };
 
-export default TbenefPage;
+export default Page;

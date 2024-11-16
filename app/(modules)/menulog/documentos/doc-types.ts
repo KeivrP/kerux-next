@@ -1,0 +1,46 @@
+export interface Documentoslist {
+    ano:             number;
+    appabrev:        string;
+    codmoneda:       string;
+    codmonedamtodoc: string;
+    codsitio:        string;
+    codundadmpro:    string;
+    desccodundpro:   string;
+    descdoc:         string;
+    descdocext:      null;
+    descstsdoc:      string;
+    desctipodoc:     string;
+    feccod:          null;
+    feccre:          Date;
+    fecdoc:          Date;
+    fecmod:          Date;
+    fecrec:          null;
+    fecsts:          Date;
+    fecver:          null;
+    iddoc:           number;
+    iddocfis:        null;
+    iddocres:        null;
+    idsts:           number;
+    indreverso:      string;
+    mensaje:         null;
+    montoorig:       string;
+    mtodoc:          string;
+    nombre:          string;
+    numbenef:        number;
+    numidbenef:      string;
+    numop:           null;
+    origen:          string;
+    raw_rnum_:       number;
+    refdoc:          string;
+    stsapr:          string;
+    stsdoc:          string;
+    tasa:            string;
+    tipodoc:         string;
+    usucod:          null;
+    usucre:          string;
+    usumod:          string;
+    usurec:          null;
+    ususts:          string;
+    usuver:          null;
+   }
+   

@@ -9,3 +9,11 @@ export interface Tipodoclist {
     tipodocrespre: null | string;
     tiposis:       string;
    }
+
+   export interface Tiporngsumlist {
+    desctiporeng:  string;
+    limitundtrib:  number;
+    raw_rnum_:     number;
+    tiporengsumin: string;
+   }
+   

@@ -1,52 +1,34 @@
-"use client";
-import { useCallback, useEffect, useState } from "react";
-
-import SimpleBackdrop from "@/components/backdrop/backdrop";
-import { BaseTablePagination } from "@/components/table-material/baseTablePagination";
-import { BaseTable } from "@/components/table-material/genericTable";
-import { Rutalist } from "../trutas-types";
-import { Order } from "@/components/button/OrderButton";
-import { Filter } from "@/components/button/FilterButton";
+'use client'
+import React, { useCallback, useEffect, useState } from "react";
+import { Cambiolist } from "../tcambioss-types";
 import { useQueryData } from "@/server/fetch-data";
-import { useDeleteRuta } from "../hook/useRutas";
+import { BaseTable } from "@/components/table-material/genericTable";
+import { BaseTablePagination } from "@/components/table-material/baseTablePagination";
+import { Acciones, columnsFilter, columnsHeaders, columnsOrder } from "./header-table";
 import ActionCardHeader from "@/components/card/actionCardHeader";
-import {
-  Acciones,
-  columnsFilter,
-  columnsHeaders,
-  columnsOrder,
-} from "./header-table";
+import { Filter } from "@/components/button/FilterButton";
+import { Order } from "@/components/button/OrderButton";
 import { ConfirmDialog } from "@/components/modal/confirmDialog";
-import EditTrutas from "./edit";
-import { usePathname, useRouter } from "next/navigation";
+import SimpleBackdrop from "@/components/backdrop/backdrop";
+import { formatDate } from "@/utils/main";
+import BadgeTipodoc from "@/components/badge/badge-estatus";
+import { useDeleteTcambio } from "../hook/useTcambios";
 
-export const TrutasTable = () => {
+export const TcambiosTable = () => {
+
   const [page, setPage] = useState(0);
-  const router = useRouter();
-  const pathname = usePathname();
   const [rowsPerPage, setRowsPerPage] = useState(25);
-
-  const [rows, setRows] = useState<Rutalist[]>([]);
-  const [order, setOrder] = useState<Order[]>([
-    { column: "N°", id: "codruta", operator: "DESC" },
+  const [rows, setRows] = useState<Cambiolist[]>([]);
+  const [order, setOrder] = useState<Order[]>([         { column: "N°", id: "idsolsum", operator: "DESC" },
   ]);
   const [filter, setFilter] = useState<Filter[]>([]);
   const [count, setCount] = useState(0);
-
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const [isDrawerOpen, setDrawerOpen] = useState<boolean>(false);
-  const [openModal, setOpenModal] = useState<boolean>(false);
-  const [rowSelected, setRowSelected] = useState<Rutalist | null>(null);
-  const [ruta, setRuta] = useState<string | null>(null);
-  const [deleteRowId, setDeleteRowId] = useState<string>("");
-
+  const [isPending, handleLoading] = useState(false);
 
   /* ------------------ USEEFFECT PARA TRAER LA DATA DE LA BD ----------------- */
 
-  const { mutate, isPending: deleteLoading } = useDeleteRuta();
 
-  const [isPendingData, handleLoading] = useState<boolean>(false);
-
+  const { mutate, isPending: deleteLoading, isSuccess } = useDeleteTcambio();
 
   useEffect(() => {
     if (deleteLoading) {
@@ -55,18 +37,25 @@ export const TrutasTable = () => {
   }, [deleteLoading, handleLoading]);
 
   const { data, isLoading, refetch } = useQueryData({
-    entity: "rutas",
-    api: "doc",
+    entity: "tcambioss",
     params: {
-      page,
+      page: page + 1,
       per: rowsPerPage,
       filter,
       order,
+      status: ["PEN", "RCH"],
     },
     dependency: [filter, order, page, rowsPerPage],
   });
+
   useEffect(() => {
-    setRows(data?.rutalist || []);
+    if (isSuccess) {
+      refetch();
+    }
+  }, [isSuccess, refetch]);
+
+  useEffect(() => {
+    setRows(data?.cambiolist || []);
     setCount(data?.total);
   }, [data]);
 
@@ -85,8 +74,11 @@ export const TrutasTable = () => {
     []
   );
 
-  const handleDelete = (codruta: string) => {
-    setDeleteRowId(codruta);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [deleteRowId, setDeleteRowId] = useState<number>(0);
+
+  const handleDelete = (idsolsum: number) => {
+    setDeleteRowId(idsolsum);
     setOpenDialog(true);
   };
 
@@ -95,40 +87,28 @@ export const TrutasTable = () => {
   };
 
   const handleConfirmDelete = () => {
-    const rowToDelete = rows.find((row) => row.codruta === deleteRowId);
+    const rowToDelete = rows.find((row) => row.idsolsum === deleteRowId);
     if (rowToDelete) {
-      mutate(deleteRowId);
+      mutate({
+        idsolsum: deleteRowId.toString(),
+        nrocambio: rowToDelete.nrocambio.toString(),
+      });
     } else {
       console.log(`Row with id ${deleteRowId} not found`);
-    }
-    setOpenDialog(false);
+    } setOpenDialog(false);
+  }
+
+
+
+  const handleEdit = (idsolsum: number) => {
+    console.log(`Edit ${idsolsum}`);
   };
 
-  const handleEdit = (codruta: string) => {
-    setDrawerOpen(true);
-    setRowSelected(rows.find((row) => row.codruta === codruta) || null);
-    console.log(`Edit ${codruta}`);
-  };
-
-  const handleCreate = () => {
-    setDrawerOpen(true);
-    setRowSelected(null);
-  };
-
-  const handleOpen = (codruta: string) => {
-    if (codruta) {
-      setOpenModal(true);
-      router.push(`${pathname}/${codruta}`);
-
-    }
-  };
 
   return (
     <>
       <ActionCardHeader
-        add={() => {
-          handleCreate();
-        }}
+        add={() => { console.log('anadir') }}
         onApplyFilter={(filters) => setFilter(filters)}
         columnsFilter={columnsFilter}
         onApplyOrder={(orders) => setOrder(orders)}
@@ -146,17 +126,22 @@ export const TrutasTable = () => {
         <BaseTable
           loading={isLoading}
           rows={rows}
-          rowAction={(row) => console.log(row)}
           headers={columnsHeaders}
+          rowAction={(row) => console.log(row)}
           collapsible={{
             visible: (row) => [
-              { content: row.codruta, align: "center" },
-              { content: row.descruta, align: "center" },
+              { content: row.idsolsum, align: "center" },
+              { content: row.nrocambio, align: "center" },
+              { content: row.desccambio, align: "left" },
+              { content: formatDate(row.feccambio), align: "center" },
+              {
+                content: <BadgeTipodoc tipo={row.stscamb} />,
+                align: "center",
+              },
               {
                 content: (
                   <Acciones
                     row={row}
-                    onOpen={handleOpen}
                     onDelete={handleDelete}
                     onEdit={handleEdit}
                   />
@@ -182,19 +167,9 @@ export const TrutasTable = () => {
         open={openDialog}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
-        text={`¿Estas seguro que deseas eliminar la ruta ${
-          rows.find((row) => row.codruta)?.codruta
-        }?`}
+        text={`¿Estas seguro que deseas eliminar la solicitud ${rows.find((row) => row.idsolsum == deleteRowId)?.idsolsum}?`}
       />
-      <EditTrutas
-        isPending={handleLoading}
-        row={rowSelected}
-        isOpen={isDrawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        refetch={refetch}
-      />
-
-      <SimpleBackdrop show={isPendingData} />
+      <SimpleBackdrop show={isPending} />
     </>
   );
 };

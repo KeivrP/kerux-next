@@ -1,72 +1,61 @@
 "use client";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
-import SimpleBackdrop from "@/components/backdrop/backdrop";
-import { BaseTablePagination } from "@/components/table-material/baseTablePagination";
-import { BaseTable } from "@/components/table-material/genericTable";
-import { Rutalist } from "../trutas-types";
-import { Order } from "@/components/button/OrderButton";
-import { Filter } from "@/components/button/FilterButton";
 import { useQueryData } from "@/server/fetch-data";
-import { useDeleteRuta } from "../hook/useRutas";
-import ActionCardHeader from "@/components/card/actionCardHeader";
+import { BaseTable } from "@/components/table-material/genericTable";
+import { BaseTablePagination } from "@/components/table-material/baseTablePagination";
 import {
   Acciones,
   columnsFilter,
   columnsHeaders,
   columnsOrder,
 } from "./header-table";
+import ActionCardHeader from "@/components/card/actionCardHeader";
+import { Filter } from "@/components/button/FilterButton";
+import { Order } from "@/components/button/OrderButton";
 import { ConfirmDialog } from "@/components/modal/confirmDialog";
-import EditTrutas from "./edit";
+import SimpleBackdrop from "@/components/backdrop/backdrop";
+import { BadgeAct } from "@/components/badge/badge-act";
+import { ITnivsum } from "../tnivsum-types";
+import { useDeleteNivsum } from "../hook/useNivsum";
 import { usePathname, useRouter } from "next/navigation";
+import DataSheet from "./data-sheet";
 
-export const TrutasTable = () => {
-  const [page, setPage] = useState(0);
+export const Tnivsum = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
-
-  const [rows, setRows] = useState<Rutalist[]>([]);
+  const [rows, setRows] = useState<ITnivsum[]>([]);
   const [order, setOrder] = useState<Order[]>([
-    { column: "N°", id: "codruta", operator: "DESC" },
+    { column: "N°", id: "nivelsum", operator: "ASC" },
   ]);
   const [filter, setFilter] = useState<Filter[]>([]);
   const [count, setCount] = useState(0);
 
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const [isDrawerOpen, setDrawerOpen] = useState<boolean>(false);
-  const [openModal, setOpenModal] = useState<boolean>(false);
-  const [rowSelected, setRowSelected] = useState<Rutalist | null>(null);
-  const [ruta, setRuta] = useState<string | null>(null);
-  const [deleteRowId, setDeleteRowId] = useState<string>("");
-
-
   /* ------------------ USEEFFECT PARA TRAER LA DATA DE LA BD ----------------- */
 
-  const { mutate, isPending: deleteLoading } = useDeleteRuta();
-
-  const [isPendingData, handleLoading] = useState<boolean>(false);
-
-
-  useEffect(() => {
-    if (deleteLoading) {
-      handleLoading(true);
-    } else handleLoading(false);
-  }, [deleteLoading, handleLoading]);
+  const { mutate, isPending, isSuccess } = useDeleteNivsum();
 
   const { data, isLoading, refetch } = useQueryData({
-    entity: "rutas",
-    api: "doc",
+    entity: "nivs_auts",
     params: {
-      page,
+      page: page + 1,
       per: rowsPerPage,
       filter,
       order,
     },
     dependency: [filter, order, page, rowsPerPage],
   });
+
   useEffect(() => {
-    setRows(data?.rutalist || []);
+    if (isSuccess) {
+      refetch();
+    }
+  }, [isSuccess]);
+
+  useEffect(() => {
+    setRows(data?.nivautlist || []);
     setCount(data?.total);
   }, [data]);
 
@@ -85,8 +74,13 @@ export const TrutasTable = () => {
     []
   );
 
-  const handleDelete = (codruta: string) => {
-    setDeleteRowId(codruta);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [deleteRowId, setDeleteRowId] = useState<string>("");
+  const [rowToEdit, setRowToEdit] = useState<ITnivsum | null>(null);
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+
+  const handleDelete = (id: string) => {
+    setDeleteRowId(id);
     setOpenDialog(true);
   };
 
@@ -95,8 +89,9 @@ export const TrutasTable = () => {
   };
 
   const handleConfirmDelete = () => {
-    const rowToDelete = rows.find((row) => row.codruta === deleteRowId);
+    const rowToDelete = rows.find((row) => row.nivelsum === deleteRowId);
     if (rowToDelete) {
+      console.log(`Deleting row with id ${deleteRowId}`);
       mutate(deleteRowId);
     } else {
       console.log(`Row with id ${deleteRowId} not found`);
@@ -104,30 +99,16 @@ export const TrutasTable = () => {
     setOpenDialog(false);
   };
 
-  const handleEdit = (codruta: string) => {
-    setDrawerOpen(true);
-    setRowSelected(rows.find((row) => row.codruta === codruta) || null);
-    console.log(`Edit ${codruta}`);
-  };
-
-  const handleCreate = () => {
-    setDrawerOpen(true);
-    setRowSelected(null);
-  };
-
-  const handleOpen = (codruta: string) => {
-    if (codruta) {
-      setOpenModal(true);
-      router.push(`${pathname}/${codruta}`);
-
-    }
+  const handleEdit = (id: string) => {
+    setIsEdit(true);
+    setRowToEdit(rows.find((row) => row.nivelsum === id) || null);
   };
 
   return (
     <>
       <ActionCardHeader
         add={() => {
-          handleCreate();
+          handleEdit("anadir");
         }}
         onApplyFilter={(filters) => setFilter(filters)}
         columnsFilter={columnsFilter}
@@ -146,21 +127,27 @@ export const TrutasTable = () => {
         <BaseTable
           loading={isLoading}
           rows={rows}
-          rowAction={(row) => console.log(row)}
           headers={columnsHeaders}
+          rowAction={(row) => console.log(row)}
           collapsible={{
             visible: (row) => [
-              { content: row.codruta, align: "center" },
-              { content: row.descruta, align: "center" },
+              { content: row.nivelsum, align: "center" },
+              { content: row.descnivel, align: "left" },
+              {
+                content: <BadgeAct status={row.indgeneral} />,
+                align: "center",
+              },
+
               {
                 content: (
                   <Acciones
                     row={row}
-                    onOpen={handleOpen}
                     onDelete={handleDelete}
                     onEdit={handleEdit}
+                    onOpen={(a) => router.push(`${pathname}/${a}`)}
                   />
                 ),
+                align: "center",
                 action: () => null,
                 disableTooltip: true,
               },
@@ -177,24 +164,24 @@ export const TrutasTable = () => {
           handleChangeRowsPerPage={handleChangeRowsPerPage}
         ></BaseTablePagination>
       </div>
+      <DataSheet
+        isOpen={isEdit}
+        onClose={() => {
+          setIsEdit(false);
+          refetch();
+        }}
+        row={rowToEdit}
+      />
       <ConfirmDialog
         mode={"delete"}
         open={openDialog}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
-        text={`¿Estas seguro que deseas eliminar la ruta ${
-          rows.find((row) => row.codruta)?.codruta
+        text={`¿Estas seguro quedeseas eliminar el nivel de autorización ${
+          rows.find((row) => row.nivelsum == deleteRowId)?.nivelsum
         }?`}
       />
-      <EditTrutas
-        isPending={handleLoading}
-        row={rowSelected}
-        isOpen={isDrawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        refetch={refetch}
-      />
-
-      <SimpleBackdrop show={isPendingData} />
+      <SimpleBackdrop show={isPending} />
     </>
   );
 };

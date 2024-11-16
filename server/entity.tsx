@@ -7,10 +7,12 @@ export const entities = {
     tipo_reng_sum_crud: '/tipos_rngs_crud',
     delete_tipos_docs: '/tipos_docs_crud',
     pasos_rutas: '/pasos_rutas_crud',
+    ccostos_crud: '/ccostos_nivs_crud/',
   
     // Lists
     log_coddependencia: "/sols_sums_crud/lst_coddependencia",
     ccosto: "/sols_sums_crud/lst_ccosto",
+    ccostoNiv: '/ccostos_nivs_crud/lst_ccostoniv',
     codaccint: "/sols_sums_crud/lst_codaccint",
     codundcmp: "/sols_sums_crud/lst_codundcmp",
     iddocres: "/sols_sums_crud/lst_iddocres",
@@ -73,5 +75,7 @@ export const entities = {
     criterios: "/criterios_eval",
     tiposcomp_unidades: "/tiposcomp_unidades",
     compradores: "/compradores",
+    nivs_auts: '/nivs_auts',
+    sols_sums: '/sols_sums/?',
   };
   
