@@ -31,7 +31,7 @@ const Navbar = ({ children }: { children: ReactNode }) => {
         <div
           className={`transition-all duration-300 ${open ? "w-72" : "w-24"
             } xl:p-4 p-2 bg-[#142f62] flex-col justify-start items-${open ? "start" : "center"
-            } gap-5 inline-flex border-r bg-red h-screen`}
+            } gap-5 inline-flex border-r bg-red h-screen  overflow-y-auto`}
         >
           {firstPathSegment === "" ? (
             <></>
