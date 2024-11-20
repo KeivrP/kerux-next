@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,7 +23,6 @@ import {
 } from "@/app/actions/authActions";
 import { useState } from "react";
 import ErrorMessage from "@/components/error-message";
-import { Button } from "@/components/ui/button";
 
 export default function SignIn() {
     const [globalError, setGlobalError] = useState<string>("");

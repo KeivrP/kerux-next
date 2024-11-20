@@ -1,0 +1,32 @@
+export interface ITSolRec {
+    nrosc: number;
+    fecsol: string;
+    fecreq: string;
+    fecrec: string;
+    ccosto: string;
+    codaccint: string;
+    descsc: string;
+    codcomprador: string;
+    tipoevento: string;
+    codsisaprob: string;
+    fecing: string;
+    fecsts: string;
+    iddoc: number;
+    idsolsum: number;
+    stssc: string;
+    idevento: number;
+    usrsts: string;
+    mensajes: string;
+    mtosc: string;
+    indres: string;
+    iddocres: number;
+    stsres: string;
+    lugarentrega: string;
+    codmoneda: string;
+    codundcmp: string;
+    tipoprocedimiento: string;
+    nroprocedimiento: string;
+    fecreserva: string;
+    indcotizar: string;
+    diasbandeja: number;
+  }
