@@ -13,10 +13,12 @@ const ButtonForms: React.FC<GlobalButtonProps> = ({
     <Button
       {...props}
       style={{
-        justifyContent: "center",
-        alignItems: "center",
-        textTransform: "none",
-        height: "2.1875rem",
+      justifyContent: "center",
+      alignItems: "center",
+      textTransform: "none",
+      height: "2.1875rem",
+      backgroundColor: props.disabled ? "grey" : undefined,
+      color: props.disabled ? "white" : undefined,
       }}
     >
       {children}
