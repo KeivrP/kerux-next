@@ -3,7 +3,7 @@ import { Order } from "@/components/button/OrderButton";
 import { HeadersName } from "@/components/table-material/genericTable";
 import { ITSolRec } from "../tsolrec-types";
 import { IconButton, Tooltip, useTheme } from "@mui/material";
-import { DeleteIcon, OpenIcon } from "@/components/icons/table-icon";
+import { DeleteIcon, DevolverIcon, OpenIcon, RecibirIcon } from "@/components/icons/table-icon";
 
 
 export const columnsFilter: Filter[] = [
@@ -56,12 +56,12 @@ export const columnsHeaders: HeadersName[] = [
 
 export const Acciones = ({
     row,
-    onDelete,
-    onEdit,
+    onDevolver,
+    onRecibir,
   }: {
     row: ITSolRec;
-    onDelete: (id: string) => void;
-    onEdit: (id: string) => void;
+    onDevolver: (id: number) => void;
+    onRecibir: (id: number) => void;
   }) => {
     const theme = useTheme();
   
@@ -83,27 +83,27 @@ export const Acciones = ({
               backgroundColor: theme.palette.background.default,
               borderRadius: "50%",
             }}
-            title="Abrir"
+            title="Recibir"
           >
             <IconButton
-              onClick={() => onEdit(row.codundcmp)}
+              onClick={() => onRecibir(row.nrosc)}
               color="primary"
               size="small"
             >
-              <OpenIcon />
+              <RecibirIcon />
             </IconButton>
           </Tooltip>
   
           <Tooltip
             sx={{ backgroundColor: theme.palette.background.default }}
-            title="Eliminar"
+            title="Devolver"
           >
             <IconButton
-              onClick={() => onDelete(row.codundcmp)}
+              onClick={() => onDevolver(row.nrosc)}
               color="primary"
               size="small"
             >
-              <DeleteIcon />
+              <DevolverIcon />
             </IconButton>
           </Tooltip>
         </span>
