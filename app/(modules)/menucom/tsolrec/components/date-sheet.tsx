@@ -1,16 +1,17 @@
 import TextDivider from "@/components/ui/textDivider";
 import { ConditionalWrapper } from "@/utils/main";
 import { Typography, Grid2 as Grid } from "@mui/material";
-import { DatePicker } from "@nextui-org/date-picker";
 import React from "react";
-import { ITSolRec } from "../tsolrec-types";
+import { FormContextProps } from "../tsolrec-types";
 import { SkeletonInput } from "@/components/skeleton/detail";
 import { parseDate } from "@internationalized/date";
-interface DateSheetProps {
-  data: ITSolRec;
+import { Input } from "@/components/ui/input";
+interface DateSheetProps extends FormContextProps {
+  isLoading?: boolean;
 }
 
-const DateSheet = ({ data }: DateSheetProps) => {
+const DateSheet = ({ formData, isLoading, setFormData }: DateSheetProps) => {
+  console.log("formData", formData.cabsolcompra);
   return (
     <Grid container spacing={2}>
       {/* ---------------------------- INICIO DE DIVISOR --------------------------- */}
@@ -26,11 +27,16 @@ const DateSheet = ({ data }: DateSheetProps) => {
         >
           Estatus
         </Typography>
-        <ConditionalWrapper condition={false} wrapper={SkeletonInput}>
-          <DatePicker
+        <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
+          <Input
+            type="date"
+            disabled
             className="max-w-[284px]"
-            isDisabled
-            defaultValue={data.fecsts ? parseDate(data.fecsts) : null}
+            value={
+              formData.detsolcompra.fecsts
+                ? parseDate(formData.detsolcompra.fecsts).toString()
+                : ""
+            }
           />
         </ConditionalWrapper>
       </Grid>
@@ -42,11 +48,15 @@ const DateSheet = ({ data }: DateSheetProps) => {
         >
           Recepción
         </Typography>
-        <ConditionalWrapper condition={false} wrapper={SkeletonInput}>
-          <DatePicker
+        <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
+          <Input
             className="max-w-[284px]"
-            isDisabled
-            defaultValue={data.fecrec ? parseDate(data.fecrec) : null}
+            disabled
+            value={
+              formData.cabsolcompra.fecrec
+                ? parseDate(formData.cabsolcompra.fecrec).toString()
+                : ""
+            }
           />
         </ConditionalWrapper>
       </Grid>
@@ -58,11 +68,15 @@ const DateSheet = ({ data }: DateSheetProps) => {
         >
           Requerida
         </Typography>
-        <ConditionalWrapper condition={false} wrapper={SkeletonInput}>
-          <DatePicker
+        <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
+          <Input
             className="max-w-[284px]"
-            isDisabled
-            defaultValue={data.fecreq ? parseDate(data.fecreq) : null}
+            disabled
+            value={
+              formData.cabsolcompra.fecreq
+                ? parseDate(formData.cabsolcompra.fecreq).toString()
+                : ""
+            }
           />
         </ConditionalWrapper>
       </Grid>
@@ -75,16 +89,26 @@ const DateSheet = ({ data }: DateSheetProps) => {
         >
           Solicitud
         </Typography>
-        <ConditionalWrapper condition={false} wrapper={SkeletonInput}>
-          <DatePicker
-            className="max-w-[284px]"
-            onChange={(e) => console.log(e)}
-            defaultValue={data.fecsol ? parseDate(data.fecsol) : null}
+        <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
+          <Input
+            type="date"
+            className="max-w-md"
+            value={
+              formData.cabsolcompra.fecsol
+                ? parseDate(formData.cabsolcompra.fecsol).toString()
+                : ""
+            }
+            onChange={(e) =>
+              setFormData((prevFormData) => ({
+                ...prevFormData,
+                cabsolcompra: {
+                  ...prevFormData.cabsolcompra,
+                  fecsol: e.target.value || "",
+                },
+              }))
+            }
+            style={{ backgroundColor: "#fff" }}
           />
-          {/*    <DateAsyncPicker
-              date={dayjs(data?.fecsol)}
-              onSelectionChange={(e) => dispatch(updateData({ ["fecsol"]: e?.format('DD/MM/YYYY') }))}
-            /> */}
         </ConditionalWrapper>
       </Grid>
     </Grid>

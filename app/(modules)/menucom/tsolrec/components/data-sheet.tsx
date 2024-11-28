@@ -1,3 +1,4 @@
+"use client";
 import ButtonForms from "@/components/button/buttonForms";
 import ModalDialog from "@/components/modal/modalDialog";
 import React, { use, useEffect, useState } from "react";
@@ -17,14 +18,16 @@ import SimpleBackdrop from "@/components/backdrop/backdrop";
 
 import { useQueryData } from "@/server/fetch-data";
 import { AsignarIcon } from "@/components/icons/table-icon";
-import { ITSolRec } from "../tsolrec-types";
+import { IFasigcom, ITSolRec } from "../tsolrec-types";
 import InputSheet from "./input-sheet";
 import DateSheet from "./date-sheet";
+import { useFormContextFasigcom } from "@/provider/fasigcom-provider";
+import { useAsignar } from "../hook/useTSolRec";
 
 interface dataSheetProps {
   isOpen: boolean;
   onClose: (value: boolean) => void;
-  row: ITSolRec
+  row: number;
 }
 
 export default function DataSheet({
@@ -32,103 +35,103 @@ export default function DataSheet({
   onClose,
   row,
 }: dataSheetProps): JSX.Element {
-  /*  const {
-    mutate: mutateUpdate,
-    isPending: updateLoading,
-    isSuccess: isSuccessUP,
-  } = useUpdateCompradores();
- */
+  const { formData, setFormData, initialData } = useFormContextFasigcom();
 
-  const { data: accInt, isLoading: loadingAccInt } = useQueryData({
-    entity: "codaccint",
-    api: "log",
-    params: {
-      fecsol: row?.fecsol,
-      ccosto: row?.ccosto,
-    },
+  const { data: rowSelectedData, isLoading } = useQueryData({
+    entity: "compra",
+    api: "comp",
+    type: `${row}`,
+    dependency: [row],
   });
-
-  const [isPending, setIsPending] = useState(false);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    control,
-    reset,
-  } = useForm({
-    defaultValues: {},
-  });
-
-  console.log(row);
 
   useEffect(() => {
-    if (isOpen) {
-      reset({});
+    if (rowSelectedData) {
+      setFormData(rowSelectedData);
     }
-  }, [isOpen, row]);
+  }, [rowSelectedData]);
 
-  const onSubmit = (data: ITSolRec) => {
-    console.log({ data });
-  };
+  const { mutate, isPending: updateLoading, isSuccess } = useAsignar(); 
 
-  /*   useEffect(() => {
+
+  const [isPending, setIsPending] = useState(false);
+
+    useEffect(() => {
     if (updateLoading) {
       setIsPending(true);
     } else {
       setIsPending(false);
     }
-  }, [updateLoading]); */
+  }, [updateLoading]);
 
-  /*   useEffect(() => {
-    if (isSuccessUP) {
+    useEffect(() => {
+    if (isSuccess) {
       onClose(false);
     }
-  }, [isSuccessUP]);
- */
+  }, [isSuccess]);
+
   return (
     <>
       <ModalDialog
-        width="xs"
+        width="md"
         title="Asignar comprador a la solicitud"
         dialogOpen={isOpen}
         handleClose={() => onClose(false)}
       >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Box
-            sx={{
-              mt: -2,
-              px: 8,
-              display: "flex",
-              justifyContent: "flex-end",
-            }}
+        <Box
+          sx={{
+            mt: -2,
+            px: 8,
+            display: "flex",
+            justifyContent: "flex-end",
+            pb: 2,
+          }}
+        >
+          <ButtonForms
+            type="submit"
+            title="Guardar"
+            className="bg-blue-950 text-white ml-4 hover:bg-blue-800 transition duration-200 gap-2 p-2"
+            onClick={() => {
+              mutate({
+                id: row,
+                codcomprador: formData.cabsolcompra.codcomprador!,
+                descsc: formData.cabsolcompra.descsc,
+                fecsol: formData.cabsolcompra.fecsol,
+                codaccint: formData.cabsolcompra.codaccint,
+              });
+            }
+            }
           >
-            <ButtonForms
-              type="submit"
-              title="Guardar"
-              className="bg-blue-950 text-white ml-4 hover:bg-blue-800 transition duration-200"
-            >
-              <AsignarIcon />
-            </ButtonForms>
-          </Box>
-          {/* INICIO GRID VE EL BORDE DE LA FICHA */}
-          <Grid container spacing={2} paddingX={8}>
-            <Grid size={12}>
-              <Divider
-                textAlign="left"
-                sx={{
-                  width: "100%",
-                }}
-              ></Divider>
-            </Grid>
-
-            <Grid size={12}>
-              <InputSheet data={row} />
-            </Grid>
-            <Grid size={12}>
-              <DateSheet data={row} />
-            </Grid>
+            <AsignarIcon fill="white" />
+            Asignar
+          </ButtonForms>
+        </Box>
+        {/* INICIO GRID VE EL BORDE DE LA FICHA */}
+        <Grid container spacing={2} paddingX={8}>
+          <Grid size={12}>
+            <Divider
+              textAlign="left"
+              sx={{
+                width: "100%",
+              }}
+            ></Divider>
           </Grid>
-        </form>
+
+          <Grid size={12}>
+            <InputSheet
+              isLoading={isLoading}
+              formData={formData}
+              setFormData={setFormData}
+              initialData={initialData}
+            />
+          </Grid>
+
+          <Grid size={12}>
+              <DateSheet isLoading={isLoading}
+              formData={formData}
+              setFormData={setFormData}
+              initialData={initialData} />
+            </Grid>
+        </Grid>
       </ModalDialog>
       <SimpleBackdrop show={isPending} />
     </>

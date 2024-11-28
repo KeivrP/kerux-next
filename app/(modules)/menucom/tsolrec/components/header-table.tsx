@@ -28,29 +28,29 @@ export const columnsOrder: Order[] = [
 ];
 
 export const columnsHeaders: HeadersName[] = [
-    { label: "Id Doc", align: "center", minWidth: 130 },
+    { label: "Id Doc", align: "center", minWidth: 80 },
     {
         label: "Nro. Solicitud",
 
         align: "center",
         minWidth: 160,
     },
-    { label: "Descripción", align: "left", minWidth: 350 },
+    { label: "Descripción", align: "left", minWidth: 200 },
     {
         label: "Días",
         align: "center",
-        minWidth: 100,
+        minWidth: 60,
         tooltip: "Días en Bandeja",
     },
     {
         label: "Id Sol. Sum",
         align: "center",
-        minWidth: 140,
+        minWidth: 100,
     },
-    { label: "F. Sol.", align: "center", minWidth: 140 },
-    { label: "F. Req.", align: "center", minWidth: 140 },
-    { label: "Estatus", minWidth: 140 },
-    { label: "Acciones", align: "center", minWidth: 160 },
+    { label: "F. Sol.", align: "center", minWidth: 100 },
+    { label: "F. Req.", align: "center", minWidth: 100 },
+    { label: "Estatus", minWidth: 100, align: "center" }, 
+    { label: "Acciones", align: "center", width: 80 },
 ];
 
 

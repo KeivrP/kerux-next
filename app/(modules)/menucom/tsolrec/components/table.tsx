@@ -18,7 +18,7 @@ import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { ITSolRec } from "../tsolrec-types";
 import { useDevolver } from "../hook/useTSolRec";
 import { calculateDays, formatDate } from "@/utils/main";
-import BadgeTipodoc from "@/components/badge/badge-estatus";
+import { BadgeTipoComp } from "@/components/badge/badge-estatus";
 import DevDialog from "@/components/modal/devDialog";
 import DataSheet from "./data-sheet";
 
@@ -91,12 +91,12 @@ export const Tsolrec = () => {
     setOpenDialog(false);
   };
 
-  const [rowToEdit, setRowToEdit] = useState<ITSolRec | null>(null);
+  const [rowToEdit, setRowToEdit] = useState<number>(0);
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
   const handleEdit = (id: number) => {
     setIsEdit(true);
-    setRowToEdit(rows.find((row) => row.nrosc === id) || null);
+    setRowToEdit(id);
   };
 
   return (
@@ -131,7 +131,7 @@ export const Tsolrec = () => {
               { content: row.idsolsum, align: "center" },
               { content: formatDate(row.fecsol), align: "center" },
               { content: formatDate(row.fecreq), align: "center" },
-              { content: <BadgeTipodoc tipo={row.stssc} />, align: "center" },
+              { content: <BadgeTipoComp tipo={row.stssc} />, align: "center" },
               {
                 content: (
                   <Acciones
@@ -155,21 +155,23 @@ export const Tsolrec = () => {
           handleChangeRowsPerPage={handleChangeRowsPerPage}
         ></BaseTablePagination>
       </div>
-      <DataSheet
-        isOpen={isEdit}
-        onClose={() => {
-          setIsEdit(false);
-          refetch();
-        }}
-        row={rowToEdit!}
-      />
+      {rowToEdit > 0 && (
+        <DataSheet
+          isOpen={isEdit}
+          onClose={() => {
+            setIsEdit(false);
+            refetch();
+          }}
+          row={rowToEdit}
+        />
+      )}
 
       <SimpleBackdrop show={isPending} />
       <DevDialog
         open={openDialog}
         handleClose={handleCancelDevolver}
         title="MENSAJE DE DEVOLUCIÓN"
-        fecsol={rows.find((row) => row.nrosc === deleteRowId)?.fecsol ?? ''}
+        fecsol={rows.find((row) => row.nrosc === deleteRowId)?.fecsol ?? ""}
         handleConfirm={handleConfirmDevolver}
       />
     </>

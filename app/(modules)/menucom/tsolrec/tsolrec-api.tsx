@@ -22,3 +22,21 @@ export const updateCompradores = async (data: ITSolRec) => {
       throw error;
     }
   }
+
+  export const asignarComprador = async (id: number, codcomprador: string, descsc: string, fecsol: string, codaccint: string) => {
+    try {
+      const res = await Api_Comp.post(`/sol_compras/boton_asig_comprador`, {
+        params: {
+          id,
+          codcomprador,
+          descsc,
+          fecsol,
+          codaccint,
+        },
+      });
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
