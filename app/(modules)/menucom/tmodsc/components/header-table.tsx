@@ -38,7 +38,7 @@ export const Acciones = ({
     onFile,
   }: {
     row: ITSolRec;
-    onFile: (id: number) => void;
+    onFile: (id: ITSolRec) => void;
   }) => {
     const theme = useTheme();
   
@@ -61,7 +61,7 @@ export const Acciones = ({
             title="Abrir"
           >
             <IconButton
-              onClick={() => onFile(row.nrosc)}
+              onClick={() => onFile(row)}
               color="primary"
               size="small"
             >

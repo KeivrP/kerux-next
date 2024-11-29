@@ -41,6 +41,9 @@ export interface ICabSolCompra {
   descsc: string;
   codcomprador: string | null;
   tipoevento: string | null;
+  Comprador?: {
+    nomcomprador: string;
+  };
   codsisaprob: string;
   fecing: string;
   fecsts: string;
@@ -95,7 +98,7 @@ export interface IDetSolCompra {
 
 export interface IFasigcom {
   cabsolcompra: ICabSolCompra;
-  detsolcompra: IDetSolCompra;
+  detsolcompra: IDetSolCompra[];
 }
 export const initialDataFasigcom: IFasigcom = {
   cabsolcompra: {
@@ -134,30 +137,32 @@ export const initialDataFasigcom: IFasigcom = {
       nombre: "",
     },
   },
-  detsolcompra: {
-    nrosc: 0,
-    nrorengsc: 0,
-    tiporeng: "",
-    coditem: null,
-    descreng: "",
-    cantsol: "",
-    undsol: "",
-    cantpend: "",
-    stsrengsc: "",
-    fecsts: "",
-    idsolsum: 0,
-    nroreng: 0,
-    descadiitem: null,
-    mtoneto: "",
-    mtoimptos: "",
-    porcimptos: "",
-    indimptosman: "",
-    mtorengsc: "",
-    indcotizar: "",
-    codserv: null,
-    raw_rnum_: 0,
-    dsp_codigo: null,
-  },
+  detsolcompra: [
+    {
+      nrosc: 0,
+      nrorengsc: 0,
+      tiporeng: "",
+      coditem: null,
+      descreng: "",
+      cantsol: "",
+      undsol: "",
+      cantpend: "",
+      stsrengsc: "",
+      fecsts: "",
+      idsolsum: 0,
+      nroreng: 0,
+      descadiitem: null,
+      mtoneto: "",
+      mtoimptos: "",
+      porcimptos: "",
+      indimptosman: "",
+      mtorengsc: "",
+      indcotizar: "",
+      codserv: null,
+      raw_rnum_: 0,
+      dsp_codigo: null,
+    },
+  ],
 };
 
 export interface FormContextProps {
