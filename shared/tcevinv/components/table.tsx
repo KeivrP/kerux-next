@@ -21,7 +21,7 @@ import ActionCardHeader from "@/components/card/actionCardHeader";
 import RadioButtonCodUad from "@/components/radio/radioButtonUnd";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 import Checkbox from "@/components/checkbox/checkbox";
-import BadgeTipodoc from "@/components/badge/badge-estatus";
+import {BadgeTipodoc} from "@/components/badge/badge-estatus";
 import Hcdocorg from "@/shared/hcdocorg/Hcdocorg";
 
 type Params = {

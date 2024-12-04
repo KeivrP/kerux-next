@@ -15,7 +15,7 @@ import { Order } from "@/components/button/OrderButton";
 
 import { ITsolsum } from "../tsolsum-types";
 import { formatDate } from "@/utils/main";
-import BadgeTipodoc from "@/components/badge/badge-estatus";
+import {BadgeTipodoc} from "@/components/badge/badge-estatus";
 import { useGenerateTnivsum } from "../hook/useTsolsum";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { ConfirmDialog } from "@/components/modal/confirmDialog";

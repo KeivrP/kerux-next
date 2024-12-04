@@ -10,7 +10,7 @@ import { formatCurrency, formatDate } from "@/utils/main";
 import { Asterisk } from "lucide-react";
 import { BaseTablePagination } from "@/components/table-material/baseTablePagination";
 import ActionCardHeader from "@/components/card/actionCardHeader";
-import BadgeTipodoc from "@/components/badge/badge-estatus";
+import {BadgeTipodoc} from "@/components/badge/badge-estatus";
 import Hcdocorg from "@/shared/hcdocorg/Hcdocorg";
 import { ITDoRig } from "../tdorig-types";
 import { Acciones, columnsFilterMensajero, columnsHeadersMensajero, columnsOrderMensajero } from "./header-table";

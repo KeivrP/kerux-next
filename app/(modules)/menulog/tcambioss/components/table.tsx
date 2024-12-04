@@ -11,7 +11,7 @@ import { Order } from "@/components/button/OrderButton";
 import { ConfirmDialog } from "@/components/modal/confirmDialog";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { formatDate } from "@/utils/main";
-import BadgeTipodoc from "@/components/badge/badge-estatus";
+import {BadgeTipodoc} from "@/components/badge/badge-estatus";
 import { useDeleteTcambio } from "../hook/useTcambios";
 
 export const TcambiosTable = () => {

@@ -18,7 +18,7 @@ import { useEffect, useMemo, useState } from "react";
 import { FormContextProps } from "../hcdocorg-utils";
 import BadgeModule from "@/components/badge/badge-mod";
 import Grid from "@mui/material/Grid2";
-import BadgeTipodoc from "@/components/badge/badge-estatus";
+import {BadgeTipodoc} from "@/components/badge/badge-estatus";
 import { Input } from "@/components/ui/input";
 import { BadgeAct } from "@/components/badge/badge-act";
 

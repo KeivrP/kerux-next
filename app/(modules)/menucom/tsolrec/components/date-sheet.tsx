@@ -33,8 +33,8 @@ const DateSheet = ({ formData, isLoading, setFormData }: DateSheetProps) => {
             disabled
             className="max-w-[284px]"
             value={
-              formData.detsolcompra.fecsts
-                ? parseDate(formData.detsolcompra.fecsts).toString()
+              formData.cabsolcompra.fecsts
+                ? parseDate(formData.cabsolcompra.fecsts).toString()
                 : ""
             }
           />

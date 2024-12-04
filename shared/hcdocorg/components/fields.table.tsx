@@ -8,7 +8,7 @@ import { IconButton, Tooltip, useTheme } from "@mui/material";
 import { CircleSlash, RefreshCcw } from "lucide-react";
 import { BaseTable } from "@/components/table-material/genericTable";
 import { formatDate } from "@/utils/main";
-import BadgeTipodoc from "@/components/badge/badge-estatus";
+import {BadgeTipodoc} from "@/components/badge/badge-estatus";
 import BadgeModule from "@/components/badge/badge-mod";
 
 interface FielTablesProps extends FormContextProps {

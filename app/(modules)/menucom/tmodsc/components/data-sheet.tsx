@@ -1,30 +1,19 @@
 "use client";
-import ButtonForms from "@/components/button/buttonForms";
 import ModalDialog from "@/components/modal/modalDialog";
-import React, { use, useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import React, { useState } from "react";
 import {
-  Autocomplete,
-  Box,
   Grid2 as Grid,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  TextField,
-  Typography,
   Divider,
 } from "@mui/material";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 
-import { useQueryData } from "@/server/fetch-data";
-import { AsignarIcon } from "@/components/icons/table-icon";
-import { ITSolRec } from "../../tsolrec/tsolrec-types";
+import { ICabSolCompra, ITSolRec } from "../../tsolrec/tsolrec-types";
 import InputSheet from "../[id]/components/input-sheet";
 
 interface dataSheetProps {
   isOpen: boolean;
   onClose: (value: boolean) => void;
-  rows: ITSolRec;
+  rows: ICabSolCompra;
 }
 
 export default function DataSheet({

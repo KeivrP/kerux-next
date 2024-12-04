@@ -8,7 +8,7 @@ import ActionCardHeader from "@/components/card/actionCardHeader";
 import { Filter } from "@/components/button/FilterButton";
 import { Order } from "@/components/button/OrderButton";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
-import BadgeTipodoc from "@/components/badge/badge-estatus";
+import {BadgeTipodoc} from "@/components/badge/badge-estatus";
 import { formatCurrency, formatDate } from "@/utils/main";
 import Hcdocorg from "@/shared/hcdocorg/Hcdocorg";
 import Checkbox from "@/components/checkbox/checkbox";

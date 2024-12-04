@@ -10,7 +10,7 @@ import ActionCardHeader from "@/components/card/actionCardHeader";
 import { Acciones, columnsFilter, columnsHeaders, columnsOrder } from "./header-table";
 import { BaseTable } from "@/components/table-material/genericTable";
 import { formatDate } from "@/utils/main";
-import BadgeTipodoc from "@/components/badge/badge-estatus";
+import {BadgeTipodoc} from "@/components/badge/badge-estatus";
 import { BaseTablePagination } from "@/components/table-material/baseTablePagination";
 
 

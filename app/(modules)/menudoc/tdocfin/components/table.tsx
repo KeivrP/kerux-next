@@ -9,12 +9,12 @@ import { Filter } from "@/components/button/FilterButton";
 import { Order } from "@/components/button/OrderButton";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { Documentoslist } from "../tdocfin-types";
-import BadgeTipodoc from "@/components/badge/badge-estatus";
 import { formatCurrency, formatDate } from "@/utils/main";
 import Hcdocorg from "@/shared/hcdocorg/Hcdocorg";
 import { useReturnsDocFin } from "../hook/useReturnDocfin";
 import Checkbox from "@/components/checkbox/checkbox";
 import { CornerUpLeft } from "lucide-react";
+import { BadgeTipodoc } from "@/components/badge/badge-estatus";
 
 export const TdocfinTable = () => {
     const [page, setPage] = useState(0);
