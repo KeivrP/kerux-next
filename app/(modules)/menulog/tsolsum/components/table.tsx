@@ -19,6 +19,7 @@ import {BadgeTipodoc} from "@/components/badge/badge-estatus";
 import { useGenerateTnivsum } from "../hook/useTsolsum";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { ConfirmDialog } from "@/components/modal/confirmDialog";
+import { usePathname, useRouter } from "next/navigation";
 
 export const TsolsumTable = () => {
     const [page, setPage] = useState(0);
@@ -30,6 +31,10 @@ export const TsolsumTable = () => {
     const [filter, setFilter] = useState<Filter[]>([]);
     const [count, setCount] = useState(0);
     const [isPending, handleLoading] = useState<boolean>(false);
+    const [openModal, setOpenModal] = useState<boolean>(false)
+    const router = useRouter()
+    const pathname = usePathname();
+
 
     /* ------------------ USEEFFECT PARA TRAER LA DATA DE LA BD ----------------- */
 
@@ -98,6 +103,13 @@ export const TsolsumTable = () => {
     const handleCancelDelete = () => {
         setOpenConfirm(false);
     }
+    const handleOpen = (id: number) => {
+        if (id) {
+          setOpenModal(true);
+          router.push(`${pathname}/${id}`);
+    
+        }
+      };
 
     return (
         <>
@@ -130,7 +142,7 @@ export const TsolsumTable = () => {
                             { content: row.ccosto, align: "center" },
                             { content: <BadgeTipodoc tipo={row.stssol} />, align: "center" },
                             {
-                                content: <Acciones row={row} onOpen={handleEdit} onReject={() => { }} onGenerate={openGenerate} />,
+                                content: <Acciones row={row} onOpen={handleOpen} onReject={() => { }} onGenerate={openGenerate} />,
                                 action: () => null,
                                 disableTooltip: true,
                             },
