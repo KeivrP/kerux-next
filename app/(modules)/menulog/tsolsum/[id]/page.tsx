@@ -1,29 +1,29 @@
 "use client";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useQueryData } from "@/server/fetch-data";
-import { Container, Typography, useTheme } from "@mui/material";
+import { Suspense } from "react";
+import { Container } from "@mui/material";
 import Breadcrumbs from "@/components/breadcrumbs/breadcumbs";
-import TextDivider from "@/components/ui/textDivider";
-import { Input } from "@/components/ui/input";
-import { FrutasTable } from "./components/table";
+import Loader from "@/components/backdrop/loader";
+import {
+  FormProviderFsolsum,
+} from "@/provider/fsolsum-provider";
+import DataSheet from "./components/data-sheet";
 
-export default function TrutasPage() {
+export default function Fsolsum() {
   const params = useParams();
-  const theme = useTheme();
   const { id } = params;
 
- 
+  if(!id){
+    return <></>
+  }
+
   return (
     <>
       <Container maxWidth="xl">
         <Breadcrumbs />
-        <div className="p-6 flex flex-col gap-4">
-          <div>
-            <TextDivider>Codigo de la Ruta</TextDivider>
-          </div>
-          {id}
-        </div>
+        <FormProviderFsolsum>
+            <DataSheet id={id.toString()} />
+        </FormProviderFsolsum>
       </Container>
     </>
   );

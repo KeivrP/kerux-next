@@ -1,9 +1,7 @@
-import * as React from "react"
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
-import { cn } from "@/lib/utils"
-
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
 }
 
@@ -16,16 +14,40 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           className={cn(
             "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
             className,
-            error && "border-red-500" // Add a red border if there's an error
+            error && "border-red-500" // Añadir un borde rojo si hay un error
           )}
           ref={ref}
           {...props}
         />
         {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
       </div>
-    )
+    );
   }
-)
-Input.displayName = "Input"
+);
+Input.displayName = "Input";
 
-export { Input }
+export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  error?: string;
+}
+
+const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ className, error, ...props }, ref) => {
+    return (
+      <div>
+        <textarea
+          className={cn(
+            "flex h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+            className,
+            error && "border-red-500" // Añadir un borde rojo si hay un error
+          )}
+          ref={ref}
+          {...props}
+        />
+        {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
+      </div>
+    );
+  }
+);
+Textarea.displayName = "Textarea";
+
+export { Input, Textarea };

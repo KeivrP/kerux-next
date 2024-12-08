@@ -40,6 +40,7 @@ export const entities = {
     lst_contador: '/listas/lst_tipocontador',
     lst_superusuarios: 'listas/lst_superusuarios',
     lst_ujecutora: 'listas/lst_ujec',
+    controlog: '/sols_sums_crud/lst_controlog',
     
   
     // Other entities

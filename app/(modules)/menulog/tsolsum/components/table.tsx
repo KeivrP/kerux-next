@@ -105,7 +105,6 @@ export const TsolsumTable = () => {
     }
     const handleOpen = (id: number) => {
         if (id) {
-          setOpenModal(true);
           router.push(`${pathname}/${id}`);
     
         }
@@ -114,7 +113,7 @@ export const TsolsumTable = () => {
     return (
         <>
             <ActionCardHeader
-                add={() => setOpenDialog(true)}
+                add={()=> router.push(`${pathname}/${"-"}`)}
                 onApplyFilter={(filters) => setFilter(filters)}
                 columnsFilter={columnsFilter}
                 onApplyOrder={(orders) => setOrder(orders)}
