@@ -76,6 +76,9 @@ export const entities = {
     tiposcomp_unidades: "/tiposcomp_unidades",
     compradores: "/compradores",
     nivs_auts: '/nivs_auts',
+    proveedores: '/proveedores',
+    tipos_doc_com: '/tipos_doc_com',
+    tipos_doc: '/tipos_doc',
     sols_sums: '/sols_sums/?',
   };
   
