@@ -21,8 +21,8 @@ export const getUserLogin = async (user: UserLogin) => {
   }
 
   const data = await response.json();
-  setAuthTokenInCookies("token", data.correo, { path: "/", secure: true });
-  setAuthTokenInCookies("email", data.token, { path: "/", secure: true });
+  setAuthTokenInCookies("token", data.correo, { path: "/" });
+  setAuthTokenInCookies("email", data.token, { path: "/" });
   return data;
 };
 
