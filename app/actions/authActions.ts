@@ -28,7 +28,7 @@ export async function handleCredentialsSignin({ email, password }: {
 }
 
 export async function handleSignOut() {
-    removeAuthTokenCookie("token");
-    removeAuthTokenCookie("email");
+   await removeAuthTokenCookie("token");
+   await  removeAuthTokenCookie("email");
     await signOut();
 }
