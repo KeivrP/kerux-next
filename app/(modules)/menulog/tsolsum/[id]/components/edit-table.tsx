@@ -1,6 +1,6 @@
 import ButtonForms from "@/components/button/buttonForms";
 import ModalDialog from "@/components/modal/modalDialog";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Autocomplete, TextField, Typography } from "@mui/material";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
@@ -9,6 +9,7 @@ import Grid from "@mui/material/Grid2";
 import { ConditionalWrapper } from "@/utils/main";
 import { useQueryData } from "@/server/fetch-data";
 import { SkeletonInput } from "@/components/skeleton/detail";
+import { Input } from "@/components/ui/input";
 
 interface DataSheetProps {
   isOpen: boolean;
@@ -49,7 +50,7 @@ export default function DataSheet({
       stsrngsol: "",
       mtototrng: "",
       codserv: "",
-      codnombre: ""
+      codnombre: "",
     },
   });
 
@@ -94,6 +95,18 @@ export default function DataSheet({
     }
   );
 
+  useEffect(() => {
+    if (getValues("tiporeng") === "SV") {
+      setValue("destino", "COMP");
+    } else if (getValues("tiporeng") === "MA") {
+      setValue("destino", "MTTO");
+    } else if (["OB", "AD"].includes(getValues("tiporeng"))) {
+      setValue("destino", "CTTO");
+    } else {
+      setValue("destino", "");
+    }
+  }, [getValues("tiporeng")]);
+
   const { data: lst_nombnorm, isLoading: isLoadingNombnorm } = useQueryData({
     entity: "nombnorm",
     dependency: [getValues("tiporeng")],
@@ -105,7 +118,7 @@ export default function DataSheet({
       idsolsum: formData.cabsolsum.idsolsum,
       codnombre: getValues("codnombre"),
       tiporeng: getValues("tiporeng"),
-      coditem: getValues("coditem")
+      coditem: getValues("coditem"),
     },
     dependency: [getValues("codnombre"), getValues()],
   });
@@ -124,6 +137,7 @@ export default function DataSheet({
       params: {
         tiporeng: getValues("tiporeng"),
         idsolsum: formData.cabsolsum.idsolsum,
+        codserv: getValues("codserv"),
       },
       dependency: [getValues("tiporeng")],
     });
@@ -142,8 +156,160 @@ export default function DataSheet({
     console.log(data);
     onClose(false);
   };
-const Item = useMemo(() => getValues("tiporeng") === "MT" ? lst_itemcat : lst_servicioscat, [getValues("tiporeng")])
-  console.log(getValues());
+
+  const ItemServ = () => {
+    return getValues("tiporeng") === "MT" ? (
+      <>
+        <Typography variant="h3" color="primary" mb={2}>
+          Item
+        </Typography>
+        <ConditionalWrapper
+          condition={isLoadingItemcat}
+          wrapper={SkeletonInput}
+        >
+          <Autocomplete
+            id="coditem"
+            fullWidth
+            size="small"
+            {...register("coditem", { required: "Item requerido" })}
+            options={Array.isArray(lst_itemcat) ? lst_itemcat : []}
+            getOptionLabel={(option) =>
+              `${option.coditem} - ${option.dsp_DescAmpliada}`
+            }
+            renderInput={(params) => <TextField {...params} />}
+            value={
+              Array.isArray(lst_itemcat)
+                ? lst_itemcat.find(
+                    (option) => option.coditem === getValues("coditem")
+                  )
+                : null
+            }
+            onChange={(_, newValue) => {
+              setValue("coditem", newValue ? newValue.coditem : "");
+              setValue("unidbasica", newValue ? newValue.unidbasica : "");
+              setValue("codcta", newValue ? newValue.codcta : "");
+              setValue("codclasifsnc", newValue ? newValue.codclasifsnc : "");
+              setValue("destino", newValue ? newValue.tiposumin : "");
+              setValue("descadiitem", newValue ? newValue.descadicional : "");
+              setValue("descreng", newValue ? newValue.dsp_DescAmpliada : "");
+              /*                     setValue("codmoneda", newValue ? newValue.codmoneda : ""); */
+            }}
+          />
+          {!!errors.tiporeng && (
+            <Typography color="error">{errors.coditem?.message} ff</Typography>
+          )}
+        </ConditionalWrapper>
+      </>
+    ) : (
+      <>
+        <Typography variant="h3" color="primary" mb={2}>
+          Servicio
+        </Typography>
+        <ConditionalWrapper
+          condition={isLoadingItemcat}
+          wrapper={SkeletonInput}
+        >
+          <Autocomplete
+            id="codserv"
+            {...register("codserv", {
+              required:
+                (formData.IndCatObras === "S" &&
+                  getValues("tiporeng") === "OB") ||
+                getValues("tiporeng") === "AD"
+                  ? "Codigo de servicio reuqerdio requerida"
+                  : undefined,
+            })}
+            fullWidth
+            size="small"
+            {...register("codserv", { required: "Item requerido" })}
+            options={Array.isArray(lst_servicioscat) ? lst_servicioscat : []}
+            getOptionLabel={(option) =>
+              `${option.codserv} - ${option.descripcion}`
+            }
+            renderInput={(params) => <TextField {...params} />}
+            value={
+              Array.isArray(lst_servicioscat)
+                ? lst_servicioscat.find(
+                    (option) => option.codserv === getValues("codserv")
+                  )
+                : null
+            }
+            onChange={(_, newValue) => {
+              setValue("codserv", newValue ? newValue.codserv : "");
+              setValue("unidbasica", newValue ? newValue.unidbasica : "");
+              setValue("codcta", newValue ? newValue.codcta : "");
+              setValue("codclasifsnc", newValue ? newValue.codclasifsnc : "");
+              setValue("destino", newValue ? newValue.tiposumin : "");
+              setValue("descadiitem", newValue ? newValue.descadicional : "");
+              setValue("descreng", newValue ? newValue.dsp_DescAmpliada : "");
+              /*                     setValue("codmoneda", newValue ? newValue.codmoneda : ""); */
+            }}
+          />
+          {!!errors.tiporeng && (
+            <Typography color="error">{errors.codserv?.message} ff</Typography>
+          )}
+        </ConditionalWrapper>
+      </>
+    );
+  };
+
+  const Cuentas = () => {
+    return getValues("tiporeng") === "MT" ? (
+      <>
+        <Typography variant="h3" color="primary" mb={2}>
+          Cuenta Presupuestaria
+        </Typography>
+        <ConditionalWrapper condition={isLoadinCtas} wrapper={SkeletonInput}>
+          <Autocomplete
+            fullWidth
+            size="small"
+            options={Array.isArray(lst_ctas) ? lst_ctas : []}
+            getOptionLabel={(option) => option.codcta}
+            renderInput={(params) => <TextField {...params} />}
+            value={
+              Array.isArray(lst_ctas)
+                ? lst_ctas.find(
+                    (option: { codcta: string; nombre: string }) =>
+                      option.codcta === getValues("codcta")
+                  )
+                : null
+            }
+            onChange={(_, newValue) => {
+              setValue("codcta", newValue ? newValue.codcta : "");
+            }}
+          />
+        </ConditionalWrapper>
+      </>
+    ) : (
+      <>
+        <Typography variant="h3" color="primary" mb={2}>
+          Cuenta Presupuestaria
+        </Typography>
+        <ConditionalWrapper condition={isLoadinCtas} wrapper={SkeletonInput}>
+          <Autocomplete
+            fullWidth
+            size="small"
+            options={Array.isArray(lst_ctaspresup) ? lst_ctaspresup : []}
+            getOptionLabel={(option) => option.codcta}
+            renderInput={(params) => <TextField {...params} />}
+            value={
+              Array.isArray(lst_ctaspresup)
+                ? lst_ctaspresup.find(
+                    (option: { codcta: string; nombre: string }) =>
+                      option.codcta === getValues("codcta")
+                  )
+                : null
+            }
+            onChange={(_, newValue) => {
+              setValue("codcta", newValue ? newValue.codcta : "");
+            }}
+          />
+        </ConditionalWrapper>
+      </>
+    );
+  };
+
+  console.log(getValues(), "---", row);
 
   return (
     <>
@@ -189,6 +355,8 @@ const Item = useMemo(() => getValues("tiporeng") === "MT" ? lst_itemcat : lst_se
                       "tiporeng",
                       newValue ? newValue.tiporengsumin : ""
                     );
+                    setValue("codserv", "");
+                    setValue("coditem", "");
                   }}
                 />
                 {!!errors.tiporeng && (
@@ -240,60 +408,9 @@ const Item = useMemo(() => getValues("tiporeng") === "MT" ? lst_itemcat : lst_se
               </ConditionalWrapper>
             </Grid>
 
-            <Grid size={6}>
-              <Typography variant="h3" color="primary" mb={2}>
-                Item
-              </Typography>
-              <ConditionalWrapper
-                condition={isLoadingItemcat}
-                wrapper={SkeletonInput}
-              >
-                <Autocomplete
-                  id="coditem"
-                  fullWidth
-                  size="small"
-                  {...register("coditem", { required: "Item requerido" })}
-                  options={Array.isArray(lst_itemcat) ? lst_itemcat : []}
-                  getOptionLabel={(option) =>
-                    `${option.coditem} - ${option.dsp_DescAmpliada}`
-                  }
-                  renderInput={(params) => <TextField {...params} />}
-                  value={
-                    Array.isArray(lst_itemcat)
-                      ? lst_itemcat.find(
-                          (option) => option.coditem === getValues("coditem")
-                        )
-                      : null
-                  }
-                  onChange={(_, newValue) => {
-                    setValue("coditem", newValue ? newValue.coditem : "");
-                    setValue("unidbasica", newValue ? newValue.unidbasica : "");
-                    setValue("codcta", newValue ? newValue.codcta : "");
-                    setValue(
-                      "codclasifsnc",
-                      newValue ? newValue.codclasifsnc : ""
-                    );
-                    setValue("destino", newValue ? newValue.tiposumin : "");
-                    setValue(
-                      "descadiitem",
-                      newValue ? newValue.descadicional : ""
-                    );
-                    setValue(
-                      "descreng",
-                      newValue ? newValue.dsp_DescAmpliada : ""
-                    );
-/*                     setValue("codmoneda", newValue ? newValue.codmoneda : ""); */            
-      }}
-                />
-                {!!errors.tiporeng && (
-                  <Typography color="error">
-                    {errors.coditem?.message} ff
-                  </Typography>
-                )}
-              </ConditionalWrapper>
-            </Grid>
+            <Grid size={6}>{ItemServ()}</Grid>
 
-            <Grid size={2}>
+            <Grid size={2.5}>
               <Typography variant="h3" color="primary" mb={2}>
                 Unidad
               </Typography>
@@ -328,14 +445,7 @@ const Item = useMemo(() => getValues("tiporeng") === "MT" ? lst_itemcat : lst_se
                   onChange={(_, newValue) => {
                     setValue("unidbasica", newValue ? newValue.unidmedida : "");
                   }}
-                  disabled={
-                    !(
-                      getValues("tiporeng") === "SV" ||
-                      getValues("tiporeng") === "MA" ||
-                      getValues("tiporeng") === "OB" ||
-                      getValues("tiporeng") === "AD"
-                    )
-                  }
+                  disabled={getValues("tiporeng") === "MT"}
                 />
                 {!!errors.unidbasica && (
                   <Typography color="error">
@@ -345,20 +455,24 @@ const Item = useMemo(() => getValues("tiporeng") === "MT" ? lst_itemcat : lst_se
               </ConditionalWrapper>
             </Grid>
 
-            <Grid size={3}>
-              <Typography variant="h3" color="primary">
+            <Grid size={2.5}>
+              <Typography variant="h3" color="primary" mb={2}>
                 Cantidad
               </Typography>
-              <TextField
+              <Input
                 id="cantsol"
-                {...register("cantsol", { required: "Cantidad requerida" })}
-                size="small"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                error={!!errors.cantsol}
-                helperText={errors.cantsol?.message}
+                {...register("cantsol", {
+                  required: "Cantidad requerida",
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: "Solo se permiten números",
+                  },
+                })}
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
               />
+              {errors.cantsol && <span>{errors.cantsol.message}</span>}
             </Grid>
 
             <Grid size={4}>
@@ -384,25 +498,42 @@ const Item = useMemo(() => getValues("tiporeng") === "MT" ? lst_itemcat : lst_se
             </Grid>
 
             <Grid size={3}>
-              <Typography variant="h3" color="primary">
+              <Typography variant="h3" color="primary" mb={2}>
                 IVA
               </Typography>
-              <TextField
-                id="porcimptos"
-                {...register("porcimptos", {
-                  required:
-                    formData.cabsolsum.reserva !== "N"
-                      ? "IVA requerido"
-                      : undefined,
-                })}
-                size="small"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                error={!!errors.porcimptos}
-                helperText={errors.porcimptos?.message}
-                disabled={formData.cabsolsum.reserva === "N"}
-              />
+              <ConditionalWrapper
+                condition={isLoadinCtas}
+                wrapper={SkeletonInput}
+              >
+                <Autocomplete
+                  fullWidth
+                  size="small"
+                  {...register("porcimptos", {
+                    required:
+                      formData.cabsolsum.reserva !== "N"
+                        ? "IVA requerido"
+                        : undefined,
+                  })}
+                  disabled={formData.cabsolsum.reserva === "N"}
+                  options={Array.isArray(lst_porcimptos) ? lst_porcimptos : []}
+                  getOptionLabel={(option) => option.desccatg}
+                  renderInput={(params) => <TextField {...params} />}
+                  value={
+                    Array.isArray(lst_porcimptos)
+                      ? lst_porcimptos.find(
+                          (option: { porccat: string; desccatg: string }) =>
+                            option.porccat === getValues("porcimptos")
+                        )
+                      : null
+                  }
+                  onChange={(_, newValue) => {
+                    setValue("porcimptos", newValue ? newValue.porccat : "");
+                  }}
+                />
+              </ConditionalWrapper>
+              {!!errors.porcimptos && (
+                <Typography color="error">IVA es requerido</Typography>
+              )}
             </Grid>
 
             <Grid size={12}>
@@ -413,7 +544,7 @@ const Item = useMemo(() => getValues("tiporeng") === "MT" ? lst_itemcat : lst_se
                 id="descreng"
                 {...register("descreng", {
                   required:
-                    getValues("tiporeng") === "MT"
+                    getValues("tiporeng") !== "MT"
                       ? "Descripción requerida"
                       : undefined,
                 })}
@@ -423,39 +554,11 @@ const Item = useMemo(() => getValues("tiporeng") === "MT" ? lst_itemcat : lst_se
                 margin="normal"
                 error={!!errors.descreng}
                 helperText={errors.descreng?.message}
-                disabled={getValues("tiporeng") !== "MT"}
+                disabled={getValues("tiporeng") === "MT"}
               />
             </Grid>
 
-            <Grid size={6}>
-              <Typography variant="h3" color="primary" mb={2}>
-                Cuenta Presupuestaria
-              </Typography>
-              <ConditionalWrapper
-                condition={isLoadinCtas}
-                wrapper={SkeletonInput}
-              >
-                <Autocomplete
-                  fullWidth
-                  size="small"
-                  options={Array.isArray(lst_ctas) ? lst_ctas : []}
-                  getOptionLabel={(option) => option.codcta}
-                  renderInput={(params) => <TextField {...params} />}
-                  value={
-                    Array.isArray(lst_ctas)
-                      ? lst_ctas.find(
-                          (option: { codcta: string; nombre: string }) =>
-                            option.codcta === getValues("codcta")
-                        )
-                      : null
-                  }
-                  onChange={(_, newValue) => {
-                    setValue("codcta", newValue ? newValue.codcta : "");
-                  }}
-                />
-              </ConditionalWrapper>
-            </Grid>
-
+            <Grid size={6}>{Cuentas()}</Grid>
             <Grid size={6}>
               <Typography variant="h3" color="primary" mb={2}>
                 Clasif. SNC

@@ -18,6 +18,8 @@ import { formatCurrency, formatDate } from "@/utils/main";
 import { Typography } from "@mui/material";
 import { Input } from "@/components/ui/input";
 import DataSheet from "./edit-table";
+import { Coda } from "next/font/google";
+import { calcularTotales } from "../utils";
 
 interface DataInputProps extends FormContextProps {
   isLoading: boolean;
@@ -43,6 +45,8 @@ export const FsolsumTable: React.FC<DataInputProps> = ({
     setDrawerOpen(true);
   };
 
+  const { total, totalIVA, subtotal } = calcularTotales(formData);
+
   return (
     <>
       <ActionCardHeader
@@ -55,7 +59,7 @@ export const FsolsumTable: React.FC<DataInputProps> = ({
 
       <div
         style={{
-          height: "35vh",
+          height: "70vh",
           width: "100%",
         }}
       >
@@ -69,7 +73,7 @@ export const FsolsumTable: React.FC<DataInputProps> = ({
               { content: row.nroreng, handleCollapse: true, align: "center" },
               { content: row.dsp_DescTipoReng, align: "left" },
               { content: row.dsp_DescNombNorm, align: "left" },
-              { content: row.tiporeng !== "MT" ? "" : "algo", align: "center" },
+              { content: row.tiporeng !== "MT" ? row.codserv : row.coditem, align: "center" },
               { content: row.descreng, align: "left" },
               {
                 content: <BadgeModule codmenu={row.destino} />,
@@ -80,7 +84,7 @@ export const FsolsumTable: React.FC<DataInputProps> = ({
               { content: row.cantsol, align: "center" },
               { content: formatCurrency(row?.precio), align: "center" },
               { content: row.porcimptos, align: "center" },
-              { content: row.dsp_MtoTotReng, align: "center" },
+              { content: formatCurrency(row.dsp_MtoTotReng), align: "center" },
               {
                 content: (
                   <Acciones
@@ -123,19 +127,19 @@ export const FsolsumTable: React.FC<DataInputProps> = ({
               <Typography variant="h3" color="primary" mb={1.5}>
                 SubTotal
               </Typography>
-              <Input value={""} disabled />
+              <Input value={formatCurrency(subtotal)} disabled />
             </Grid>
             <Grid size={4}>
               <Typography variant="h3" color="primary" mb={1.5}>
                 Impuesto
               </Typography>
-              <Input value={""} disabled />
+              <Input value={formatCurrency(totalIVA)} disabled />
             </Grid>
             <Grid size={4}>
               <Typography variant="h3" color="primary" mb={1.5}>
                 Total
               </Typography>
-              <Input value={""} disabled />
+              <Input value={formatCurrency(total)} disabled />
             </Grid>
           </Grid>
         </BaseTable>

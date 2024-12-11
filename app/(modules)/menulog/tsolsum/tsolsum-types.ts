@@ -12,6 +12,7 @@ export interface ITsolsum {
 export interface Root {
   cabsolsum: Cabsolsum;
   detsolsum: Detsolsum[];
+  IndCatObras: "S" | "N";
 }
 
 export interface Cabsolsum {
@@ -201,6 +202,7 @@ export const initialRootData: Root = {
     },
   },
   detsolsum: [],
+  IndCatObras: "N",
 };
 
 export const initialRenglon: Detsolsum = {

@@ -32,9 +32,12 @@ const RightInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
     entity: "controlog",
   });
   const today = new Date();
-
   useEffect(() => {
-    if (lst_controlog) {
+    if (
+      lst_controlog &&
+      Array.isArray(lst_controlog) &&
+      lst_controlog.length > 0
+    ) {
       if (
         formData.cabsolsum.reserva === null ||
         formData.cabsolsum.reserva === ""
@@ -46,6 +49,13 @@ const RightInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
         }
       } else {
         setValue(formData.cabsolsum.reserva);
+      }
+
+      if (lst_controlog[0].indcatobras === "S") {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          IndCatObras: "S",
+        }));
       }
     }
   }, [lst_controlog, formData.cabsolsum.reserva]);
@@ -87,7 +97,9 @@ const RightInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
           <Input
             type="date"
-            max={formData.cabsolsum.fecrecsol && today.toISOString().split('T')[0]}
+            max={
+              formData.cabsolsum.fecrecsol && today.toISOString().split("T")[0]
+            }
             onChange={(e) =>
               setFormData((prevFormData) => ({
                 ...prevFormData,
