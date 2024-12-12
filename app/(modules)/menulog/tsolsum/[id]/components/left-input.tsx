@@ -107,6 +107,8 @@ const LeftInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
           <Grid size={9}>
             <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
               <Input
+                required
+              
                 value={formData.cabsolsum.desccorta}
                 onChange={(e) => {
                   setFormData((prevFormData) => ({
@@ -162,7 +164,18 @@ const LeftInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
                 getOptionLabel={(option: { coddependencia: string }) =>
                   option.coddependencia
                 }
-                renderInput={(params) => <TextField {...params} />}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    required
+                    error={!formData.cabsolsum.coddependencia}
+                    helperText={
+                      !formData.cabsolsum.coddependencia
+                        ? "Campo requerido"
+                        : ""
+                    }
+                  />
+                )}
                 value={
                   Array.isArray(log_coddependencia)
                     ? log_coddependencia.find(
@@ -247,10 +260,13 @@ const LeftInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
         </Typography>
         <Grid container spacing={1} mt={1}>
           <Grid size={3}>
-            <ConditionalWrapper condition={formData.cabsolsum.ccosto ? isLstCcint : isLoading} wrapper={SkeletonInput}>
+            <ConditionalWrapper
+              condition={formData.cabsolsum.ccosto ? isLstCcint : isLoading}
+              wrapper={SkeletonInput}
+            >
               {/* --------------------- SELECCIONA DEPENDENCIA --------------------- */}
               <Autocomplete
-              disabled={!formData.cabsolsum.ccosto}
+                disabled={!formData.cabsolsum.ccosto}
                 fullWidth
                 size="small"
                 options={Array.isArray(lst_codaccint) ? lst_codaccint : []}
@@ -279,8 +295,11 @@ const LeftInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
             </ConditionalWrapper>
           </Grid>
           <Grid size={9}>
-          <ConditionalWrapper condition={formData.cabsolsum.ccosto ? isLstCcint : isLoading} wrapper={SkeletonInput}>
-          <Input value={CodAccionInt} disabled />
+            <ConditionalWrapper
+              condition={formData.cabsolsum.ccosto ? isLstCcint : isLoading}
+              wrapper={SkeletonInput}
+            >
+              <Input value={CodAccionInt} disabled />
             </ConditionalWrapper>
           </Grid>
         </Grid>

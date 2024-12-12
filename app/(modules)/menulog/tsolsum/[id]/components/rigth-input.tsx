@@ -43,8 +43,22 @@ const RightInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
         formData.cabsolsum.reserva === ""
       ) {
         if (lst_controlog[0].indestreserva === "S") {
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            cabsolsum: {
+              ...prevFormData.cabsolsum,
+              reserva: "E",
+            },
+          }));
           setValue("E");
         } else {
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            cabsolsum: {
+              ...prevFormData.cabsolsum,
+              reserva: "N",
+            },
+          }));
           setValue("N");
         }
       } else {

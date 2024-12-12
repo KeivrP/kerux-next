@@ -26,7 +26,7 @@ export const TsolsumTable = () => {
     const [rowsPerPage, setRowsPerPage] = useState(25);
     const [rows, setRows] = useState<ITsolsum[]>([]);
     const [order, setOrder] = useState<Order[]>([
-        { column: "N°", id: "idsolum", operator: "ASC" },
+        { column: "N°", id: "idsolum", operator: "DESC" },
     ]);
     const [filter, setFilter] = useState<Filter[]>([]);
     const [count, setCount] = useState(0);
@@ -49,7 +49,7 @@ export const TsolsumTable = () => {
 
     const { data, isLoading: updateLoading, refetch } = useQueryData({
         entity: "sols_sums",
-        params: { status: ["PGN", "RCH", "RAE"], },
+        params: { status: ["PGN", "RCH", "RAE"], order, filter, rowsPerPage },
         dependency: [filter, order, page, rowsPerPage],
     });
 
@@ -170,7 +170,7 @@ export const TsolsumTable = () => {
                 text={`¿Estas seguro que deseas Generar la Solicitud ${rows.find((row) => row.idsolsum == generaID)?.idsolsum}?`}
             />
             <SimpleBackdrop show={isPending} />
-            {/*             <DataSheet isOpen={openDialog} onClose={setOpenDialog} row={row} /> */}
+           
         </>
     );
 };
