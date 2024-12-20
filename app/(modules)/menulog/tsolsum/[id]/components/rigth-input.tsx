@@ -32,6 +32,8 @@ const RightInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
     entity: "controlog",
   });
   const today = new Date();
+  today.setDate(today.getDate() - 1);
+  
   useEffect(() => {
     if (
       lst_controlog &&
@@ -191,7 +193,7 @@ const RightInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
       <Grid size={12}>
         <TextDivider>Compra</TextDivider>
       </Grid>
-      <Grid size={2}>
+      <Grid size={2.5}>
         <Typography variant="h3" color="primary" mb={1}>
           Moneda
         </Typography>
@@ -199,7 +201,7 @@ const RightInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
           <Input value={formData.cabsolsum.codmoneda} disabled />
         </ConditionalWrapper>
       </Grid>
-      <Grid size={3}>
+      <Grid size={4}>
         <Typography variant="h3" color="primary" mb={1}>
           Compra directa
         </Typography>
@@ -221,7 +223,7 @@ const RightInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
           />
         </ConditionalWrapper>
       </Grid>
-      <Grid size={3}>
+      <Grid size={4}>
         <Typography variant="h3" color="primary" mb={1}>
           Compras y Contrato
         </Typography>

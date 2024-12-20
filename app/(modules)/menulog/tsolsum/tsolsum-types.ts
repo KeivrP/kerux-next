@@ -154,6 +154,9 @@ export interface RenglonInterface {
 }
 const today = new Date();
 
+const yesterday = new Date(today);
+yesterday.setDate(today.getDate() - 1);
+
 export const initialRootData: Root = {
   cabsolsum: {
     idsolsum: 0,
@@ -161,7 +164,7 @@ export const initialRootData: Root = {
     desccorta: "",
     ccosto: "",
     descsolsum: "",
-    fecsol: today.toISOString().split("T")[0],
+    fecsol: yesterday.toISOString().split("T")[0],
     fecrecsol: today.toISOString().split("T")[0],
     stssol: "PGN",
     fecreqsol: "",

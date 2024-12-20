@@ -26,7 +26,7 @@ export const TsolsumTable = () => {
     const [rowsPerPage, setRowsPerPage] = useState(25);
     const [rows, setRows] = useState<ITsolsum[]>([]);
     const [order, setOrder] = useState<Order[]>([
-        { column: "N°", id: "idsolum", operator: "DESC" },
+        { column: "N°", id: "idsolsum", operator: "DESC" },
     ]);
     const [filter, setFilter] = useState<Filter[]>([]);
     const [count, setCount] = useState(0);

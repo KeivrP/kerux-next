@@ -10,6 +10,7 @@ import { ConditionalWrapper } from "@/utils/main";
 import { useQueryData } from "@/server/fetch-data";
 import { SkeletonInput } from "@/components/skeleton/detail";
 import { Input } from "@/components/ui/input";
+import { useUpdateRenglon } from "../../hook/useTsolsum";
 
 interface DataSheetProps {
   isOpen: boolean;
@@ -25,6 +26,8 @@ export default function DataSheet({
   row,
 }: DataSheetProps): JSX.Element {
   const [isPending, setIsPending] = useState(false);
+  const { mutate } = useUpdateRenglon()
+
   const {
     register,
     handleSubmit,
@@ -152,8 +155,8 @@ export default function DataSheet({
   });
 
   const onSubmit = (data: any) => {
-    // Aquí puedes manejar el envío de datos
-    console.log(data);
+    console.log(data)
+   // mutate(data);
     onClose(false);
   };
 
@@ -180,8 +183,8 @@ export default function DataSheet({
             value={
               Array.isArray(lst_itemcat)
                 ? lst_itemcat.find(
-                    (option) => option.coditem === getValues("coditem")
-                  )
+                  (option) => option.coditem === getValues("coditem")
+                )
                 : null
             }
             onChange={(_, newValue) => {
@@ -215,7 +218,7 @@ export default function DataSheet({
               required:
                 (formData.IndCatObras === "S" &&
                   getValues("tiporeng") === "OB") ||
-                getValues("tiporeng") === "AD"
+                  getValues("tiporeng") === "AD"
                   ? "Codigo de servicio reuqerdio requerida"
                   : undefined,
             })}
@@ -230,8 +233,8 @@ export default function DataSheet({
             value={
               Array.isArray(lst_servicioscat)
                 ? lst_servicioscat.find(
-                    (option) => option.codserv === getValues("codserv")
-                  )
+                  (option) => option.codserv === getValues("codserv")
+                )
                 : null
             }
             onChange={(_, newValue) => {
@@ -269,9 +272,9 @@ export default function DataSheet({
             value={
               Array.isArray(lst_ctas)
                 ? lst_ctas.find(
-                    (option: { codcta: string; nombre: string }) =>
-                      option.codcta === getValues("codcta")
-                  )
+                  (option: { codcta: string; nombre: string }) =>
+                    option.codcta === getValues("codcta")
+                )
                 : null
             }
             onChange={(_, newValue) => {
@@ -295,9 +298,9 @@ export default function DataSheet({
             value={
               Array.isArray(lst_ctaspresup)
                 ? lst_ctaspresup.find(
-                    (option: { codcta: string; nombre: string }) =>
-                      option.codcta === getValues("codcta")
-                  )
+                  (option: { codcta: string; nombre: string }) =>
+                    option.codcta === getValues("codcta")
+                )
                 : null
             }
             onChange={(_, newValue) => {
@@ -308,9 +311,6 @@ export default function DataSheet({
       </>
     );
   };
-
-  console.log(getValues(), "---", row);
-
   return (
     <>
       <ModalDialog
@@ -345,9 +345,9 @@ export default function DataSheet({
                   value={
                     Array.isArray(lst_tiporengsum)
                       ? lst_tiporengsum.find(
-                          (option) =>
-                            option.tiporengsumin === getValues("tiporeng")
-                        )
+                        (option) =>
+                          option.tiporengsumin === getValues("tiporeng")
+                      )
                       : null
                   }
                   onChange={(_, newValue) => {
@@ -391,9 +391,9 @@ export default function DataSheet({
                   value={
                     Array.isArray(lst_nombnorm)
                       ? lst_nombnorm.find(
-                          (option) =>
-                            option.codnombre === getValues("codnombre")
-                        )
+                        (option) =>
+                          option.codnombre === getValues("codnombre")
+                      )
                       : null
                   }
                   onChange={(_, newValue) => {
@@ -425,9 +425,9 @@ export default function DataSheet({
                   {...register("unidbasica", {
                     required:
                       getValues("tiporeng") === "SV" ||
-                      getValues("tiporeng") === "MA" ||
-                      getValues("tiporeng") === "OB" ||
-                      getValues("tiporeng") === "AD"
+                        getValues("tiporeng") === "MA" ||
+                        getValues("tiporeng") === "OB" ||
+                        getValues("tiporeng") === "AD"
                         ? "Unidad requerida"
                         : undefined,
                   })}
@@ -437,9 +437,9 @@ export default function DataSheet({
                   value={
                     Array.isArray(lst_unidmedida)
                       ? lst_unidmedida.find(
-                          (option) =>
-                            option.unidmedida === getValues("unidbasica")
-                        )
+                        (option) =>
+                          option.unidmedida === getValues("unidbasica")
+                      )
                       : null
                   }
                   onChange={(_, newValue) => {
@@ -521,9 +521,9 @@ export default function DataSheet({
                   value={
                     Array.isArray(lst_porcimptos)
                       ? lst_porcimptos.find(
-                          (option: { porccat: string; desccatg: string }) =>
-                            option.porccat === getValues("porcimptos")
-                        )
+                        (option: { porccat: string; desccatg: string }) =>
+                          option.porccat === getValues("porcimptos")
+                      )
                       : null
                   }
                   onChange={(_, newValue) => {
@@ -578,9 +578,9 @@ export default function DataSheet({
                   value={
                     Array.isArray(lst_codclasifsnc)
                       ? lst_codclasifsnc.find(
-                          (option) =>
-                            option.codclasifsnc === getValues("codclasifsnc")
-                        )
+                        (option) =>
+                          option.codclasifsnc === getValues("codclasifsnc")
+                      )
                       : null
                   }
                   onChange={(_, newValue) => {

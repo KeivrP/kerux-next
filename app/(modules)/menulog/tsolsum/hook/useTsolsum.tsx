@@ -8,6 +8,7 @@ import {
 } from "../tsolsum-api";
 import { showNotification } from "@/components/toast/toast";
 import { Cabsolsum, Detsolsum } from "../tsolsum-types";
+import { useRouter } from "next/navigation";
 
 export const useGenerateTnivsum = () => {
   return useMutation({
@@ -43,10 +44,14 @@ export const useCreateModeloTnivsum = () => {
   });
 };
 export const useUpdateFsolsum = () => {
+  const router = useRouter()
   return useMutation({
     mutationFn: ({ id, data }: { id: number | null; data: Cabsolsum }) =>
       fsolsumUpdate(id, data),
     onSuccess: (res) => {
+      if (res.idsolsum) {
+        router.push(`${res.idsolsum}`);
+      }
       showNotification(res);
     },
     onError: (error) => {

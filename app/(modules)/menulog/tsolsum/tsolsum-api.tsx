@@ -48,6 +48,7 @@ export const fsolsumUpdate = async (id: number | null, data: Cabsolsum) => {
     throw error;
   }
 };
+
 export const fsolsumRng = async (id: number, nro: number, data: Detsolsum) => {
   try {
     const res = await Api_Log.put(`/sols_sums_crud/update_rng`, {

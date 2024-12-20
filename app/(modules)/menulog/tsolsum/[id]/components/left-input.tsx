@@ -108,7 +108,7 @@ const LeftInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
             <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
               <Input
                 required
-              
+
                 value={formData.cabsolsum.desccorta}
                 onChange={(e) => {
                   setFormData((prevFormData) => ({
@@ -149,7 +149,7 @@ const LeftInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
           Dependencia
         </Typography>
         <Grid container spacing={1} mt={1}>
-          <Grid size={3}>
+          <Grid size={{ lg: 4, xl: 3, md: 6  }}>
             <ConditionalWrapper
               condition={isLoadingCoddependencia || isLoading}
               wrapper={SkeletonInput}
@@ -179,10 +179,10 @@ const LeftInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
                 value={
                   Array.isArray(log_coddependencia)
                     ? log_coddependencia.find(
-                        (option: { coddependencia: string | undefined }) =>
-                          option.coddependencia ===
-                          formData.cabsolsum.coddependencia
-                      ) || null
+                      (option: { coddependencia: string | undefined }) =>
+                        option.coddependencia ===
+                        formData.cabsolsum.coddependencia
+                    ) || null
                     : null
                 }
                 onChange={(_, newValue) => {
@@ -197,7 +197,7 @@ const LeftInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
               />
             </ConditionalWrapper>
           </Grid>
-          <Grid size={9}>
+          <Grid size={{lg:8,  xl:9, md: 6}}>
             <ConditionalWrapper
               condition={isLoadingCoddependencia || isLoading}
               wrapper={SkeletonInput}
@@ -212,7 +212,8 @@ const LeftInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
           Centro de Costo
         </Typography>
         <Grid container spacing={1} mt={1}>
-          <Grid size={3}>
+          <Grid size={{ lg: 4, xl: 3, md: 6  }}>
+
             <ConditionalWrapper
               condition={isLoadingCcosto}
               wrapper={SkeletonInput}
@@ -227,9 +228,9 @@ const LeftInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
                 value={
                   Array.isArray(lst_ccosto)
                     ? lst_ccosto.find(
-                        (option: { ccosto: string | undefined }) =>
-                          option.ccosto === formData.cabsolsum.ccosto
-                      ) || null
+                      (option: { ccosto: string | undefined }) =>
+                        option.ccosto === formData.cabsolsum.ccosto
+                    ) || null
                     : null
                 }
                 onChange={(_, newValue) => {
@@ -244,7 +245,7 @@ const LeftInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
               />
             </ConditionalWrapper>
           </Grid>
-          <Grid size={9}>
+          <Grid size={{lg:8,  xl:9, md: 6}}>
             <ConditionalWrapper
               condition={isLoadingCcosto}
               wrapper={SkeletonInput}
@@ -259,7 +260,8 @@ const LeftInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
           Accion Interna
         </Typography>
         <Grid container spacing={1} mt={1}>
-          <Grid size={3}>
+          <Grid size={{ lg: 4, xl: 3, md: 6  }}>
+
             <ConditionalWrapper
               condition={formData.cabsolsum.ccosto ? isLstCcint : isLoading}
               wrapper={SkeletonInput}
@@ -277,9 +279,9 @@ const LeftInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
                 value={
                   Array.isArray(lst_codaccint)
                     ? lst_codaccint.find(
-                        (option: { codaccint: string | undefined }) =>
-                          option.codaccint === formData.cabsolsum.codaccint
-                      ) || null
+                      (option: { codaccint: string | undefined }) =>
+                        option.codaccint === formData.cabsolsum.codaccint
+                    ) || null
                     : null
                 }
                 onChange={(_, newValue) => {
@@ -294,7 +296,7 @@ const LeftInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
               />
             </ConditionalWrapper>
           </Grid>
-          <Grid size={9}>
+          <Grid size={{lg:8,  xl:9, md: 6}}>
             <ConditionalWrapper
               condition={formData.cabsolsum.ccosto ? isLstCcint : isLoading}
               wrapper={SkeletonInput}
@@ -309,7 +311,8 @@ const LeftInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
           Unidad de Compra
         </Typography>
         <Grid container spacing={1} mt={1}>
-          <Grid size={3}>
+          <Grid size={{ lg: 4, xl: 3, md: 6  }}>
+
             <ConditionalWrapper
               condition={isLoadingCodundcmp || isLoading}
               wrapper={SkeletonInput}
@@ -326,9 +329,9 @@ const LeftInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
                 value={
                   Array.isArray(lst_codundcmp)
                     ? lst_codundcmp.find(
-                        (option: { codundcmp: string | undefined }) =>
-                          option.codundcmp === formData.cabsolsum.codundcmp
-                      ) || null
+                      (option: { codundcmp: string | undefined }) =>
+                        option.codundcmp === formData.cabsolsum.codundcmp
+                    ) || null
                     : null
                 }
                 onChange={(_, newValue) => {
@@ -343,7 +346,7 @@ const LeftInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
               />
             </ConditionalWrapper>
           </Grid>
-          <Grid size={9}>
+          <Grid size={{lg:8,  xl:9, md: 6}}>
             <ConditionalWrapper
               condition={isLoadingCodundcmp || isLoading}
               wrapper={SkeletonInput}

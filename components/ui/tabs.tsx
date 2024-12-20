@@ -5,6 +5,7 @@ interface TabProps {
   id: string;
   label: string;
   children: React.ReactNode; // Cambiado a children para permitir componentes
+  disabled?: boolean;
 }
 
 interface TabsProps {
@@ -37,6 +38,7 @@ const Tabs: React.FC<TabsProps> = ({ tabs, children }) => {
             <button
               key={tab.id}
               type="button"
+              disabled={tab.disabled}
               className={`${
                 activeTab === tab.id
                   ? "bg-gradient-to-r from-[#142f62] to-[#354f8e] text-white"

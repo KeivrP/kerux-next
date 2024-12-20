@@ -12,14 +12,16 @@ import { FsolsumTable } from "./table";
 import ButtonForms from "@/components/button/buttonForms";
 import { CircleSlash, CircleX } from "lucide-react";
 import { Typography, Button } from "@mui/material";
-import { useUpdateFsolsum } from "../../hook/useTsolsum";
+import { useAnularTnivsum, useGenerateTnivsum, useUpdateFsolsum } from "../../hook/useTsolsum";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 
 const DataSheet = ({ id }: DataSheetProps) => {
   const { formData, setFormData, initialData } = useFormContextFsolsum();
   const [isSaveButtonEnabled, setIsSaveButtonEnabled] = useState(false);
 
-  const { mutate, isSuccess, isPending } = useUpdateFsolsum();
+  const { mutate, isPending, isSuccess } = useUpdateFsolsum();
+  const { mutate: Generate, isPending: isPendingGenerate, isSuccess: isSuccesGenerate } = useGenerateTnivsum();
+  const { mutate: Anular, isPending: isPendingAnular, isSuccess: isSuccesAnular } = useAnularTnivsum();
 
   const { data: solsumData, isLoading, refetch } = useQueryData({
     entity: "sols_sums_crud",
@@ -34,14 +36,14 @@ const DataSheet = ({ id }: DataSheetProps) => {
     if (solsumData) {
       setFormData(solsumData);
     }
-  }, [solsumData, isLoading]);
+  }, [solsumData, isLoading, isSuccess]);
 
   useEffect(() => {
     setIsSaveButtonEnabled(
       JSON.stringify(formData?.cabsolsum) !==
-        JSON.stringify(solsumData?.cabsolsum)
+      JSON.stringify(solsumData?.cabsolsum)
     );
-  }, [formData, solsumData, isLoading]);
+  }, [formData, solsumData, isLoading, isSuccess]);
 
   const tabs = [
     {
@@ -58,6 +60,7 @@ const DataSheet = ({ id }: DataSheetProps) => {
     },
     {
       id: "tab2",
+      disabled: formData?.cabsolsum.idsolsum === 0,
       label: "Renglones de la Solicitud",
       children: (
         <FsolsumTable
@@ -70,32 +73,40 @@ const DataSheet = ({ id }: DataSheetProps) => {
     },
   ];
 
+  useEffect(() => {
+    if (isSuccess || isSuccesGenerate || isSuccesAnular) {
+      refetch();
+    }
+  }, [isSuccess]);
+
   const handleSave = () => {
-    
     mutate({ id: formData?.cabsolsum?.idsolsum === 0 ? null : formData?.cabsolsum?.idsolsum, data: formData.cabsolsum });
-    refetch()
     console.log("Formulario guardado.");
   };
+
+  const handleGenerate = () => {
+    Generate({ id: formData?.cabsolsum?.idsolsum });
+  }
+
+  const handleAnular = () => {
+    Anular({ id: formData?.cabsolsum?.idsolsum });
+  }
 
   return (
     <div>
       <Tabs tabs={tabs}>
+        {formData?.cabsolsum.stssol !== "ANU" && (
+          <ButtonForms
+            onClick={handleAnular}
+            sx={{ color: "alert" }}
+          >
+            <CircleX size={18} color="#Ba1a1a" />
+            <Typography variant="h3" marginLeft={1} color="alert">
+              Anular
+            </Typography>
+          </ButtonForms>)}
         <ButtonForms
-          onClick={() => {
-            console.log();
-          }}
-          sx={{ color: "alert" }}
-        >
-          <CircleX size={18} color="#Ba1a1a" />
-          <Typography variant="h3" marginLeft={1} color="alert">
-            Anular
-          </Typography>
-        </ButtonForms>
-        <ButtonForms />
-        <ButtonForms
-          onClick={() => {
-            console.log();
-          }}
+          onClick={handleGenerate}
           sx={{ color: "alert" }}
         >
           <CircleSlash size={18} />
@@ -103,7 +114,6 @@ const DataSheet = ({ id }: DataSheetProps) => {
             Generar
           </Typography>
         </ButtonForms>
-        <ButtonForms />
         {isSaveButtonEnabled && (
           <Button
             onClick={handleSave}
@@ -116,7 +126,7 @@ const DataSheet = ({ id }: DataSheetProps) => {
           </Button>
         )}
       </Tabs>
-      <SimpleBackdrop show={isPending} />
+      <SimpleBackdrop show={isPending || isPendingAnular || isPendingGenerate} />
 
     </div>
   );

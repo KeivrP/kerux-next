@@ -17,7 +17,7 @@ const DataInput: React.FC<DataInputProps> = ({
 }) => {
   return (
     <Grid container spacing={4} padding={4}>
-      <Grid size={6}>
+      <Grid size={{ md: 12, lg: 6 }}>
         <LeftInput
           isLoading={isLoading}
           setFormData={setFormData}
@@ -25,7 +25,7 @@ const DataInput: React.FC<DataInputProps> = ({
           initialData={initialRootData}
         />
       </Grid>
-      <Grid size={6}>
+      <Grid size={{ md: 12, lg: 6 }}>
         <RightInput
           isLoading={isLoading}
           setFormData={setFormData}
