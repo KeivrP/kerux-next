@@ -9,14 +9,15 @@ import Grid from "@mui/material/Grid2";
 import { ConditionalWrapper } from "@/utils/main";
 import { useQueryData } from "@/server/fetch-data";
 import { SkeletonInput } from "@/components/skeleton/detail";
-import { Input } from "@/components/ui/input";
 import { useUpdateRenglon } from "../../hook/useTsolsum";
+import { showNotification } from "@/components/toast/toast";
 
 interface DataSheetProps {
   isOpen: boolean;
   onClose: (value: boolean) => void;
   row: Detsolsum;
   formData: Root;
+  refetch: () => void
 }
 
 export default function DataSheet({
@@ -24,19 +25,20 @@ export default function DataSheet({
   onClose,
   formData,
   row,
+  refetch
 }: DataSheetProps): JSX.Element {
-  const [isPending, setIsPending] = useState(false);
-  const { mutate } = useUpdateRenglon()
+  const { mutate, isPending, isSuccess } = useUpdateRenglon()
 
   const {
     register,
     handleSubmit,
     getValues,
-    setError,
+    watch,
     setValue,
     formState: { errors },
     reset,
   } = useForm({
+    mode: "onChange",
     defaultValues: {
       nroreng: 0,
       tiporeng: "",
@@ -54,8 +56,13 @@ export default function DataSheet({
       mtototrng: "",
       codserv: "",
       codnombre: "",
-    },
+    }
   });
+
+  const tiporeng = watch("tiporeng");
+  const coditem = watch("coditem");
+  const codnombre = watch("codnombre");
+  const unidbasica = watch('unidbasica')
 
   useEffect(() => {
     if (isOpen) {
@@ -99,31 +106,31 @@ export default function DataSheet({
   );
 
   useEffect(() => {
-    if (getValues("tiporeng") === "SV") {
+    if (tiporeng === "SV") {
       setValue("destino", "COMP");
-    } else if (getValues("tiporeng") === "MA") {
+    } else if (tiporeng === "MA") {
       setValue("destino", "MTTO");
-    } else if (["OB", "AD"].includes(getValues("tiporeng"))) {
+    } else if (["OB", "AD"].includes(tiporeng)) {
       setValue("destino", "CTTO");
     } else {
       setValue("destino", "");
     }
-  }, [getValues("tiporeng")]);
+  }, [tiporeng]);
 
   const { data: lst_nombnorm, isLoading: isLoadingNombnorm } = useQueryData({
     entity: "nombnorm",
-    dependency: [getValues("tiporeng")],
+    dependency: [tiporeng],
   });
 
   const { data: lst_itemcat, isLoading: isLoadingItemcat } = useQueryData({
     entity: "itemcat",
     params: {
       idsolsum: formData.cabsolsum.idsolsum,
-      codnombre: getValues("codnombre"),
-      tiporeng: getValues("tiporeng"),
-      coditem: getValues("coditem"),
+      codnombre: codnombre,
+      tiporeng: tiporeng,
+      coditem: coditem,
     },
-    dependency: [getValues("codnombre"), getValues()],
+    dependency: [codnombre, getValues()],
   });
 
   const { data: lst_unidmedida, isLoading: isLoadingUnidad } = useQueryData({
@@ -138,30 +145,45 @@ export default function DataSheet({
     useQueryData({
       entity: "servicioscat",
       params: {
-        tiporeng: getValues("tiporeng"),
+        tiporeng: tiporeng,
         idsolsum: formData.cabsolsum.idsolsum,
         codserv: getValues("codserv"),
       },
-      dependency: [getValues("tiporeng")],
+      dependency: [tiporeng],
     });
 
   const { data: lst_ctas, isLoading: isLoadinCtas } = useQueryData({
     entity: "ctas",
     params: {
-      coditem: getValues("coditem"),
+      coditem: coditem,
       fecsol: formData.cabsolsum.fecsol,
     },
-    dependency: [getValues("coditem")],
+    dependency: [coditem],
   });
-
+  
   const onSubmit = (data: any) => {
-    console.log(data)
-   // mutate(data);
-    onClose(false);
+    const isContratoOrAdendum = tiporeng === "OB" || tiporeng === "AD";
+    const hasContratoOrAdendum = formData.detsolsum.some(
+      (renglon) => renglon.tiporeng === "OB" || renglon.tiporeng === "AD"
+    );
+
+    if (isContratoOrAdendum && hasContratoOrAdendum) {
+      showNotification({ message: "Solo se permite un renglón de tipo Contrato o Adendum.", mode: "error", alert: "A" });
+      return;
+    }
+    mutate({ id: formData.cabsolsum.idsolsum, data, nro: row.nroreng });
   };
 
+  useEffect(() => {
+    if (isSuccess) {
+      refetch()
+      onClose(false)
+    }
+
+  }, [isSuccess])
+
   const ItemServ = () => {
-    return getValues("tiporeng") === "MT" ? (
+    return tiporeng === "MT" ? (
       <>
         <Typography variant="h3" color="primary" mb={2}>
           Item
@@ -183,7 +205,7 @@ export default function DataSheet({
             value={
               Array.isArray(lst_itemcat)
                 ? lst_itemcat.find(
-                  (option) => option.coditem === getValues("coditem")
+                  (option) => option.coditem === coditem
                 )
                 : null
             }
@@ -199,7 +221,7 @@ export default function DataSheet({
             }}
           />
           {!!errors.tiporeng && (
-            <Typography color="error">{errors.coditem?.message} ff</Typography>
+            <Typography color="error" sx={{ fontSize: 9, fontWeight: "bold" }}>{errors.coditem?.message} ff</Typography>
           )}
         </ConditionalWrapper>
       </>
@@ -209,7 +231,7 @@ export default function DataSheet({
           Servicio
         </Typography>
         <ConditionalWrapper
-          condition={isLoadingItemcat}
+          condition={isLoadingServicioscat}
           wrapper={SkeletonInput}
         >
           <Autocomplete
@@ -217,8 +239,8 @@ export default function DataSheet({
             {...register("codserv", {
               required:
                 (formData.IndCatObras === "S" &&
-                  getValues("tiporeng") === "OB") ||
-                  getValues("tiporeng") === "AD"
+                  tiporeng === "OB") ||
+                  tiporeng === "AD"
                   ? "Codigo de servicio reuqerdio requerida"
                   : undefined,
             })}
@@ -249,15 +271,16 @@ export default function DataSheet({
             }}
           />
           {!!errors.tiporeng && (
-            <Typography color="error">{errors.codserv?.message} ff</Typography>
+            <Typography color="error" sx={{ fontSize: 9, fontWeight: "bold" }}>{errors.codserv?.message} ff</Typography>
           )}
         </ConditionalWrapper>
       </>
     );
   };
 
+
   const Cuentas = () => {
-    return getValues("tiporeng") === "MT" ? (
+    return tiporeng === "MT" ? (
       <>
         <Typography variant="h3" color="primary" mb={2}>
           Cuenta Presupuestaria
@@ -288,7 +311,7 @@ export default function DataSheet({
         <Typography variant="h3" color="primary" mb={2}>
           Cuenta Presupuestaria
         </Typography>
-        <ConditionalWrapper condition={isLoadinCtas} wrapper={SkeletonInput}>
+        <ConditionalWrapper condition={isLoadingCtasPresup} wrapper={SkeletonInput}>
           <Autocomplete
             fullWidth
             size="small"
@@ -311,6 +334,9 @@ export default function DataSheet({
       </>
     );
   };
+
+
+
   return (
     <>
       <ModalDialog
@@ -346,7 +372,7 @@ export default function DataSheet({
                     Array.isArray(lst_tiporengsum)
                       ? lst_tiporengsum.find(
                         (option) =>
-                          option.tiporengsumin === getValues("tiporeng")
+                          option.tiporengsumin === tiporeng
                       )
                       : null
                   }
@@ -360,7 +386,7 @@ export default function DataSheet({
                   }}
                 />
                 {!!errors.tiporeng && (
-                  <Typography color="error">
+                  <Typography color="error" sx={{ fontSize: 9, fontWeight: "bold" }}>
                     {errors.tiporeng?.message} ff
                   </Typography>
                 )}
@@ -377,11 +403,11 @@ export default function DataSheet({
               >
                 <Autocomplete
                   fullWidth
-                  disabled={getValues("tiporeng") !== "MT"}
+                  disabled={tiporeng !== "MT"}
                   size="small"
                   {...register("codnombre", {
                     required:
-                      getValues("tiporeng") === "MT"
+                      tiporeng === "MT"
                         ? "Nombre requerido"
                         : undefined,
                   })}
@@ -392,7 +418,7 @@ export default function DataSheet({
                     Array.isArray(lst_nombnorm)
                       ? lst_nombnorm.find(
                         (option) =>
-                          option.codnombre === getValues("codnombre")
+                          option.codnombre === codnombre
                       )
                       : null
                   }
@@ -401,7 +427,7 @@ export default function DataSheet({
                   }}
                 />
                 {!!errors.codnombre && (
-                  <Typography color="error">
+                  <Typography color="error" sx={{ fontSize: 9, fontWeight: "bold" }}>
                     {errors.codnombre?.message} ff
                   </Typography>
                 )}
@@ -424,10 +450,10 @@ export default function DataSheet({
                   id="unidbasica"
                   {...register("unidbasica", {
                     required:
-                      getValues("tiporeng") === "SV" ||
-                        getValues("tiporeng") === "MA" ||
-                        getValues("tiporeng") === "OB" ||
-                        getValues("tiporeng") === "AD"
+                      tiporeng === "SV" ||
+                        tiporeng === "MA" ||
+                        tiporeng === "OB" ||
+                        tiporeng === "AD"
                         ? "Unidad requerida"
                         : undefined,
                   })}
@@ -438,28 +464,28 @@ export default function DataSheet({
                     Array.isArray(lst_unidmedida)
                       ? lst_unidmedida.find(
                         (option) =>
-                          option.unidmedida === getValues("unidbasica")
-                      )
+                          option.unidmedida === unidbasica
+                      ) || null
                       : null
                   }
                   onChange={(_, newValue) => {
                     setValue("unidbasica", newValue ? newValue.unidmedida : "");
                   }}
-                  disabled={getValues("tiporeng") === "MT"}
+                  disabled={tiporeng === "MT"}
                 />
                 {!!errors.unidbasica && (
-                  <Typography color="error">
-                    {errors.unidbasica?.message} ff
+                  <Typography color="error" sx={{ fontSize: 9, fontWeight: "bold" }}>
+                    {errors.unidbasica?.message}
                   </Typography>
                 )}
               </ConditionalWrapper>
             </Grid>
 
             <Grid size={2.5}>
-              <Typography variant="h3" color="primary" mb={2}>
+              <Typography variant="h3" color="primary" >
                 Cantidad
               </Typography>
-              <Input
+              <TextField
                 id="cantsol"
                 {...register("cantsol", {
                   required: "Cantidad requerida",
@@ -468,11 +494,14 @@ export default function DataSheet({
                     message: "Solo se permiten números",
                   },
                 })}
-                type="text"
+                size="small"
+                type="number"
                 inputMode="numeric"
-                pattern="[0-9]*"
+                fullWidth
+                margin="normal"
+                error={!!errors.cantsol}
+                helperText={errors.cantsol?.message}
               />
-              {errors.cantsol && <span>{errors.cantsol.message}</span>}
             </Grid>
 
             <Grid size={4}>
@@ -489,7 +518,9 @@ export default function DataSheet({
                 })}
                 size="small"
                 variant="outlined"
+                type="number"
                 fullWidth
+                inputMode="numeric"
                 margin="normal"
                 error={!!errors.precio}
                 helperText={errors.precio?.message}
@@ -532,7 +563,7 @@ export default function DataSheet({
                 />
               </ConditionalWrapper>
               {!!errors.porcimptos && (
-                <Typography color="error">IVA es requerido</Typography>
+                <Typography color="error" sx={{ fontSize: 9, fontWeight: "bold" }}>IVA es requerido</Typography>
               )}
             </Grid>
 
@@ -544,7 +575,7 @@ export default function DataSheet({
                 id="descreng"
                 {...register("descreng", {
                   required:
-                    getValues("tiporeng") !== "MT"
+                    tiporeng !== "MT"
                       ? "Descripción requerida"
                       : undefined,
                 })}
@@ -554,7 +585,7 @@ export default function DataSheet({
                 margin="normal"
                 error={!!errors.descreng}
                 helperText={errors.descreng?.message}
-                disabled={getValues("tiporeng") === "MT"}
+                disabled={tiporeng === "MT"}
               />
             </Grid>
 

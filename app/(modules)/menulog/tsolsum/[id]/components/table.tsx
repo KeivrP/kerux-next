@@ -18,22 +18,19 @@ import { formatCurrency, formatDate } from "@/utils/main";
 import { Typography } from "@mui/material";
 import { Input } from "@/components/ui/input";
 import DataSheet from "./edit-table";
-import { Coda } from "next/font/google";
 import { calcularTotales } from "../utils";
-import { useUpdateRenglon } from "../../hook/useTsolsum";
 
 interface DataInputProps extends FormContextProps {
   isLoading: boolean;
+  refetch: () => void;
 }
 
 export const FsolsumTable: React.FC<DataInputProps> = ({
   formData,
-  setFormData,
   isLoading,
+  refetch
 }) => {
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [isDrawerOpen, setDrawerOpen] = useState<boolean>(false);
-  const { mutate: deleteRng} = useUpdateRenglon()
 
   const [rowSelected, setRowSelected] =
     useState<Detsolsum>(initialRenglon);
@@ -166,9 +163,9 @@ export const FsolsumTable: React.FC<DataInputProps> = ({
         row={rowSelected}
         isOpen={isDrawerOpen}
         onClose={() => setDrawerOpen(false)}
-        /*  refetch={() => {
+         refetch={() => {
         refetch();
-      }} */
+      }}
       />
       <SimpleBackdrop show={false} />
     </>

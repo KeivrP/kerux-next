@@ -33,7 +33,7 @@ const RightInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
   });
   const today = new Date();
   today.setDate(today.getDate() - 1);
-  
+
   useEffect(() => {
     if (
       lst_controlog &&
@@ -95,7 +95,6 @@ const RightInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
   };
 
   const [error, setError] = useState("");
-  console.log(error);
 
   return (
     <Grid container spacing={2}>
@@ -278,8 +277,8 @@ const RightInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
             value={
               Array.isArray(lst_iddocres)
                 ? lst_iddocres.find(
-                    (option) => option.iddoc === formData.cabsolsum.iddocres
-                  ) || null
+                  (option) => option.iddoc === formData.cabsolsum.iddocres
+                ) || null
                 : null
             }
             onChange={(_, newValue) => {
@@ -325,7 +324,7 @@ const RightInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
             <BadgeTipodoc tipo={formData.cabsolsum.stssol} />
           </ConditionalWrapper>
           {formData.cabsolsum.stssol === "RCH" ||
-          formData.cabsolsum.stssol === "RAE" ? (
+            formData.cabsolsum.stssol === "RAE" ? (
             <Box
               sx={{
                 bgcolor: "#142f62",

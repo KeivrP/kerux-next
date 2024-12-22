@@ -37,7 +37,7 @@ export const TcevinvTable = ({ codsis }: TcevinvTableProps) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [order, setOrder] = useState<Order[]>([
-    { column: "Id.", id: "idevento", operator: "DESC" },
+    { column: "idevento", id: "idevento", operator: "DESC" },
   ]);
   const [filter, setFilter] = useState<Filter[]>([]);
 

@@ -9,6 +9,7 @@ import ActionCardHeader from "@/components/card/actionCardHeader";
 import { Acciones, columnsFilter, columnsHeaders, columnsOrder } from "./header-table";
 import { BaseTable } from "@/components/table-material/genericTable";
 import { BaseTablePagination } from "@/components/table-material/baseTablePagination";
+import { usePathname, useRouter } from "next/navigation";
 
 
 export const TsolmodTable = () => {
@@ -22,6 +23,8 @@ export const TsolmodTable = () => {
   ]);
   const [filter, setFilter] = useState<Filter[]>([]);
   const [count, setCount] = useState(0);
+  const router = useRouter()
+  const pathname = usePathname();
 
   /* ------------------ USEEFFECT PARA TRAER LA DATA DE LA BD ----------------- */
 
@@ -54,8 +57,11 @@ export const TsolmodTable = () => {
     console.log(`Delete ${numsolsum}`);
   };
 
-  const handleEdit = (numsolsum: number) => {
-    console.log(`Edit ${numsolsum}`);
+  const handleOpen = (id: number) => {
+    if (id) {
+      router.push(`${pathname}/${id}`);
+
+    }
   };
 
   const handleGenerate = (numsolsum: number) => {
@@ -64,15 +70,15 @@ export const TsolmodTable = () => {
 
   return (
     <>
-       <ActionCardHeader
-                isAddButtonVisible={false}
-                onApplyFilter={(filters) => setFilter(filters)}
-                columnsFilter={columnsFilter}
-                onApplyOrder={(orders) => setOrder(orders)}
-                columnsOrder={columnsOrder}
-                setFilter={setFilter}
-                setOrder={setOrder}
-            />
+      <ActionCardHeader
+        isAddButtonVisible={false}
+        onApplyFilter={(filters) => setFilter(filters)}
+        columnsFilter={columnsFilter}
+        onApplyOrder={(orders) => setOrder(orders)}
+        columnsOrder={columnsOrder}
+        setFilter={setFilter}
+        setOrder={setOrder}
+      />
       <div
         style={{
           height: "71vh",
@@ -87,17 +93,17 @@ export const TsolmodTable = () => {
           rowAction={(row) => console.log(row)}
           collapsible={{
             visible: (row) => [
-                { content: row.numsolsum, handleCollapse: true, align: "left" },
-                { content: row.ano, align: "center" },
-                { content: row.codaccint, align: "center" },
-                { content: row.ccosto, align: "center" },
-                { content: row.desccorta, align: "left" },
+              { content: row.numsolsum, handleCollapse: true, align: "left" },
+              { content: row.ano, align: "center" },
+              { content: row.codaccint, align: "center" },
+              { content: row.ccosto, align: "center" },
+              { content: row.desccorta, align: "left" },
               {
                 content: (
                   <Acciones
                     row={row}
                     onDelete={handleDelete}
-                    onOpen={handleEdit}
+                    onOpen={handleOpen}
                     onGenerate={handleGenerate}
                   />
                 ),
@@ -107,11 +113,11 @@ export const TsolmodTable = () => {
             ],
 
             collapsed: (row) => [
-                
-                { name: "Acción Interna", content: row.descaccint },
-                { name: "Centro de Costo", content: row.desccosto },
-        
-              ],
+
+              { name: "Acción Interna", content: row.descaccint },
+              { name: "Centro de Costo", content: row.desccosto },
+
+            ],
           }}
         ></BaseTable>
         <BaseTablePagination

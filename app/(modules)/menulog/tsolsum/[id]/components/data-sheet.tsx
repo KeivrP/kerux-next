@@ -1,57 +1,69 @@
+import React from "react";
+import { Typography } from "@mui/material";
+import { CircleSlash, CircleX } from "lucide-react";
 import { useFormContextFsolsum } from "@/provider/fsolsum-provider";
 import { useQueryData } from "@/server/fetch-data";
-import React, { useEffect, useState } from "react";
+import { useAnularTnivsum, useGenerateTnivsum, useUpdateFsolsum } from "../../hook/useTsolsum";
+import Tabs from "@/components/ui/tabs";
+import DataInput from "./data-input";
+import { FsolsumTable } from "./table";
+import ButtonForms from "@/components/button/buttonForms";
+import SimpleBackdrop from "@/components/backdrop/backdrop";
 
 interface DataSheetProps {
   id: string;
 }
 
-import Tabs from "@/components/ui/tabs";
-import DataInput from "./data-input";
-import { FsolsumTable } from "./table";
-import ButtonForms from "@/components/button/buttonForms";
-import { CircleSlash, CircleX } from "lucide-react";
-import { Typography, Button } from "@mui/material";
-import { useAnularTnivsum, useGenerateTnivsum, useUpdateFsolsum } from "../../hook/useTsolsum";
-import SimpleBackdrop from "@/components/backdrop/backdrop";
-
 const DataSheet = ({ id }: DataSheetProps) => {
   const { formData, setFormData, initialData } = useFormContextFsolsum();
-  const [isSaveButtonEnabled, setIsSaveButtonEnabled] = useState(false);
 
-  const { mutate, isPending, isSuccess } = useUpdateFsolsum();
-  const { mutate: Generate, isPending: isPendingGenerate, isSuccess: isSuccesGenerate } = useGenerateTnivsum();
-  const { mutate: Anular, isPending: isPendingAnular, isSuccess: isSuccesAnular } = useAnularTnivsum();
-
-  const { data: solsumData, isLoading, refetch } = useQueryData({
+  const {
+    data: solsumData,
+    isLoading,
+    refetch
+  } = useQueryData({
     entity: "sols_sums_crud",
-    params: {
-      idsolsum: id,
-    },
+    params: { idsolsum: id },
     dependency: [id],
     type: "show",
   });
 
-  useEffect(() => {
+  const { mutate: updateMutate, isPending: isUpdating, isSuccess: isSuccesup } = useUpdateFsolsum();
+
+  const { mutate: generateMutate, isPending: isGenerating, isSuccess: isSuccesgen } = useGenerateTnivsum();
+
+  const { mutate: anularMutate, isPending: isAnulating, isSuccess: isSuccesanu } = useAnularTnivsum();
+
+  React.useEffect(() => {
+    if (isSuccesup || isSuccesgen || isSuccesanu) {
+      refetch();
+    }
+  }, [isSuccesanu, isSuccesgen, isSuccesup])
+
+  // Actualizar formData cuando lleguen nuevos datos
+  React.useEffect(() => {
     if (solsumData) {
       setFormData(solsumData);
     }
-  }, [solsumData, isLoading, isSuccess]);
+  }, [solsumData, setFormData]);
 
-  useEffect(() => {
-    setIsSaveButtonEnabled(
-      JSON.stringify(formData?.cabsolsum) !==
-      JSON.stringify(solsumData?.cabsolsum)
-    );
-  }, [formData, solsumData, isLoading, isSuccess]);
+  // Determinar si hay cambios para habilitar el botón de guardar
+  const hasChanges = React.useMemo(() => {
+    return JSON.stringify(formData?.cabsolsum) !== JSON.stringify(solsumData?.cabsolsum);
+  }, [formData?.cabsolsum, solsumData?.cabsolsum]);
 
-  const tabs = [
+  const handleSave = () => {
+    const id = formData?.cabsolsum?.idsolsum || null;
+    updateMutate({ id, data: formData.cabsolsum });
+  };
+
+  const tabs = React.useMemo(() => [
     {
       id: "tab1",
       label: "Datos de la Solicitud",
       children: (
         <DataInput
-          isLoading={!isNaN(Number(id)) ? isLoading : false}
+          isLoading={!isNaN(Number(id)) && isLoading}
           formData={formData}
           setFormData={setFormData}
           initialData={initialData}
@@ -60,53 +72,39 @@ const DataSheet = ({ id }: DataSheetProps) => {
     },
     {
       id: "tab2",
-      disabled: formData?.cabsolsum.idsolsum === 0,
       label: "Renglones de la Solicitud",
+      disabled: !formData?.cabsolsum?.idsolsum,
       children: (
         <FsolsumTable
-          isLoading={!isNaN(Number(id)) ? isLoading : false}
+          isLoading={!isNaN(Number(id)) && isLoading}
           formData={formData}
           setFormData={setFormData}
           initialData={initialData}
+          refetch={refetch}
         />
       ),
     },
-  ];
+  ], [id, isLoading, formData, setFormData, initialData]);
 
-  useEffect(() => {
-    if (isSuccess || isSuccesGenerate || isSuccesAnular) {
-      refetch();
-    }
-  }, [isSuccess]);
-
-  const handleSave = () => {
-    mutate({ id: formData?.cabsolsum?.idsolsum === 0 ? null : formData?.cabsolsum?.idsolsum, data: formData.cabsolsum });
-    console.log("Formulario guardado.");
-  };
-
-  const handleGenerate = () => {
-    Generate({ id: formData?.cabsolsum?.idsolsum });
-  }
-
-  const handleAnular = () => {
-    Anular({ id: formData?.cabsolsum?.idsolsum });
-  }
+  const isLoaderVisible = isUpdating || isAnulating || isGenerating;
 
   return (
     <div>
       <Tabs tabs={tabs}>
         {formData?.cabsolsum.stssol !== "ANU" && (
           <ButtonForms
-            onClick={handleAnular}
+            onClick={() => anularMutate({ id: formData?.cabsolsum?.idsolsum })}
             sx={{ color: "alert" }}
           >
             <CircleX size={18} color="#Ba1a1a" />
             <Typography variant="h3" marginLeft={1} color="alert">
               Anular
             </Typography>
-          </ButtonForms>)}
+          </ButtonForms>
+        )}
+
         <ButtonForms
-          onClick={handleGenerate}
+          onClick={() => generateMutate({ id: formData?.cabsolsum?.idsolsum })}
           sx={{ color: "alert" }}
         >
           <CircleSlash size={18} />
@@ -114,20 +112,20 @@ const DataSheet = ({ id }: DataSheetProps) => {
             Generar
           </Typography>
         </ButtonForms>
-        {isSaveButtonEnabled && (
-          <Button
+
+        {hasChanges && (
+          <ButtonForms
             onClick={handleSave}
-            disabled={!isSaveButtonEnabled}
+            disabled={!hasChanges}
             variant="contained"
-            size="small"
             color="primary"
           >
             Guardar
-          </Button>
+          </ButtonForms>
         )}
       </Tabs>
-      <SimpleBackdrop show={isPending || isPendingAnular || isPendingGenerate} />
 
+      <SimpleBackdrop show={isLoaderVisible} />
     </div>
   );
 };
