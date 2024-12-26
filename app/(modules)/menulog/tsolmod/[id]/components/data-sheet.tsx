@@ -9,6 +9,7 @@ import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { useGenerateTnivsum, useUpdateFsolsum } from "../../../tsolsum/hook/useTsolsum";
 import { useFormContextTsolmod } from "@/provider/tsolmod-provider";
 import SupplyRequestForm from "./data-input";
+import { FsolmodTable } from "./table";
 
 interface DataSheetProps {
   id: string;
@@ -74,7 +75,13 @@ const DataSheet = ({ id }: DataSheetProps) => {
       label: "Renglones de la Solicitud",
       disabled: !formData?.cabssmod.numsolsum,
       children: (
-        <></>
+        <FsolmodTable
+          isLoading={isLoading}
+          formData={formData}
+          setFormData={setFormData}
+          initialData={initialData}
+          refetch={refetch}
+          />
       ),
     },
   ], [id, isLoading, formData, setFormData, initialData]);

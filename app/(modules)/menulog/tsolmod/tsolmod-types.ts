@@ -56,6 +56,29 @@ export interface Detssmod {
   dsp_MtoTotReng: number
 }
 
+
+export const initialRenglon: Detssmod = {
+  numsolsum: 0,
+  nroreng: 0,
+  tiporeng: "",
+  descreng: "",
+  destino: "",
+  unidbasica: "",
+  cantsol: "",
+  coditem: "",
+  descadiitem: null,
+  destant: null,
+  codcta: "",
+  precio: "",
+  codclasifsnc: null,
+  codserv: null,
+  dsp_CodNombNorm: "",
+  dsp_DescNombNorm: "",
+  dsp_DescCodCta: "",
+  dsp_DescTipoReng: "",
+  dsp_MtoTotReng: 0
+}
+
 export const initialData: Root = {
   cabssmod: {
     numsolsum: 0,

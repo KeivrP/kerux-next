@@ -78,14 +78,14 @@ const SupplyRequestForm = ({ isLoading, formData, setFormData }: DataInputProps)
 
                     <Grid size={{ xs: 12, md: 2 }} >
                         <TextField
-                            defaultValue="1"
+                            defaultValue={formData.cabssmod.numsolsum}
                             size="small"
                             fullWidth
                         />
                     </Grid>
                     <Grid size={{ xs: 12, md: 10 }}>
                         <TextField
-                            defaultValue="PLANTILLA PARA COMPRAR MATRIAL DEE OFICINA"
+                            defaultValue={formData.cabssmod.descsolsum}
                             size="small"
                             fullWidth
                             slotProps={{
@@ -106,7 +106,7 @@ const SupplyRequestForm = ({ isLoading, formData, setFormData }: DataInputProps)
                         Año
                     </Typography>
                     <TextField
-                        defaultValue="2011"
+                        defaultValue={formData.cabssmod.ano}
                         size="small"
                         fullWidth
                     />
@@ -116,7 +116,7 @@ const SupplyRequestForm = ({ isLoading, formData, setFormData }: DataInputProps)
                         Moneda
                     </Typography>
                     <TextField
-                        defaultValue="VEF"
+                        defaultValue={formData.cabssmod.codmoneda}
                         size="small"
                         fullWidth
                     />
@@ -249,7 +249,7 @@ const SupplyRequestForm = ({ isLoading, formData, setFormData }: DataInputProps)
                     Solicitante
                 </Typography>
                 <TextField
-                    defaultValue="solicitante variable"
+                    defaultValue={formData.cabssmod.nomubic}
                     size="small"
                     fullWidth
                 />
@@ -261,7 +261,7 @@ const SupplyRequestForm = ({ isLoading, formData, setFormData }: DataInputProps)
                     Descripción
                 </Typography>
                 <Textarea
-                    defaultValue="ESTO ES PARA COMPRAR MATERLA DE OFICINA"
+                    defaultValue={formData.cabssmod.descsolsum}
                     rows={2}
                 />
             </Grid>
