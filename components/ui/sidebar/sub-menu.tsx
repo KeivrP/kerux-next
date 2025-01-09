@@ -10,10 +10,17 @@ export interface SubMenuItem {
   path: string;
 }
 
-const SubMenu = ({ isOpen }: { isOpen: boolean }) => {
+interface SubMenuProps {
+  isOpen: boolean;
+  aside?: boolean;
+  path?: string;
+}
+
+const SubMenu = ({ isOpen, aside = true, path }: SubMenuProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [menus, setMenus] = useState<MenuItemUser[]>([]);
   const { data, isLoading } = useMenu();
+  
 
   useEffect(() => {
     if (data) {
@@ -43,14 +50,15 @@ const SubMenu = ({ isOpen }: { isOpen: boolean }) => {
   return (
     <nav
       style={{
-        marginLeft: isOpen ? "18.2rem" : "6.2rem",
-        minWidth: isOpen ? "calc(100% - 18.2rem)" : "calc(100% - 6.2rem)",
+        marginLeft: aside ? (isOpen ? "18.2rem" : "6.2rem") : "0",
+        minWidth: aside ? (isOpen ? "calc(100% - 18.2rem)" : "calc(100% - 6.2rem)") : "100%",
         transition: "margin-left 0.2s ease-in-out, min-width 0.2s ease-in-out",
       }}
-      className={`fixed flex border-gray-200  border-b py-3 bg-white border-b-default h-16 border-solid border-prime-gray-200`}
+      className={`fixed flex border-gray-200 border-b py-3 bg-white border-b-default h-16 border-solid border-prime-gray-200`}
     >
       <div className="w-full flex flex-row p-2 px-4 justify-between">
         <div className="hidden lg:flex lg:pl-8 gap-4" id="megamenu-cta">
+        {path != "" ? (
           <ul className="flex lg:items-center gap-y-4 flex-col my-4 lg:my-0 lg:flex-row">
             <MenuDropdown onOpenChange={(a) => setDropdownOpen(a)} transformOrigin={{ vertical: 'top', horizontal: 'left' }} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} buttonText="" icon={<svg
               style={{
@@ -111,6 +119,9 @@ const SubMenu = ({ isOpen }: { isOpen: boolean }) => {
 
             </MenuDropdown>
           </ul>
+        ) : (
+          <></>
+        )}
         </div>
 
         <div className="">

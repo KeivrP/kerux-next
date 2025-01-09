@@ -21,9 +21,9 @@ export function BadgeDest({ item }: BadgeActProps) {
         <div className="relative group">
             <span className="flex justify-center items-center">
                 {item === "DEST" ? (
-                    <MapPinHouse className="text-blue-500" />
+                    <MapPinHouse className="text-blue-500" size={20} />
                 ) : (
-                    <Send className="text-green-500" />
+                    <Send className="text-green-500" size={20} />
                 )}
             </span>
             <div

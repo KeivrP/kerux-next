@@ -1,34 +1,43 @@
-// middleware.ts
-import { NextResponse } from 'next/server'
-import { auth } from './auth'  // Importa la configuración de auth que ya tienes
+import { NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt"; // Helper para verificar el token de sesión
+import type { NextRequest } from "next/server";
 
-export default auth((req) => {
-  const isAuthenticated = !!req.auth
-  const { pathname } = req.nextUrl
+const PUBLIC_ROUTES = ["/auth/signin", "/api/auth"];
 
-  // Lista de rutas públicas que no requieren autenticación
-  const publicRoutes = ['/auth/signin', '/api/auth']
-  
-  // Si la ruta es pública, permitir acceso
-  if (publicRoutes.some(route => pathname.startsWith(route))) {
-    return NextResponse.next()
+export default async function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
+
+  // Permitir acceso a rutas públicas
+  if (PUBLIC_ROUTES.some((route) => pathname.startsWith(route))) {
+    return NextResponse.next();
   }
 
-  // Si no está autenticado y no es una ruta pública, redirigir al login
-  if (!isAuthenticated) {
-    const signInUrl = new URL('/auth/signin', req.url)
-    signInUrl.searchParams.set('callbackUrl', pathname)
-    return NextResponse.redirect(signInUrl)
+  if (!process.env.AUTH_SECRET) {
+    throw new Error('AUTH_SECRET must be defined');
   }
 
-  // Si está autenticado, permitir acceso
-  return NextResponse.next()
-})
+  // Verificar el token de sesión
+  const token = await getToken({ 
+    req, 
+    secret: process.env.AUTH_SECRET,
+    salt: process.env.AUTH_SALT || process.env.AUTH_SECRET
+  });
+
+  // Si no hay token, redirigir al login
+  if (!token) {
+    const signInUrl = new URL("/auth/signin", req.url);
+    signInUrl.searchParams.set("callbackUrl", req.nextUrl.pathname);
+    return NextResponse.redirect(signInUrl);
+  }
+
+  // Si hay token, permitir acceso
+  return NextResponse.next();
+}
 
 // Configurar en qué rutas se ejecutará el middleware
 export const config = {
   matcher: [
-    // Rutas que requieren autenticación
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ]
-}
+    // Proteger todas las rutas excepto las públicas y las de Next.js internas
+    "/((?!api/auth|_next/static|_next/image|favicon.ico).*)",
+  ],
+};

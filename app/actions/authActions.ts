@@ -15,11 +15,11 @@ export async function handleCredentialsSignin({ email, password }: {
             switch (error.type) {
                 case 'CredentialsSignin':
                     return {
-                        message: 'Invalid credentials',
+                        message: 'Credenciales invalidas. Por favor, verifique su correo y contraseña.',
                     }
                 default:
                     return {
-                        message: 'Something went wrong.',
+                        message: 'Ocurrió un error inesperado. Por favor, intente nuevamente.',
                     }
             }
         }

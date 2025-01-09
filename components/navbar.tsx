@@ -21,21 +21,24 @@ const Navbar = ({ children }: { children: ReactNode }) => {
     }
   }, [data, isLoading]);
 
+
+
   return (
 
     <div className="h-screen flex flex-col">
       <header className="sticky h-16 bg-gray-200">
-        <SubMenu isOpen={open} />
+        <SubMenu isOpen={open} aside={firstPathSegment === "" ? false : true} path={firstPathSegment} />
       </header>
-      <aside className="fixed top-0 left-0 z-50 flex">
-        <div
-          className={`transition-all duration-300 ${open ? "w-72" : "w-24"
-            } xl:p-4 p-2 bg-[#142f62] flex-col justify-start items-${open ? "start" : "center"
-            } gap-5 inline-flex border-r bg-red h-screen  overflow-y-auto`}
-        >
-          {firstPathSegment === "" ? (
-            <></>
-          ) : (
+      {firstPathSegment === "" ? (
+        <></>
+      ) : (
+        <aside className="fixed top-0 left-0 z-50 flex">
+          <div
+            className={`transition-all duration-300 ${open ? "w-72" : "w-24"
+              } xl:p-4 p-2 bg-[#142f62] flex-col justify-start items-${open ? "start" : "center"
+              } gap-5 inline-flex border-r bg-red h-screen  overflow-y-auto`}
+          >
+
             <>
               {open ? (
                 <div className="flex justify-center items-center w-full p-2 transition-all duration-300">
@@ -106,13 +109,14 @@ const Navbar = ({ children }: { children: ReactNode }) => {
                 ))}
               </div>
             </>
-          )}
-        </div>
-      </aside>
+
+          </div>
+        </aside>
+      )}
       <div className="flex flex-1 overflow-auto">
         <div
           style={{
-            marginLeft: open ? "18.2rem" : "6.2rem",
+            marginLeft: firstPathSegment === "" ? "0" : open ? "18.2rem" : "6.2rem",
             transition: "margin-left 0.2s ease-in-out",
           }}
           className="flex-1 transition-all duration-300"
@@ -120,7 +124,7 @@ const Navbar = ({ children }: { children: ReactNode }) => {
           {children}
         </div>
       </div>
-      
+
 
     </div>
   );
