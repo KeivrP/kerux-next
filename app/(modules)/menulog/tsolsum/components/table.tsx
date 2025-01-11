@@ -19,17 +19,22 @@ import {BadgeTipodoc} from "@/components/badge/badge-estatus";
 import { useGenerateTnivsum } from "../hook/useTsolsum";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { ConfirmDialog } from "@/components/modal/confirmDialog";
+import { usePathname, useRouter } from "next/navigation";
 
 export const TsolsumTable = () => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(25);
     const [rows, setRows] = useState<ITsolsum[]>([]);
     const [order, setOrder] = useState<Order[]>([
-        { column: "N°", id: "idsolum", operator: "ASC" },
+        { column: "N°", id: "idsolsum", operator: "DESC" },
     ]);
     const [filter, setFilter] = useState<Filter[]>([]);
     const [count, setCount] = useState(0);
     const [isPending, handleLoading] = useState<boolean>(false);
+    const [openModal, setOpenModal] = useState<boolean>(false)
+    const router = useRouter()
+    const pathname = usePathname();
+
 
     /* ------------------ USEEFFECT PARA TRAER LA DATA DE LA BD ----------------- */
 
@@ -44,7 +49,7 @@ export const TsolsumTable = () => {
 
     const { data, isLoading: updateLoading, refetch } = useQueryData({
         entity: "sols_sums",
-        params: { status: ["PGN", "RCH", "RAE"], },
+        params: { status: ["PGN", "RCH", "RAE"], order, filter, rowsPerPage },
         dependency: [filter, order, page, rowsPerPage],
     });
 
@@ -98,11 +103,17 @@ export const TsolsumTable = () => {
     const handleCancelDelete = () => {
         setOpenConfirm(false);
     }
+    const handleOpen = (id: number) => {
+        if (id) {
+          router.push(`${pathname}/${id}`);
+    
+        }
+      };
 
     return (
         <>
             <ActionCardHeader
-                add={() => setOpenDialog(true)}
+                add={()=> router.push(`${pathname}/${"-"}`)}
                 onApplyFilter={(filters) => setFilter(filters)}
                 columnsFilter={columnsFilter}
                 onApplyOrder={(orders) => setOrder(orders)}
@@ -130,7 +141,7 @@ export const TsolsumTable = () => {
                             { content: row.ccosto, align: "center" },
                             { content: <BadgeTipodoc tipo={row.stssol} />, align: "center" },
                             {
-                                content: <Acciones row={row} onOpen={handleEdit} onReject={() => { }} onGenerate={openGenerate} />,
+                                content: <Acciones row={row} onOpen={handleOpen} onReject={() => { }} onGenerate={openGenerate} />,
                                 action: () => null,
                                 disableTooltip: true,
                             },
@@ -159,7 +170,7 @@ export const TsolsumTable = () => {
                 text={`¿Estas seguro que deseas Generar la Solicitud ${rows.find((row) => row.idsolsum == generaID)?.idsolsum}?`}
             />
             <SimpleBackdrop show={isPending} />
-            {/*             <DataSheet isOpen={openDialog} onClose={setOpenDialog} row={row} /> */}
+           
         </>
     );
 };

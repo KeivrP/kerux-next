@@ -19,6 +19,8 @@ import BadgeModule from "@/components/badge/badge-mod";
 import { Tipodoclist } from "@/app/(modules)/menudoc/ttipodoc/ttipodc-types";
 import { useDeleteTdocsum } from "../hook/useTtdocsum";
 import { BadgeDest } from "@/components/badge/badge-dest";
+import DataSheet from "./data-sheet";
+import { set } from "lodash";
 
 export const TtdocsumTable = () => {
     const [page, setPage] = useState(0);
@@ -103,9 +105,14 @@ export const TtdocsumTable = () => {
         setOpenDialog(false);
     };
 
+    const [editRow, setEditRow] = useState('')
+    const [openEdit, setOpenEdit] = useState(false)
+
     const handleEdit = (id: string) => {
-        console.log(`Edit ${id}`);
+        setEditRow(id)
+        setOpenEdit(true)
     };
+
     return (
         <>
             <ActionCardHeader
@@ -180,6 +187,12 @@ export const TtdocsumTable = () => {
                 text={`¿Estas seguro que deseas eliminar el Tipo de Documento ${rows.find((row) => row.tipodoc == deleteRowId)?.tipodoc
                     }?`}
             />
+            {editRow && <DataSheet
+                row={editRow}
+                isOpen={openEdit}
+                onClose={() => { setOpenEdit(false), setEditRow('') }}
+                refetch={refetch}
+            />}
             <SimpleBackdrop show={isPending} />
         </>
     );

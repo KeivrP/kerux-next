@@ -13,6 +13,8 @@ import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { formatDate } from "@/utils/main";
 import {BadgeTipodoc} from "@/components/badge/badge-estatus";
 import { useDeleteTcambio } from "../hook/useTcambios";
+import { set } from "lodash";
+import DataSheet from "./data-sheet";
 
 export const TcambiosTable = () => {
 
@@ -98,10 +100,15 @@ export const TcambiosTable = () => {
     } setOpenDialog(false);
   }
 
+  const [openFile, setOpenFile] = useState<boolean>(false);
+  const [openRow, setOpenRow]  = useState<number>(0);
+
 
 
   const handleEdit = (idsolsum: number) => {
-    console.log(`Edit ${idsolsum}`);
+    console.log(idsolsum);
+    setOpenRow(idsolsum);
+    setOpenFile(true);
   };
 
 
@@ -169,6 +176,14 @@ export const TcambiosTable = () => {
         onCancel={handleCancelDelete}
         text={`¿Estas seguro que deseas eliminar la solicitud ${rows.find((row) => row.idsolsum == deleteRowId)?.idsolsum}?`}
       />
+      {openRow > 1 &&(
+        <DataSheet
+        row={openRow}
+        isOpen={openFile}
+        onClose={() => setOpenFile(false)}
+        />
+      )}
+      
       <SimpleBackdrop show={isPending} />
     </>
   );

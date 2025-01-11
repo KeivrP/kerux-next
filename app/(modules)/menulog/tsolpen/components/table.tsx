@@ -10,8 +10,9 @@ import ActionCardHeader from "@/components/card/actionCardHeader";
 import { Acciones, columnsFilter, columnsHeaders, columnsOrder } from "./header-table";
 import { BaseTable } from "@/components/table-material/genericTable";
 import { formatDate } from "@/utils/main";
-import {BadgeTipodoc} from "@/components/badge/badge-estatus";
+import { BadgeTipodoc } from "@/components/badge/badge-estatus";
 import { BaseTablePagination } from "@/components/table-material/baseTablePagination";
+import HistoriaDocumento from "@/shared/hcdlog/data-sheet";
 
 
 export const TsolpenTable = () => {
@@ -32,13 +33,13 @@ export const TsolpenTable = () => {
     entity: "sols_sums",
     params: { status: ["PGN", "RCH", "RAE", "PPA", "PAE", "GEN", "ANU"], filter, order, page, rowsPerPage },
     dependency: [filter, order, page, rowsPerPage],
-});
+  });
 
-useEffect(() => {
+  useEffect(() => {
     setRows(data?.solsumlist || []);
     setCount(data?.total);
-}
-, [data]);
+  }
+    , [data]);
 
 
   const handlePageChange = useCallback(
@@ -56,25 +57,28 @@ useEffect(() => {
     []
   );
 
+  const [open, setOpen] = useState(false);
+
   const handleEdit = (id: number) => {
+    setOpen(true);
     console.log(id);
   };
 
-    const openGenerate = (id: number) => {
-        console.log(id);
-    };
+  const openGenerate = (id: number) => {
+    console.log(id);
+  };
 
   return (
     <>
       <ActionCardHeader
-                isAddButtonVisible={false}
-                onApplyFilter={(filters) => setFilter(filters)}
-                columnsFilter={columnsFilter}
-                onApplyOrder={(orders) => setOrder(orders)}
-                columnsOrder={columnsOrder}
-                setFilter={setFilter}
-                setOrder={setOrder}
-            />
+        isAddButtonVisible={false}
+        onApplyFilter={(filters) => setFilter(filters)}
+        columnsFilter={columnsFilter}
+        onApplyOrder={(orders) => setOrder(orders)}
+        columnsOrder={columnsOrder}
+        setFilter={setFilter}
+        setOrder={setOrder}
+      />
       <div
         style={{
           height: "71vh",
@@ -122,6 +126,11 @@ useEffect(() => {
           handleChangeRowsPerPage={handleChangeRowsPerPage}
         ></BaseTablePagination>
       </div>
+
+      <HistoriaDocumento
+        isOpen={open}
+        onClose={setOpen}
+      />
 
     </>
   );

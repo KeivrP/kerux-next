@@ -21,14 +21,14 @@ export const columnsOrder: Order[] = [
 ];
 
 export const columnsHeaders: HeadersName[] = [
-  { label: "ID Solsum",  align: "center", minWidth: 140 },
+  { label: "ID Solsum", align: "center", minWidth: 140 },
   {
     label: "Cambio",
-   
+
     align: "center",
     minWidth: 140,
   },
-  { label: "Descripcion",  minWidth: 180 },
+  { label: "Descripción", minWidth: 180 },
   {
     label: "Fecha",
     align: "center",
@@ -40,6 +40,28 @@ export const columnsHeaders: HeadersName[] = [
     minWidth: 140,
   },
   { label: "Acciones", align: "center", width: 100 },
+];
+
+export const columnsHeadersSheet: HeadersName[] = [
+  { label: "Código", align: "center", minWidth: 140 },
+  {
+    label: "Descripción",
+
+    align: "center",
+    minWidth: 140,
+  },
+  { label: "Cant. Original", minWidth: 180 },
+  {
+    label: "Precio Original",
+    align: "center",
+    minWidth: 140,
+  },
+  {
+    label: "Precio Cambio",
+    align: "center",
+    minWidth: 140,
+  },
+  { label: "Total", align: "center", width: 100 },
 ];
 
 export const Acciones = ({

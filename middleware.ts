@@ -4,10 +4,11 @@ import { auth } from './auth'  // Importa la configuración de auth que ya tiene
 
 export default auth((req) => {
   const isAuthenticated = !!req.auth
+
   const { pathname } = req.nextUrl
 
   // Lista de rutas públicas que no requieren autenticación
-  const publicRoutes = ['/auth/signin', '/api/auth']
+  const publicRoutes = ['/auth/signin', '/api/auth', ]
   
   // Si la ruta es pública, permitir acceso
   if (publicRoutes.some(route => pathname.startsWith(route))) {
@@ -16,9 +17,10 @@ export default auth((req) => {
 
   // Si no está autenticado y no es una ruta pública, redirigir al login
   if (!isAuthenticated) {
-    const signInUrl = new URL('/auth/signin', req.url)
-    signInUrl.searchParams.set('callbackUrl', pathname)
-    return NextResponse.redirect(signInUrl)
+    const baseUrl = 'http://localhost:3000'; // Reemplázalo si es necesario
+    const signInUrl = new URL('/auth/signin', baseUrl);
+    signInUrl.searchParams.set('callbackUrl', pathname);
+    return NextResponse.redirect(signInUrl);
   }
 
   // Si está autenticado, permitir acceso
@@ -29,6 +31,6 @@ export default auth((req) => {
 export const config = {
   matcher: [
     // Rutas que requieren autenticación
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|bg-2.jpg|/public).*)', // Excluye recursos específicos
   ]
 }
