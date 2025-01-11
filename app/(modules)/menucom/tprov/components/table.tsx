@@ -4,14 +4,14 @@ import { ITprov } from "../Tprov-types";
 import { useQueryData } from "@/server/fetch-data";
 import { BaseTable } from "@/components/table-material/genericTable";
 import { BaseTablePagination } from "@/components/table-material/baseTablePagination";
-import { Acciones, columnsFilter, columnsHeadersTprov , columnsOrder } from "./header-table";
+import { Acciones, columnsFilter, columnsHeadersTprov, columnsOrder } from "./header-table";
 import ActionCardHeader from "@/components/card/actionCardHeader";
 import { Filter } from "@/components/button/FilterButton";
 import { Order } from "@/components/button/OrderButton";
 import { ConfirmDialog } from "@/components/modal/confirmDialog";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
-import { BadgeAct } from "@/components/badge/badge-act";
 import { formatDate } from "@/utils/main";
+import { useDeleteProveedor } from "../hook/useProv";
 
 export const Tprov = () => {
 
@@ -23,12 +23,14 @@ export const Tprov = () => {
   ]);
   const [filter, setFilter] = useState<Filter[]>([]);
   const [count, setCount] = useState(0);
+  const [isPending, setIsPending] = useState(false);
 
   /* ------------------ USEEFFECT PARA TRAER LA DATA DE LA BD ----------------- */
 
+  const { mutate, isPending: deleteLoading, isSuccess } = useDeleteProveedor();
 
 
-  const { data, isLoading } = useQueryData({
+  const { data, isLoading, refetch } = useQueryData({
     entity: "proveedores",
     api: 'comp',
     params: {
@@ -39,6 +41,17 @@ export const Tprov = () => {
     },
     dependency: [filter, order, page, rowsPerPage],
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      refetch();
+    }
+  }, [isSuccess]);
+
+  useEffect(() => {
+    deleteLoading ? setIsPending(true) : setIsPending(false);
+  }, [deleteLoading]);
+
   useEffect(() => {
     setRows(data?.proveedoreslist || []);
     setCount(data?.total);
@@ -62,8 +75,8 @@ export const Tprov = () => {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [deleteRowId, setDeleteRowId] = useState<number>(0);
 
-  const handleDelete = (idsolsum: number) => {
-    setDeleteRowId(idsolsum);
+  const handleDelete = (numprov: number) => {
+    setDeleteRowId(numprov);
     setOpenDialog(true);
   };
 
@@ -72,15 +85,17 @@ export const Tprov = () => {
   };
 
   const handleConfirmDelete = () => {
-    const rowToDelete = rows.find((row) => row.numbenef === deleteRowId);
+    const rowToDelete = rows.find((row) => row.numprov === deleteRowId);
     if (rowToDelete) {
+      mutate(rowToDelete.numprov.toString());
+
     } else {
       console.log(`Row with id ${deleteRowId} not found`);
     } setOpenDialog(false);
   }
 
-  const handleEdit = (idsolsum: number) => {
-    console.log(`Edit ${idsolsum}`);
+  const handleEdit = (numprov: number) => {
+    console.log(`Edit ${numprov}`);
   };
 
   return (
@@ -108,12 +123,11 @@ export const Tprov = () => {
           rowAction={(row) => console.log(row)}
           collapsible={{
             visible: (row) => [
-              { content: row.numprov, align: "left" },
-              { content: row.nomprov, align: "center" },
-              { content: row.tipoprov, align: "center" },
-              { content: row.numbenef, align: "left" },
-              { content: formatDate(row.fecing), align: "left" },
-              { content: row.fecvigenciareg?formatDate(row.fecvigenciareg):'', align: "left" },
+              { content: row.numprov, align: "center" },
+              { content: row.nomprov, align: "left" },
+              { content: `${row.tipoprov} ${row.numbenef ? `- ${row.numbenef}` : ""}`, align: "left" },
+              { content: formatDate(row.fecing), align: "center" },
+              { content: row.fecvigenciareg ? formatDate(row.fecvigenciareg) : '', align: "center" },
               {
                 content: (
                   <Acciones
@@ -143,8 +157,10 @@ export const Tprov = () => {
         open={openDialog}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
-        text={`¿Estas seguro que deseas eliminar el beneficiario ${rows.find((row) => row.numbenef == deleteRowId)?.numbenef}?`}
+        text={`¿Estas seguro que deseas eliminar el Proveedor  ${rows.find((row) => row.numprov == deleteRowId)?.numprov}?`}
       />
+      <SimpleBackdrop show={isPending} />
+
     </>
   );
 };

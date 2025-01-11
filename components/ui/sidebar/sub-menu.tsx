@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MenuAvatar from "./menu-avatar";
 import { completdMenus, MenuItemUser } from "./sidebar-utils";
 import { useMenu } from "@/server/session/useSession";

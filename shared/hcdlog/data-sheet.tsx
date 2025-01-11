@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Container,
   Grid2 as Grid,
   Card,
   CardContent,
@@ -17,20 +16,16 @@ import {
 } from '@mui/material';
 import ModalDialog from '@/components/modal/modalDialog';
 import TextDivider from '@/components/ui/textDivider';
-import { BadgeDest } from '@/components/badge/badge-dest';
 import BadgeModule from '@/components/badge/badge-mod';
 import { formatDate } from '@/utils/main';
 import { motion } from 'framer-motion';
 import ButtonForms from '@/components/button/buttonForms';
-import { ArrowDownIcon, ArrowDownLeftSquare, ArrowDownLeftSquareIcon, ExpandIcon } from 'lucide-react';
+import { ArrowDownLeftSquareIcon } from 'lucide-react';
 
 interface HistoriaDocumentoProps {
   isOpen: boolean;
   onClose: (value: boolean) => void;
 }
-
-const MotionPaper = motion(Paper);
-
 
 const HistoriaDocumento = ({ isOpen, onClose }: HistoriaDocumentoProps) => {
   // Datos de ejemplo
@@ -71,7 +66,7 @@ const HistoriaDocumento = ({ isOpen, onClose }: HistoriaDocumentoProps) => {
 
   const variants = {
     hidden: { opacity: 0, y: 50 },
-    visible: (i) => ({
+    visible: (i: any) => ({
       opacity: 1,
       y: 0,
       transition: { delay: i * 0.1, type: 'spring', stiffness: 120 },

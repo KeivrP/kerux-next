@@ -1,4 +1,4 @@
-import { handleSignOut } from '@/app/actions/authActions';
+import { handleSignOut } from '@/app/actions/authSignout';
 import MenuDropdown from '@/components/dropdown/menu-dropdown';
 import { UserLogin } from 'next-auth';
 import { useSession } from 'next-auth/react';

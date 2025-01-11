@@ -16,7 +16,7 @@ export const columnsFilter: Filter[] = [
   { id: "fecvigenciareg", type: "desc", column: "Fecha Vigencia", value: "" },
 ];
 export const columnsOrder: Order[] = [
-  { id: "numprov", column: "Número" },
+  { id: "numprov", column: "Número",  },
   { id: "nomprov", column: "Nombre del Proveedor" },
   { id: "tipoprov", column: "Tipo" },
   { id: "numbenef", column: "Benef." },
@@ -26,12 +26,11 @@ export const columnsOrder: Order[] = [
 
 export const columnsHeadersTprov: HeadersName[] = [
 
-  { label: "Número", icon: null, align: "left", minWidth: 130 },
-  { label: "Nombre del Proveedor", icon: null, align: "center", minWidth: 130 },
-  { label: "Tipo", icon: null,  align: "center", minWidth: 130 },
-  { label: "Benef.", icon: null, align: "left", minWidth: 130 },
-  { label: "Fecha Ingreso", icon: null, align: "left", minWidth: 130 },
-  { label: "Fecha Vigencia", icon: null, align: "left", minWidth: 130 },
+  { label: "Número", icon: null, align: "center", minWidth: 80 },
+  { label: "Nombre del Proveedor", icon: null, align: "left", minWidth: 130 },
+  { label: "Tipo Benef.", icon: null,  align: "left", minWidth: 80 },
+  { label: "Fecha Ingreso", icon: null, align: "center", minWidth: 130 },
+  { label: "Fecha Vigencia", icon: null, align: "center", minWidth: 130 },
     {
       label: "Acciones",
       icon: null,

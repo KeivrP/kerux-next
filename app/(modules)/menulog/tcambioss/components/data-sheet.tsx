@@ -30,7 +30,7 @@ export default function DataSheet({
     });
 
 
-    const [selectedMovement, setSelectedMovement] = useState(null);
+    const [selectedMovement, setSelectedMovement] = useState<any>({idsolsum: 0});
 
     // Ejemplos de datos con la estructura real
     const movementsData = {
