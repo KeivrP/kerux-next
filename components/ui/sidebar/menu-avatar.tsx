@@ -1,18 +1,36 @@
+'use client'
 import { handleSignOut } from '@/app/actions/authSignout';
 import MenuDropdown from '@/components/dropdown/menu-dropdown';
+import { Session } from '@/types/next-auth';
 import { UserLogin } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useMemo, useEffect, useState } from 'react';
 
-const MenuAvatar = () => {
+export interface user {
+    codusuariodb: string
+    name: string
+    email: string
+    coddominio: string
+    coduadmproband: string
+    descund: string
+    indtodasujec: string
+    indreaund: string
+    codujec: string
+    descundejec: string
+    coddependencia: string
+  }
+  
+
+const MenuAvatar =  () => {
     const { data: session, status } = useSession();
     const [user, setUser] = useState<UserLogin | null>(null);
     const [isSigningOut, setIsSigningOut] = useState(false);
 
     useEffect(() => {
-        if (status === 'authenticated' && session?.user) {
-            setUser(session.user as unknown as UserLogin);
+        if (status === 'authenticated' && session) {
+            const request = session as unknown as Session;
+            setUser(request.request.auth.user.user as UserLogin);
         }
     }, [session, status]);
 

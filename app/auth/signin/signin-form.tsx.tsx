@@ -48,41 +48,31 @@ export default function SignIn() {
     }
   };
 
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Manejar el envío del formulario
-  }
-
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#142F62] via-[#575E71] to-[#001944] flex items-center justify-center p-4">
-      <div className="w-full h-[600px] max-w-4xl bg-white rounded-3xl overflow-hidden flex">
+      <div className="w-full max-w-4xl bg-white rounded-3xl overflow-hidden flex flex-wrap md:flex-nowrap">
         {/* Columna del formulario */}
-        <div className="w-1/2 p-12">
+        <div className="w-full md:w-1/2 p-8 md:p-12">
           <div className="text-center space-y-2">
-            <h1 className="text-3xl font-bold text-[#142F62]">
-              Bienvenido
-            </h1>
-            <p className="text-[#575E71]">
-              Ingrese sus credenciales para acceder al sistema
-            </p>
+            <h1 className="text-3xl font-bold text-[#142F62]">Bienvenido</h1>
+            <p className="text-[#575E71]">Ingrese sus credenciales para acceder al sistema</p>
           </div>
+
+          {/* Mensaje de error global */}
+          {globalError && (
+            <p className="text-red-600 text-center mt-4">{globalError}</p>
+          )}
+
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-6"
-            >
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              {/* Campo de correo */}
               <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#142F62] font-bold">
-                      Correo Electrónico
-                    </FormLabel>
+                    <FormLabel className="text-[#142F62] font-bold">Correo Electrónico</FormLabel>
                     <FormControl>
                       <Input
                         type="email"
@@ -97,14 +87,13 @@ export default function SignIn() {
                 )}
               />
 
+              {/* Campo de contraseña */}
               <FormField
                 control={form.control}
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#142F62] font-bold">
-                      Contraseña
-                    </FormLabel>
+                    <FormLabel className="text-[#142F62] font-bold">Contraseña</FormLabel>
                     <FormControl>
                       <Input
                         type="password"
@@ -118,57 +107,26 @@ export default function SignIn() {
                 )}
               />
 
+              {/* Botón de carga */}
               <div className="pt-2">
                 <LoadingButton pending={form.formState.isSubmitting} />
               </div>
             </form>
           </Form>
-
         </div>
 
-        {/* Columna de testimonios */}
-        <div className="w-1/2 relative">
+        {/* Columna de imagen */}
+        <div className="hidden md:block w-1/2 relative">
           <Image
-            src='/bg-2.jpg'
-            layout="fill"
-            objectFit="cover"
+            src="/bg-2.jpg"
+            fill
+            style={{ objectFit: "cover" }}
             alt="Background"
-            className="absolute inset-0 z-0" />
-          {/* Contenido */}
-          {/*     <div className="relative z-10 p-12">
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-4xl font-semibold text-white mb-4">
-                  What&apos;s our Jobseekers Said.
-                </h2>
-                <blockquote className="text-white text-lg">
-                  "Search and find your dream job is now easier than ever. Just browse a job and apply if you need to."
-                </blockquote>
-              </div>
-
-              <div className="space-y-2">
-                <p className="text-white font-medium">Mas Parjono</p>
-                <p className="text-white/80">UI Designer at Google</p>
-              </div>
-
-              <div className="flex space-x-2">
-                <button className="p-3 bg-white/20 rounded-full hover:bg-white/30 transition-colors">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-                <button className="p-3 bg-white/20 rounded-full hover:bg-white/30 transition-colors">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-
-          </div> */}
+            className="absolute inset-0 z-0"
+          />
         </div>
       </div>
     </div>
+
   );
 }

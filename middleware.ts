@@ -5,7 +5,6 @@ export default auth((req) => {
   const isAuthenticated = !!req.auth
 
   const { pathname, origin } = req.nextUrl
-  console.log(origin, 'origon')
 
   // Lista de rutas públicas que no requieren autenticación
   const publicRoutes = ['/auth/signin', '/api/auth']
