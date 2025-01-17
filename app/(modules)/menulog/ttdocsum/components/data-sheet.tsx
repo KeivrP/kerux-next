@@ -1,22 +1,26 @@
 'use client'
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField, Typography } from "@mui/material";
+import { Autocomplete, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField, Typography } from "@mui/material";
 import ModalDialog from "@/components/modal/modalDialog";
 import ButtonForms from "@/components/button/buttonForms";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
-import { Tipodoc } from "../ttdocsum-types";
-import { useUpdateTipoDoc } from "../hook/useTtdocsum";
+import { ITipoList, ITipodoc } from "../ttdocsum-types";
+import { useCreateTipoDoc, useUpdateTipoDoc } from "../hook/useTtdocsum";
 import { useQueryData } from "@/server/fetch-data";
 import Grid from "@mui/material/Grid2";
 import { ConditionalWrapper } from "@/utils/main";
 import { SkeletonInput } from "@/components/skeleton/detail";
+import BadgeModule from "@/components/badge/badge-mod";
+import { BadgeDest } from "@/components/badge/badge-dest";
 
 interface DataSheetProps {
     isOpen: boolean;
     onClose: (value: boolean) => void;
-    row: string,
+    row: ITipodoc | string,
     refetch: () => void;
+    tipo: ITipoList[]
+    isTipoLoading: boolean
 }
 
 export default function DataSheet({
@@ -24,211 +28,359 @@ export default function DataSheet({
     onClose,
     row,
     refetch,
+    tipo,
+    isTipoLoading
 }: DataSheetProps): JSX.Element {
     const { mutate, isPending, isSuccess } = useUpdateTipoDoc();
-    const [rows, setRows] = useState<Tipodoc | null>(null);
-    const { data, isLoading } = useQueryData({
-        entity: "tipos_docs",
-        dependency: [row],
-        type: `${row}`,
-    });
-    const { data: tipo, isLoading: isLoadingTip } = useQueryData({
-        entity: "lst_tipodoc_log",
-        api: "doc",
-        dependency: [row],
-    });
+    const { mutate: create, isPending: isPendingCreate, isSuccess: isSuccessCreate } = useCreateTipoDoc();
+    const [rows, setRows] = useState<ITipodoc>()
     const { data: tdres, isLoading: isLoadingTdres } = useQueryData({
         entity: "lst_tdres_log",
         api: "doc",
         dependency: [row],
     });
 
-    console.log(tipo, tdres)
-
-    // Cargar los datos en el estado cuando se reciban
     useEffect(() => {
-        if (data) {
-            setRows(data.tipodoc);
-        }
-    }, [data]);
+        setRows(row as ITipodoc);
+    }, []);
 
-    // Hook de formulario
     const {
         register,
         handleSubmit,
         formState: { errors },
         reset,
+        setValue,
+        watch,
     } = useForm({
         defaultValues: {
             codsis: "",
             tipodoc: "",
             tipodocres: "",
-            tipodocrespre: null,
-            tipodocaumres: null,
-            tiposis: "DEST", // Valor por defecto
+            tipodocrespre: "",
+            tipodocaumres: "",
+            tiposis: "DEST" as "DEST" | "ORIG",
+            desctipodoc: "",
+            descripcion: ""
         },
     });
 
-    // Resetear los valores cuando se abra el modal y haya datos
-    useEffect(() => {
-        if (isOpen && rows) {
-            reset({
-                codsis: rows?.codsis || "",
-                tipodoc: rows?.tipodoc || "",
-                tipodocres: rows?.tipodocres || "",
-                tipodocrespre: rows?.tipodocrespre || null,
-                tipodocaumres: rows?.tipodocaumres || null,
-                tiposis: rows?.tiposis || "DEST", // Valor por defecto
-            });
-        }
-    }, [isOpen, rows, reset]);
+    const tipodoc = watch("tipodoc");
+    const tipodocres = watch("tipodocres");
+    const tipodocrespre = watch("tipodocrespre");
+    const tipodocaumres = watch("tipodocaumres");
+    const codsis = watch("codsis");
 
-    // Función de envío del formulario
-    const onSubmit = (data: Tipodoc) => {
-        mutate({ data });
+    useEffect(() => {
+        if (rows) {
+            setValue("codsis", rows.codsis || "");
+            setValue("tipodoc", rows.tipodoc || "");
+            setValue("tipodocres", rows.tipodocres || "");
+            setValue("tipodocrespre", rows.tipodocrespre || "");
+            setValue("tipodocaumres", rows.tipodocaumres || "");
+            setValue("tiposis", rows.tiposis || "DEST" as "DEST" | "ORIG");
+            setValue("desctipodoc", rows.desctipodoc || "");
+            setValue("descripcion", rows.descripcion || "");
+        }
+    }, [rows]);
+
+    const onSubmit = (data: ITipodoc) => {
+        if (row) {
+            mutate({ data });
+        } else {
+            create({ data });
+        }
     };
 
-    // Cerrar el modal después de éxito
     useEffect(() => {
-        if (isSuccess) {
+        if (isSuccess || isSuccessCreate) {
             onClose(false);
             refetch();
         }
     }, [isSuccess, onClose]);
 
+    const getDeestipo = (tipoD: string): string => {
+        return Array.isArray(tdres) ? tdres.find((item) => item.tipodoc === tipoD)?.desctipodoc || "" : "";
+    };
+
+
     return (
         <>
             <ModalDialog
                 width="md"
-                title={row ? `Editar Tipo de Documento ${row}` : "Crear nuevo Tipo de Documento"}
+                title={row ? `Editar Tipo de Documento ${rows?.tipodoc}` : "Crear nuevo Tipo de Documento"}
                 dialogOpen={isOpen}
                 handleClose={() => onClose(false)}
             >
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <Grid container spacing={2} p={2}>
+                    <span className="flex justify-end mr-4">
+                        <ButtonForms
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            sx={{ width: 100 }}
+                        >
+                            Guardar
+                        </ButtonForms>
+                    </span>
+                    <Grid container spacing={1} p={2}>
                         <Grid size={3}>
-                            <Typography variant="h3" color="primary">
-                                Tipo de Documento
+                            <Typography variant="h3" color="primary" mb={1} >
+                                Tipo Doc
                             </Typography>
-                            <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
+                            <ConditionalWrapper
+                                condition={isTipoLoading}
+                                wrapper={SkeletonInput}
+                            >
+                                {row ? (
+                                    <TextField
+                                        id="tipodoc"
+                                        {...register("tipodoc")}
+                                        size="small"
+                                        variant="outlined"
+                                        fullWidth
+                                        disabled
+                                    />
+                                ) : (
+                                    <>
+                                        <Autocomplete
+                                            fullWidth
+                                            size="small"
+                                            {...register("tipodoc", { required: "Tipo requerido" })}
+                                            options={
+                                                Array.isArray(tipo) ? tipo : []
+                                            }
+                                            getOptionLabel={(option) => option.tipodoc}
+                                            renderInput={(params) => <TextField {...params} />}
+                                            value={
+                                                Array.isArray(tipo)
+                                                    ? tipo.find(
+                                                        (option) =>
+                                                            option.tipodoc === tipodoc
+                                                    )
+                                                    : null
+                                            }
+                                            onChange={(_, newValue) => {
+                                                setValue(
+                                                    "tipodoc",
+                                                    newValue ? newValue.tipodoc : ""
+                                                );
+                                                setValue("codsis", newValue?.codsis ?? "");
+                                                setValue("desctipodoc", newValue?.desctipodoc || "");
+                                                setValue("tiposis", newValue ? newValue.tiposis as "DEST" | "ORIG" : "DEST");
+                                            }}
+                                        />
+                                        {!!errors.tipodoc && (
+                                            <Typography color="error" sx={{ fontSize: 9, fontWeight: "bold" }}>
+                                                {errors.tipodoc?.message} ff
+                                            </Typography>
+                                        )}
+                                    </>
+                                )}
 
-                            <TextField
-                                id="tipodoc"
-                                {...register("tipodoc", {
-                                    required: "El tipo de documento es requerido",
-                                })}
-                                size="small"
-                                variant="outlined"
-                                fullWidth
-                                margin="normal"
-                                error={!!errors.tipodoc}
-                                helperText={errors.tipodoc?.message}
-                            />
+
                             </ConditionalWrapper>
                         </Grid>
 
-                        <Grid size={4.5}>
-                            <Typography variant="h3" color="primary">
-                                Tipo de Documento Resumen
-                            </Typography>
+                        <Grid size={7} mt={1.5}>
+
                             <TextField
-                                id="tipodocres"
-                                {...register("tipodocres", {
-                                    required: "El tipo de documento resumen es requerido",
-                                })}
+                                id="desctipodoc"
+                                {...register("desctipodoc")}
                                 size="small"
                                 variant="outlined"
                                 fullWidth
                                 margin="normal"
-                                error={!!errors.tipodocres}
-                                helperText={errors.tipodocres?.message}
+                                disabled
+
                             />
                         </Grid>
 
-                        <Grid size={4.5}>
-                            <Typography variant="h3" color="primary">
-                                Código del Sistema
+                        <Grid size={1}>
+                            <Typography variant="h3" color="primary" mb={1.5}>
+                                Sistema
                             </Typography>
+                            <BadgeModule codmenu={codsis} />
+                        </Grid>
+                        <Grid size={1}>
+                            <Typography variant="h3" color="primary" mb={1.5}>
+                                Tipo
+                            </Typography>
+                            <span className="flex items-center mt-4">
+
+                                <BadgeDest item={watch("tiposis")} />
+                            </span>
+                        </Grid>
+
+                        <Grid size={4.5}>
+
+                            <Typography variant="h3" color="primary" mb={1}>
+                                Tipo Documento Reserva
+                            </Typography>
+                            <ConditionalWrapper condition={isLoadingTdres} wrapper={SkeletonInput}>
+
+                                <Autocomplete
+                                    fullWidth
+                                    loading={isLoadingTdres}
+
+                                    size="small"
+                                    {...register("tipodocres", { required: "Tipo requerido" })}
+                                    options={
+                                        Array.isArray(tdres) ? tdres : []
+                                    }
+                                    getOptionLabel={(option) => option.tipodoc}
+                                    renderInput={(params) => <TextField {...params} />}
+                                    value={
+                                        Array.isArray(tdres)
+                                            ? tdres.find(
+                                                (option) =>
+                                                    option.tipodoc === tipodocres
+                                            ) || null
+                                            : null
+                                    }
+                                    onChange={(_, newValue) => {
+                                        setValue(
+                                            "tipodocres",
+                                            newValue ? newValue.tipodoc : ""
+                                        );
+                                    }}
+                                />
+                                {!!errors.tipodocres && (
+                                    <Typography color="error" sx={{ fontSize: 9, fontWeight: "bold" }}>
+                                        {errors.tipodocres?.message} ff
+                                    </Typography>
+                                )}
+                            </ConditionalWrapper>
+                        </Grid>
+
+                        <Grid size={7} mt={1.5}>
+
                             <TextField
-                                id="codsis"
-                                {...register("codsis", {
-                                    required: "El código del sistema es requerido",
-                                })}
+                                id="tipodocres"
+                                value={getDeestipo(tipodocres)}
                                 size="small"
                                 variant="outlined"
                                 fullWidth
                                 disabled
                                 margin="normal"
-                                error={!!errors.codsis}
-                                helperText={errors.codsis?.message}
+
                             />
                         </Grid>
 
-                        <Grid size={6}>
-                            <Typography variant="h3" color="primary">
-                                Tipo de Documento Resumen Previo
-                            </Typography>
-                            <TextField
-                                id="tipodocrespre"
-                                {...register("tipodocrespre")}
-                                size="small"
-                                variant="outlined"
-                                fullWidth
-                                margin="normal"
-                                error={!!errors.tipodocrespre}
-                                helperText={errors.tipodocrespre?.message}
-                            />
-                        </Grid>
+                        <Grid size={4.5}>
 
-                        <Grid size={6}>
-                            <Typography variant="h3" color="primary">
-                                Tipo de Documento Aumentado Resumen
+                            <Typography variant="h3" color="primary" mb={1}>
+                                Tipo Documento Reserva Previa
                             </Typography>
-                            <TextField
-                                id="tipodocaumres"
-                                {...register("tipodocaumres")}
-                                size="small"
-                                variant="outlined"
-                                fullWidth
-                                margin="normal"
-                                error={!!errors.tipodocaumres}
-                                helperText={errors.tipodocaumres?.message}
-                            />
-                        </Grid>
+                            <ConditionalWrapper condition={isLoadingTdres} wrapper={SkeletonInput}>
 
-                        <Grid size={12}>
-                            <Typography variant="h3" color="primary">
-                                Tipo del Sistema
-                            </Typography>
-                            <FormControl component="fieldset" error={!!errors.tiposis}>
-                                <RadioGroup
-                                    id="tiposis"
-                                    {...register("tiposis", {
-                                        required: "El tipo del sistema es requerido",
-                                    })}
-                                    defaultValue="DEST"
-                                >
-                                    <FormControlLabel value="DEST" control={<Radio />} label="Destino" />
-                                    <FormControlLabel value="ORIG" control={<Radio />} label="Origen" />
-                                </RadioGroup>
-                                {errors.tiposis && (
-                                    <Typography variant="body2" color="error">
-                                        {errors.tiposis.message}
+                                <Autocomplete
+                                    fullWidth
+                                    size="small"
+                                    {...register("tipodocrespre", { required: "Tipo requerido" })}
+                                    options={
+                                        Array.isArray(tdres) ? tdres : []
+                                    }
+                                    getOptionLabel={(option) => option.tipodoc}
+                                    renderInput={(params) => <TextField {...params} />}
+                                    loading={isLoadingTdres}
+                                    value={
+                                        Array.isArray(tdres)
+                                            ? tdres.find(
+                                                (option) =>
+                                                    option.tipodoc === tipodocrespre
+                                            ) || null
+                                            : null
+                                    }
+                                    onChange={(_, newValue) => {
+                                        setValue(
+                                            "tipodocrespre",
+                                            newValue ? newValue.tipodoc : ""
+                                        );
+                                    }}
+                                />
+                                {!!errors.tipodocrespre && (
+                                    <Typography color="error" sx={{ fontSize: 9, fontWeight: "bold" }}>
+                                        {errors.tipodocrespre?.message} ff
                                     </Typography>
                                 )}
-                            </FormControl>
+                            </ConditionalWrapper>
                         </Grid>
+
+                        <Grid size={7} mt={1.5}>
+
+                            <TextField
+                                id="tipodocrespre"
+                                value={getDeestipo(tipodocrespre)}
+                                size="small"
+                                variant="outlined"
+                                fullWidth
+                                disabled
+                                margin="normal"
+
+                            />
+                        </Grid>
+
+                        <Grid size={4.5}>
+
+                            <Typography variant="h3" color="primary" mb={1}>
+                                Tipo Documento aumentada reserva
+                            </Typography>
+                            <ConditionalWrapper condition={isLoadingTdres} wrapper={SkeletonInput}>
+
+                                <Autocomplete
+                                    fullWidth
+                                    loading={isLoadingTdres}
+
+                                    size="small"
+                                    {...register("tipodocaumres", { required: "Tipo requerido" })}
+                                    options={
+                                        Array.isArray(tdres) ? tdres : []
+                                    }
+                                    getOptionLabel={(option) => option.tipodoc}
+                                    renderInput={(params) => <TextField {...params} />}
+                                    value={
+                                        Array.isArray(tdres)
+                                            ? tdres.find(
+                                                (option) =>
+                                                    option.tipodoc === tipodocaumres
+                                            ) || null
+                                            : null
+                                    }
+                                    onChange={(_, newValue) => {
+                                        setValue(
+                                            "tipodocaumres",
+                                            newValue ? newValue.tipodoc : ""
+                                        );
+                                    }}
+                                />
+                                {!!errors.tipodocaumres && (
+                                    <Typography color="error" sx={{ fontSize: 9, fontWeight: "bold" }}>
+                                        {errors.tipodocaumres?.message} ff
+                                    </Typography>
+                                )}
+                            </ConditionalWrapper>
+                        </Grid>
+
+                        <Grid size={7} mt={1.5}>
+
+                            <TextField
+                                id="tipodocaumres"
+                                value={getDeestipo(tipodocaumres)}
+                                size="small"
+                                variant="outlined"
+                                fullWidth
+                                disabled
+                                margin="normal"
+
+                            />
+                        </Grid>
+
                     </Grid>
-                    <ButtonForms
-                        type="submit"
-                        title="Guardar"
-                        className="bg-blue-950 text-white ml-4 hover:bg-blue-800 transition duration-200"
-                    >
-                        Guardar
-                    </ButtonForms>
+
                 </form>
             </ModalDialog>
-            <SimpleBackdrop show={isPending} />
+            <SimpleBackdrop show={isPending || isPendingCreate} />
         </>
     );
 }

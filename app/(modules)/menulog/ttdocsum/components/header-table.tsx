@@ -4,6 +4,7 @@ import { Order } from "@/components/button/OrderButton";
 import { DeleteIcon, OpenIcon } from "@/components/icons/table-icon";
 import { HeadersName } from "@/components/table-material/genericTable";
 import { IconButton, Tooltip, useTheme } from "@mui/material";
+import { ITipodoc } from "../ttdocsum-types";
 
 export const columnsFilter: Filter[] = [
   { id: "TIPO_DOC_LOG.tipodoc", type: "desc", column: "Tipo Doc", value: "" },
@@ -41,9 +42,9 @@ export const Acciones = ({
   onDelete,
   onEdit,
 }: {
-  row: Tipodoclist;
+  row: ITipodoc;
   onDelete: (tipodoc: string) => void;
-  onEdit: (tipodoc: string) => void;
+  onEdit: (tipodoc: ITipodoc) => void;
 }) => {
   const theme = useTheme();
 
@@ -65,7 +66,7 @@ export const Acciones = ({
         title="Abrir"
       >
         <IconButton
-          onClick={() => onEdit(row.tipodoc)}
+          onClick={() => onEdit(row)}
           color="primary"
           size="small"
         >
