@@ -40,7 +40,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     >
       {mensaje ? (
         <>
-          <div
+          <span
             style={{
               display: "flex",
               alignItems: "center",
@@ -57,7 +57,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             >
               {title}
             </Typography>
-          </div>
+          </span>
 
           <DialogContent
             style={{
@@ -69,7 +69,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
               background: theme.palette.background.paper,
             }}
           >
-            <div
+            <span
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -81,7 +81,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
               <Typography variant="h3" sx={{ fontWeight: 200 }}>
                 {text}
               </Typography>
-            </div>
+            </span>
             <Typography variant="h3">Mensaje </Typography>
             <TextField
               multiline
@@ -139,16 +139,12 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         >
           {getIconByMode(mode)}
 
-          <DialogTitle>
-            <Typography variant="h2" color={"primary"}>
-              {title}
-            </Typography>
+          <DialogTitle style={{ fontSize: 14, fontWeight: 'bold', color: theme.palette.primary.main }}>
+            {title}
           </DialogTitle>
 
-          <DialogContentText>
-            <Typography variant="body1" align="center">
-              {text}
-            </Typography>
+          <DialogContentText style={{ textAlign: 'center', fontSize: 12 }}>
+            {text}
           </DialogContentText>
           <br />
           <DialogActions style={{ justifyContent: "center" }}>
@@ -161,24 +157,27 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
                 justifyContent: "center",
                 alignItems: "center",
                 gap: "0.625rem",
+                fontSize: 12
               }}
               onClick={onCancel}
             >
-              <Typography variant="h3">Cancelar</Typography>
+              Cancelar
             </Button>
             <Button
               variant="contained"
               color="primary"
               style={{
+
                 display: "flex",
                 padding: "0.5rem 1.5625rem",
                 justifyContent: "center",
                 alignItems: "center",
                 gap: "0.625rem",
+                fontSize: 12
               }}
               onClick={onConfirm}
             >
-              <Typography variant="h3">Confirmar</Typography>
+              Confirmar
             </Button>
           </DialogActions>
         </DialogContent>

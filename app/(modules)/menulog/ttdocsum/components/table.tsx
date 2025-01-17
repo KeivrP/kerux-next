@@ -20,7 +20,8 @@ import { Tipodoclist } from "@/app/(modules)/menudoc/ttipodoc/ttipodc-types";
 import { useDeleteTdocsum } from "../hook/useTtdocsum";
 import { BadgeDest } from "@/components/badge/badge-dest";
 import DataSheet from "./data-sheet";
-import { set } from "lodash";
+import { isEqual, set } from "lodash";
+import { ITipodoc } from "../ttdocsum-types";
 
 export const TtdocsumTable = () => {
     const [page, setPage] = useState(0);
@@ -105,23 +106,29 @@ export const TtdocsumTable = () => {
         setOpenDialog(false);
     };
 
-    const [editRow, setEditRow] = useState('')
+    const [editRow, setEditRow] = useState<ITipodoc | string | null>(null)
     const [openEdit, setOpenEdit] = useState(false)
 
-    const handleEdit = (id: string) => {
+    const handleEdit = (id: ITipodoc | string | null) => {
         setEditRow(id)
         setOpenEdit(true)
     };
 
+    const { data: tipo, isLoading: isLoadingP } = useQueryData({
+        entity: "lst_tipodoc_log",
+        api: "doc",
+    });
     return (
         <>
             <ActionCardHeader
-                isAddButtonVisible={false}
+                isAddButtonVisible={true}
+                add={() => handleEdit('')}
                 onApplyFilter={(filters) => setFilter(filters)}
                 columnsFilter={columnsFilter}
                 onApplyOrder={(orders) => setOrder(orders)}
                 columnsOrder={columnsOrder}
                 setFilter={setFilter}
+                actions={{ disabled: isEqual(tipo, { message: "No se encontraron registros" }) }}
                 setOrder={setOrder}
             />
 
@@ -187,12 +194,18 @@ export const TtdocsumTable = () => {
                 text={`¿Estas seguro que deseas eliminar el Tipo de Documento ${rows.find((row) => row.tipodoc == deleteRowId)?.tipodoc
                     }?`}
             />
-            {editRow && <DataSheet
-                row={editRow}
-                isOpen={openEdit}
-                onClose={() => { setOpenEdit(false), setEditRow('') }}
-                refetch={refetch}
-            />}
+            {
+                (editRow !== null) && (
+                    <DataSheet
+                        isTipoLoading={isLoadingP}
+                        tipo={tipo}
+                        row={editRow}
+                        isOpen={openEdit}
+                        onClose={() => { setOpenEdit(false); setEditRow(null); }}
+                        refetch={refetch}
+                    />
+                )
+            }
             <SimpleBackdrop show={isPending} />
         </>
     );

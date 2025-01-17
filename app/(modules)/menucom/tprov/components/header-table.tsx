@@ -12,8 +12,8 @@ export const columnsFilter: Filter[] = [
   { id: "nomprov", type: "desc", column: "Nombre del Proveedor", value: "" },
   { id: "tipoprov", type: "desc", column: "Tipo", value: "" },
   { id: "numbenef", type: "number", column: "Benef.", value: "" },
-  { id: "fecing", type: "desc", column: "Fecha Ingreso", value: "" },
-  { id: "fecvigenciareg", type: "desc", column: "Fecha Vigencia", value: "" },
+  { id: "fecing", type: "date", column: "Fecha Ingreso", value: "" },
+  { id: "fecvigenciareg", type: "date", column: "Fecha Vigencia", value: "" },
 ];
 export const columnsOrder: Order[] = [
   { id: "numprov", column: "Número",  },
