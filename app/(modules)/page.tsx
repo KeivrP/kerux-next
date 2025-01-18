@@ -1,9 +1,7 @@
 'use client'
 
 import { Suspense, useEffect, useState } from "react"
-import { useSession } from "next-auth/react"
 import { motion } from "framer-motion"
-import { ArrowRight } from 'lucide-react'
 
 import { CodMenu, completdMenus, MenuItemUser } from "@/components/ui/sidebar/sidebar-utils"
 import { useMenu } from "@/server/session/useSession"
@@ -11,7 +9,6 @@ import Loader from "@/components/backdrop/loader"
 import { ModuleCard } from "@/components/ui/sidebar/module-card"
 
 export default function Home() {
-  const { data: session } = useSession()
   const [menus, setMenus] = useState<MenuItemUser[]>([])
   const { data, isLoading } = useMenu()
 

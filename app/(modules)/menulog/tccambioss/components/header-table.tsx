@@ -39,48 +39,26 @@ export const columnsHeaders: HeadersName[] = [
     align: "center",
     minWidth: 140,
   },
-  { label: "Acciones", align: "center", width: 100 },
 ];
 
 export const columnsHeadersSheet: HeadersName[] = [
-  { label: "Nro", align: "right", minWidth: 20 },
-  {
-    label: "Tipo",
-
-    align: "center",
-    minWidth: 60,
-  },
-  { label: "Item/serv", minWidth: 100, align: "center" },
+  { label: "Código", align: "center", minWidth: 140 },
   {
     label: "Descripción",
-    align: "left",
-    minWidth: 220,
-  },
-  {
-    label: "Unidad",
-    align: "center",
-    minWidth: 60,
-  },
-  {
-    label: "Cantidad",
-    align: "center",
-    minWidth: 60,
-  },
-  {
-    label: "Costo Unitario",
-    align: "center",
-    minWidth: 100,
-  },
-  {
-    label: "Nvo.Cost.Unit",
-    align: "center",
-    minWidth: 100,
 
+    align: "center",
+    minWidth: 140,
+  },
+  { label: "Cant. Original", minWidth: 180 },
+  {
+    label: "Precio Original",
+    align: "center",
+    minWidth: 140,
   },
   {
-    label: "%",
+    label: "Precio Cambio",
     align: "center",
-    minWidth: 20,
+    minWidth: 140,
   },
   { label: "Total", align: "center", width: 100 },
 ];

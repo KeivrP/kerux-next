@@ -2,7 +2,9 @@
 'use client'
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { useSession } from "next-auth/react";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
+import { UserLogin } from 'next-auth';
+import { Session } from '@/types/next-auth';
 
 interface RadioButtonGroupProps {
   onValueChange?: (value: string) => void;
@@ -11,14 +13,22 @@ interface RadioButtonGroupProps {
 const RadioButtonCodUad: React.FC<RadioButtonGroupProps> = ({
   onValueChange,
 }) => {
-  const {data} = useSession();
-  const user = useMemo(() => (data ? data.user.user : null), [data]);
+  const { data, status } = useSession();
+  const [user, setUser] = useState<UserLogin | null>(null);
   const coduadmproband = user?.coduadmproband;
   const IndTodasUjec = user?.indtodasujec;
 
   const [value, setValue] = useState("");
   const [disabledUA, setDisabledUA] = useState(true);
   const [disabledTodos, setDisabledTodos] = useState(true);
+
+
+  useEffect(() => {
+    if (status === 'authenticated' && data) {
+      const request = data as unknown as Session;
+      setUser(request.request.auth.user.user as UserLogin);
+    }
+  }, [data, status]);
 
   useEffect(() => {
     let defaultValue = "";
@@ -33,26 +43,26 @@ const RadioButtonCodUad: React.FC<RadioButtonGroupProps> = ({
     }
   }, [coduadmproband]);
 
-// Este efecto se ejecuta después de que el componente se haya renderizado
-useEffect(() => {
-  // Verifica si coduadmproband es diferente de '*'
-  if (coduadmproband !== "*") {
-    // Si coduadmproband no es '*', entonces entra en este bloque
-    // Luego verifica si IndTodasUjec es igual a 'S'
-    if (IndTodasUjec === "S") {
-      // Si IndTodasUjec es 'S', entonces habilita ambos botones de radio
-      setDisabledUA(false);
-      setDisabledTodos(false);
+  // Este efecto se ejecuta después de que el componente se haya renderizado
+  useEffect(() => {
+    // Verifica si coduadmproband es diferente de '*'
+    if (coduadmproband !== "*") {
+      // Si coduadmproband no es '*', entonces entra en este bloque
+      // Luego verifica si IndTodasUjec es igual a 'S'
+      if (IndTodasUjec === "S") {
+        // Si IndTodasUjec es 'S', entonces habilita ambos botones de radio
+        setDisabledUA(false);
+        setDisabledTodos(false);
+      } else {
+        // Si IndTodasUjec no es 'S', entonces solo habilita el botón de radio 'UA'
+        setDisabledUA(false);
+      }
     } else {
-      // Si IndTodasUjec no es 'S', entonces solo habilita el botón de radio 'UA'
-      setDisabledUA(false);
+      // Si coduadmproband es '*', entonces habilita el botón de radio 'Todas'
+      setDisabledTodos(false);
     }
-  } else {
-    // Si coduadmproband es '*', entonces habilita el botón de radio 'Todas'
-    setDisabledTodos(false);
-  }
-  // Este efecto se ejecuta cada vez que cambian coduadmproband o IndTodasUjec
-}, [coduadmproband, IndTodasUjec]);
+    // Este efecto se ejecuta cada vez que cambian coduadmproband o IndTodasUjec
+  }, [coduadmproband, IndTodasUjec]);
 
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,18 +75,18 @@ useEffect(() => {
   return (
     <RadioGroup aria-label="opciones" row value={value} onChange={handleChange}>
       <FormControlLabel
-      value="UA"
-      control={<Radio className="checked:bg-no-repeat checked:bg-center checked:border-indigo-500 checked:bg-indigo-100" />}
-      label="Unidad de Proceso"
-      disabled={disabledUA}
-      classes={{ label: "flex items-center cursor-pointer text-gray-600 text-sm font-normal" }}
+        value="UA"
+        control={<Radio className="checked:bg-no-repeat checked:bg-center checked:border-indigo-500 checked:bg-indigo-100" />}
+        label="Unidad de Proceso"
+        disabled={disabledUA}
+        classes={{ label: "flex items-center cursor-pointer text-gray-600 text-sm font-normal" }}
       />
       <FormControlLabel
-      value="Todas"
-      control={<Radio className="checked:bg-no-repeat checked:bg-center checked:border-indigo-500 checked:bg-indigo-100" />}
-      label="Todas"
-      disabled={disabledTodos}
-      classes={{ label: "flex items-center cursor-pointer text-gray-600 text-sm font-normal" }}
+        value="Todas"
+        control={<Radio className="checked:bg-no-repeat checked:bg-center checked:border-indigo-500 checked:bg-indigo-100" />}
+        label="Todas"
+        disabled={disabledTodos}
+        classes={{ label: "flex items-center cursor-pointer text-gray-600 text-sm font-normal" }}
       />
     </RadioGroup>
   );

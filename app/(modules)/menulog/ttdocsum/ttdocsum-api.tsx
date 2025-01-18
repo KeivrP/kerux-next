@@ -13,7 +13,7 @@ export const deleteTiposDocs = async (id: string): Promise<Response> => {
 }
 export const updateTipoDoc = async (data: ITipodoc): Promise<Response> => {
     try {
-        const res = await Api_Log.put(`tipos_docs_crud`, {
+        const res = await Api_Log.put(`tipos_docs_crud/${data.tipodoc}`, {
             tipo_doc_log: data
         });
         return res.data;

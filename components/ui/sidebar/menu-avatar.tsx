@@ -1,11 +1,11 @@
 'use client'
 import { handleSignOut } from '@/app/actions/authSignout';
 import MenuDropdown from '@/components/dropdown/menu-dropdown';
-import { Session } from '@/types/next-auth';
 import { UserLogin } from 'next-auth';
+import { Session } from '@/types/next-auth';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import { useMemo, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export interface user {
     codusuariodb: string
@@ -24,8 +24,8 @@ export interface user {
 
 const MenuAvatar =  () => {
     const { data: session, status } = useSession();
-    const [user, setUser] = useState<UserLogin | null>(null);
     const [isSigningOut, setIsSigningOut] = useState(false);
+    const [user, setUser] = useState<UserLogin | null>(null);
 
     useEffect(() => {
         if (status === 'authenticated' && session) {

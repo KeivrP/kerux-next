@@ -96,7 +96,7 @@ export default function DataSheet({
             onClose(false);
             refetch();
         }
-    }, [isSuccess, onClose]);
+    }, [isSuccess, isSuccessCreate, onClose]);
 
     const getDeestipo = (tipoD: string): string => {
         return Array.isArray(tdres) ? tdres.find((item) => item.tipodoc === tipoD)?.desctipodoc || "" : "";

@@ -55,7 +55,7 @@ export type CollapsedRow = {
 type CollapsibleRowProps = {
   visible: VisibleRow[];
   collapsed: CollapsedRow[] | React.ReactNode;
-  rowAction?: (() => false | void) | undefined;
+  rowAction?: ((row: any) => void);
 };
 
 // Define el componente de la fila colapsable
@@ -85,7 +85,8 @@ export const CollapsibleRow: React.FC<CollapsibleRowProps> = ({
             <StyledTableCell
               className={vRow.className}
               align={vRow.align || "center"}
-              onClick={vRow.handleCollapse ? toggle : vRow.action || rowAction}
+              onClick={vRow.handleCollapse ? toggle : vRow.action || (rowAction ? () => rowAction(vRow) : undefined)}
+              style={{ padding: vRow.padding }}
             >
               {vRow.handleCollapse ? (
                 <div className="flex items-center">

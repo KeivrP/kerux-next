@@ -73,6 +73,7 @@ export const BaseTable: React.FC<BaseTableProps> = React.memo(
     loading,
     collapsible,
     children,
+    rowAction,
     addCheckboxColumn = false, // Default value for addCheckboxColumn is true
   }) => {
     useStyles();
@@ -177,6 +178,7 @@ export const BaseTable: React.FC<BaseTableProps> = React.memo(
               >
                 {rows.map((row, index) => (
                   <CollapsibleRow
+                  rowAction={rowAction}
                     key={index}
                     visible={collapsible?.visible(row) || []}
                     collapsed={collapsible?.collapsed(row) || []}

@@ -60,6 +60,7 @@ export const TtdocsumTable = () => {
     useEffect(() => {
         if (isSuccess) {
             refetch();
+            refe()
         }
     }, [isSuccess]);
 
@@ -114,9 +115,10 @@ export const TtdocsumTable = () => {
         setOpenEdit(true)
     };
 
-    const { data: tipo, isLoading: isLoadingP } = useQueryData({
+    const { data: tipo, isLoading: isLoadingP, refetch: refe } = useQueryData({
         entity: "lst_tipodoc_log",
         api: "doc",
+
     });
     return (
         <>
