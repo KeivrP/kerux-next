@@ -30,7 +30,7 @@ const MenuAvatar =  () => {
     useEffect(() => {
         if (status === 'authenticated' && session) {
             const request = session as unknown as Session;
-            setUser(request.request.auth.user.user as UserLogin);
+            setUser(request?.request?.auth?.user?.user as UserLogin);
         }
     }, [session, status]);
 

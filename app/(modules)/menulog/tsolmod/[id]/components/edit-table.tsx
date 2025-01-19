@@ -10,7 +10,7 @@ import { useQueryData } from "@/server/fetch-data";
 import { SkeletonInput } from "@/components/skeleton/detail";
 import { showNotification } from "@/components/toast/toast";
 import { Detssmod, Root } from "../../tsolmod-types";
-import { useUpdateRenglon } from "../../../tsolsum/hook/useTsolsum";
+import { useCreateRenglonTsolmod, useUpdateTsolmodRenglon } from "../../hook/useTsolmod";
 
 interface DataSheetProps {
   isOpen: boolean;
@@ -27,7 +27,8 @@ export default function DataSheet({
   row,
   refetch
 }: DataSheetProps): JSX.Element {
-  const { mutate, isPending, isSuccess } = useUpdateRenglon()
+  const { mutate, isPending, isSuccess } = useUpdateTsolmodRenglon()
+  const { mutate: create, isPending: isCreating, isSuccess: isCreate } = useCreateRenglonTsolmod()
 
   const {
     register,
@@ -98,8 +99,8 @@ export default function DataSheet({
     {
       entity: "ctaspresup",
       params: {
-        fecsol: formData.cabssmod.ano,
-      },
+        fecsol: `${formData.cabssmod.ano}-01-01`,
+      }
     }
   );
 
@@ -158,7 +159,7 @@ export default function DataSheet({
     },
     dependency: [coditem],
   });
-  
+
   const onSubmit = (data: any) => {
     const isContratoOrAdendum = tiporeng === "OB" || tiporeng === "AD";
     const hasContratoOrAdendum = formData.detssmod.some(
@@ -169,16 +170,21 @@ export default function DataSheet({
       showNotification({ message: "Solo se permite un renglón de tipo Contrato o Adendum.", mode: "error", alert: "A" });
       return;
     }
-    mutate({ id: formData.cabssmod.numsolsum, data, nro: row.nroreng });
+    if (row.nroreng === formData.detssmod.length + 1) {
+      create({ numsolsum: formData.cabssmod.numsolsum, ...data })
+    } else {
+      mutate({ id: formData.cabssmod.numsolsum, data, nro: row.nroreng });
+      console.log(data)
+    }
   };
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess || isCreate) {
       refetch()
       onClose(false)
     }
 
-  }, [isSuccess])
+  }, [isSuccess, isCreate])
 
   const ItemServ = () => {
     return tiporeng === "MT" ? (
@@ -333,14 +339,21 @@ export default function DataSheet({
       <ModalDialog
         width="md"
         title={
-          row.nroreng !== 0
-            ? `Editar Renglón ${row.nroreng}`
-            : "Crear nuevo Renglón"
+          row.nroreng === formData.detssmod.length + 1
+            ? "Crear nuevo Renglón" : `Editar Renglón ${row.nroreng}`
         }
         dialogOpen={isOpen}
         handleClose={() => onClose(false)}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
+          <div className='flex justify-end mr-5'>
+
+            <ButtonForms variant="contained" type="submit"
+              color="primary" sx={{ mr: 2 }}>
+              Guardar
+            </ButtonForms>
+
+          </div>
           <Grid container spacing={2} padding={2}>
             <Grid size={2.5}>
               <Typography variant="h3" color="primary" mb={2}>
@@ -603,16 +616,10 @@ export default function DataSheet({
               </ConditionalWrapper>
             </Grid>
           </Grid>
-          <ButtonForms
-            type="submit"
-            title="Guardar"
-            className="bg-blue-950 text-white ml-4 hover:bg-blue-800 transition duration-200"
-          >
-            Guardar
-          </ButtonForms>
+
         </form>
       </ModalDialog>
-      <SimpleBackdrop show={isPending} />
+      <SimpleBackdrop show={isPending || isCreating} />
     </>
   );
 }

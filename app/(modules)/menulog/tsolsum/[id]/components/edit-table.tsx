@@ -160,7 +160,7 @@ export default function DataSheet({
     },
     dependency: [coditem],
   });
-  
+
   const onSubmit = (data: any) => {
     const isContratoOrAdendum = tiporeng === "OB" || tiporeng === "AD";
     const hasContratoOrAdendum = formData.detsolsum.some(
@@ -350,6 +350,14 @@ export default function DataSheet({
         handleClose={() => onClose(false)}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
+          <div className='flex justify-end mr-5'>
+
+            <ButtonForms variant="contained" type="submit"
+              color="primary" sx={{ mr: 2 }}>
+              Guardar
+            </ButtonForms>
+
+          </div>
           <Grid container spacing={2} padding={2}>
             <Grid size={2.5}>
               <Typography variant="h3" color="primary" mb={2}>
@@ -624,13 +632,7 @@ export default function DataSheet({
               </ConditionalWrapper>
             </Grid>
           </Grid>
-          <ButtonForms
-            type="submit"
-            title="Guardar"
-            className="bg-blue-950 text-white ml-4 hover:bg-blue-800 transition duration-200"
-          >
-            Guardar
-          </ButtonForms>
+
         </form>
       </ModalDialog>
       <SimpleBackdrop show={isPending} />

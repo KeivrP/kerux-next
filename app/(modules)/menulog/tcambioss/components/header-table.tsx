@@ -1,7 +1,7 @@
 import { Filter } from "@/components/button/FilterButton";
 import { Order } from "@/components/button/OrderButton";
 import { HeadersName } from "@/components/table-material/genericTable";
-import { Cambiolist } from "../tcambioss-types";
+import { Cambiolist, Rengcambio } from "../tcambioss-types";
 import { IconButton, Tooltip, useTheme } from "@mui/material";
 import { DeleteIcon, OpenIcon } from "@/components/icons/table-icon";
 
@@ -40,7 +40,9 @@ export const columnsHeaders: HeadersName[] = [
     minWidth: 140,
   },
   { label: "Acciones", align: "center", width: 100 },
+
 ];
+
 
 export const columnsHeadersSheet: HeadersName[] = [
   { label: "Nro", align: "right", minWidth: 20 },
@@ -83,15 +85,15 @@ export const columnsHeadersSheet: HeadersName[] = [
     minWidth: 20,
   },
   { label: "Total", align: "center", width: 100 },
+  { label: "Acciones", align: "center", width: 100 },
+
 ];
 
-export const Acciones = ({
+export const AccionesSheet = ({
   row,
-  onDelete,
   onEdit,
 }: {
-  row: Cambiolist;
-  onDelete: (idsolsum: number) => void;
+  row: Rengcambio;
   onEdit: (idsolsum: number) => void;
 }) => {
   const theme = useTheme();
@@ -116,7 +118,49 @@ export const Acciones = ({
         title="Abrir"
       >
         <IconButton
-          onClick={() => onEdit(row.idsolsum)}
+          onClick={() => onEdit(row.nroreng)}
+          color="primary"
+          size="small"
+        >
+          <OpenIcon />
+        </IconButton>
+      </Tooltip>
+    </span>
+  );
+};
+
+export const Acciones = ({
+  row,
+  onDelete,
+  onEdit,
+}: {
+  row: Cambiolist;
+  onDelete: (idsolsum: number) => void;
+  onEdit: (idsolsum: number, cambio: number) => void;
+}) => {
+  const theme = useTheme();
+
+  return (
+    <span
+      style={{
+        color: theme.palette.primary.main,
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        gap: "10px",
+        paddingLeft: "16px",
+        paddingRight: "16px",
+      }}
+    >
+      <Tooltip
+        sx={{
+          backgroundColor: theme.palette.background.default,
+          borderRadius: "50%",
+        }}
+        title="Abrir"
+      >
+        <IconButton
+          onClick={() => onEdit(row.idsolsum, row.nrocambio)}
           color="primary"
           size="small"
         >

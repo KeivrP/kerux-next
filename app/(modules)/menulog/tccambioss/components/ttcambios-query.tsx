@@ -7,9 +7,8 @@ import { formatCurrency, formatDate } from "@/utils/main";
 import { Search, Table } from "lucide-react";
 import { Box } from "@mui/material";
 import { BaseTable } from "@/components/table-material/genericTable";
-import { columnsHeadersSheet } from "../../tcambioss/components/header-table";
 import { BadgeTipodoc } from "@/components/badge/badge-estatus";
-import { columnsHeaders } from "./header-table";
+import { columnsHeaders, columnsHeadersSheet } from "./header-table";
 
 
 export default function TtcambiossQuery(): JSX.Element {

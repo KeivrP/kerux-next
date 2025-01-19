@@ -10,6 +10,9 @@ export const entities = {
   ccostos_crud: '/ccostos_nivs_crud/',
   show_rng: 'rengs_camb_crud/show_rng',
   sols_sums_mods_crud: 'sols_sums_mods_crud',
+  tcmabios_show: '/cambios_crud/show',
+  hdoc: 'docs_logs_crud',
+  moneda: '/sols_sums_crud/lst_codmoneda',
 
 
   // Lists
@@ -46,6 +49,8 @@ export const entities = {
   lst_superusuarios: 'listas/lst_superusuarios',
   lst_ujecutora: 'listas/lst_ujec',
   controlog: '/sols_sums_crud/lst_controlog',
+  lst_sscambios: '/listas/lst_sscambio_gen',
+  lst_porcimptos: 'listas/lst_porcimptos',
 
 
   // Other entities

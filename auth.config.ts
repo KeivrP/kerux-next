@@ -61,4 +61,9 @@ export const authConfig: NextAuthConfig = {
     signIn: '/auth/signin',
   },
   trustHost: true,
+  // Aquí está la configuración de la sesión:
+  session: {
+    strategy: "jwt", 
+    maxAge: 7200, // 2 horas en segundos
+  },
 }

@@ -26,17 +26,22 @@ const SupplyRequestForm = ({ isLoading, formData, setFormData }: DataInputProps)
             idsolsum: formData.cabssmod.numsolsum,
         },
     });
+    const { data: moneda, isLoading: ismoneda } = useQueryData({
+        entity: "moneda",
+        params: {
+            fecsol: `${formData.cabssmod.ano}-01-01`,
+        },
+        dependency: [formData.cabssmod.ano]
+    });
 
     const { data: lst_codaccint, isLoading: isLstCcint } = useQueryData({
         entity: "codaccint",
         params: {
-            fecsol: formData.cabssmod.ano,
+            fecsol: `${formData.cabssmod.ano}-01-01`,
             ccosto: formData.cabssmod.ccosto,
         },
-        dependency: [formData.cabssmod.ccosto],
+        dependency: [formData.cabssmod.ccosto, formData.cabssmod.ano],
     });
-
-
 
 
     const Ccosto = React.useMemo(() => {
@@ -76,22 +81,32 @@ const SupplyRequestForm = ({ isLoading, formData, setFormData }: DataInputProps)
                 </Typography>
                 <Grid container spacing={1} >
 
-                    <Grid size={{ xs: 12, md: 2 }} >
+                    <Grid size={{ xs: 12, md: 3 }} >
                         <TextField
-                            defaultValue={formData.cabssmod.numsolsum}
+                            value={formData.cabssmod.numsolsum}
                             size="small"
-                            fullWidth
-                        />
-                    </Grid>
-                    <Grid size={{ xs: 12, md: 10 }}>
-                        <TextField
-                            defaultValue={formData.cabssmod.descsolsum}
-                            size="small"
-                            fullWidth
                             slotProps={{
                                 input: {
                                     readOnly: true,
                                 },
+                            }}
+                            fullWidth
+                        />
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 9 }}>
+                        <TextField
+                            defaultValue={formData.cabssmod.descsolsum}
+                            size="small"
+                            fullWidth
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                const newValue = event.target.value;
+                                setFormData((prevFormData) => ({
+                                    ...prevFormData,
+                                    cabssmod: {
+                                        ...prevFormData.cabssmod,
+                                        descsolsum: newValue || "",
+                                    },
+                                }));
                             }}
                         />
                     </Grid>
@@ -106,20 +121,45 @@ const SupplyRequestForm = ({ isLoading, formData, setFormData }: DataInputProps)
                         Año
                     </Typography>
                     <TextField
-                        defaultValue={formData.cabssmod.ano}
+                        value={formData.cabssmod.ano}
                         size="small"
                         fullWidth
+                        type="number"
+                        inputMode="numeric"
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                            const newValue = event.target.value;
+                            setFormData((prevFormData) => ({
+                                ...prevFormData,
+                                cabssmod: {
+                                    ...prevFormData.cabssmod,
+                                    ano: Number(newValue) || 0,
+                                },
+                            }));
+                        }}
                     />
+
                 </Grid>
                 <Grid size={{ xs: 12, md: 8 }} >
                     <Typography variant="h3" color="primary" mt={1}>
                         Moneda
                     </Typography>
-                    <TextField
-                        defaultValue={formData.cabssmod.codmoneda}
-                        size="small"
-                        fullWidth
-                    />
+                    <ConditionalWrapper
+                        condition={ismoneda}
+                        wrapper={SkeletonInput}
+                    >
+                        <TextField
+                            defaultValue={moneda}
+                            size="small"
+                            fullWidth
+                            slotProps={
+                                {
+                                    input: {
+                                        readOnly: true,
+                                    },
+                                }
+                            }
+                        />
+                    </ConditionalWrapper>
                 </Grid>
             </Grid>
 

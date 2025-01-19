@@ -48,14 +48,26 @@ export const columnsHeaders: HeadersName[] = [
   },
   { label: "Acciones", align: "center", width: 100 },
 ];
+export const columnsHeadersSheet: HeadersName[] = [
+  { label: "ID sts", align: "center", minWidth: 140 },
+  { label: "Estatus anterior", align: "center", minWidth: 140 },
+  { label: "Estatus del Documento", align: "center", minWidth: 220 },
+  {
+    label: "Fecha",
+
+    align: "center",
+    minWidth: 140,
+  },
+ 
+  { label: "Usuario", align: "center", width: 100 },
+];
 
 export const Acciones = ({
   row,
   onEdit,
 }: {
   row: Documentoslist;
-  onDelete: (tipodoc: string) => void;
-  onEdit: (tipodoc: string) => void;
+  onEdit: (iddoc: number) => void;
 }) => {
   const theme = useTheme();
 
@@ -76,7 +88,7 @@ export const Acciones = ({
         title="Abrir"
       >
         <IconButton
-          onClick={() => onEdit(row.tipodoc)}
+          onClick={() => onEdit(row.iddoc)}
           color="primary"
           size="small"
         >

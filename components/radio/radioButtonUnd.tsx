@@ -26,7 +26,7 @@ const RadioButtonCodUad: React.FC<RadioButtonGroupProps> = ({
   useEffect(() => {
     if (status === 'authenticated' && data) {
       const request = data as unknown as Session;
-      setUser(request.request.auth.user.user as UserLogin);
+      setUser(request?.request?.auth?.user?.user as UserLogin);
     }
   }, [data, status]);
 

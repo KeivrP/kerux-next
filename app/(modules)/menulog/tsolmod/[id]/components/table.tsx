@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { BaseTable } from "@/components/table-material/genericTable";
 import ActionCardHeader from "@/components/card/actionCardHeader";
@@ -9,6 +9,8 @@ import { formatCurrency, formatDate } from "@/utils/main";
 import { Detssmod, FormContextProps, initialRenglon } from "../../tsolmod-types";
 import { Acciones, columnsHeaders } from "./header-table";
 import DataSheet from "./edit-table";
+import { useDeleteRenglonTsolmod } from "../../hook/useTsolmod";
+import { ConfirmDialog } from "@/components/modal/confirmDialog";
 
 interface DataInputProps extends FormContextProps {
     isLoading: boolean;
@@ -21,6 +23,35 @@ export const FsolmodTable: React.FC<DataInputProps> = ({
     refetch
 }) => {
     const [isDrawerOpen, setDrawerOpen] = useState<boolean>(false);
+    const { mutate: deleteRng, isPending: isDeleting, isSuccess: isDelete } = useDeleteRenglonTsolmod();
+    const [openDialog, setOpenDialog] = useState<boolean>(false);
+    const [deleteRowId, setDeleteRowId] = useState<number>(0);
+
+    const handleDelete = (id: number) => {
+        setDeleteRowId(id);
+        setOpenDialog(true);
+    };
+
+    const handleCancelDelete = () => {
+        setOpenDialog(false);
+    };
+
+    const handleConfirmDelete = () => {
+        const rowToDelete = formData.detssmod.find((row) => row.nroreng === deleteRowId)?.nroreng;
+        if (rowToDelete) {
+            deleteRng({ id: formData.cabssmod.numsolsum, rng: rowToDelete });
+        } else {
+            console.log(`Row with id ${deleteRowId} not found`);
+        }
+        setOpenDialog(false);
+    };
+
+    useEffect(() => {
+        if (isDelete) {
+            refetch();
+        }
+    }, [isDelete])
+
 
     const [rowSelected, setRowSelected] =
         useState<Detssmod>(initialRenglon);
@@ -30,8 +61,6 @@ export const FsolmodTable: React.FC<DataInputProps> = ({
         setRowSelected(data);
         setDrawerOpen(true);
     };
-
-    const handleDelete = () => { };
 
     const handleEdit = (row: Detssmod) => {
         setRowSelected(row);
@@ -115,15 +144,14 @@ export const FsolmodTable: React.FC<DataInputProps> = ({
 
                 </BaseTable>
             </div>
-            {/*  <ConfirmDialog
-      mode={"delete"}
-      open={openDialog}
-      onConfirm={handleConfirmDelete}
-      onCancel={handleCancelDelete}
-      text={`¿Estas seguro que deseas eliminar la ruta ${
-        rows.find((row) => row.codruta)?.codruta
-      }?`}
-      /> */}
+            <ConfirmDialog
+                mode={"delete"}
+                open={openDialog}
+                onConfirm={handleConfirmDelete}
+                onCancel={handleCancelDelete}
+                text={`¿Estas seguro que deseas eliminar el numero de renglon ${formData.detssmod.find((row) => row.nroreng === rowSelected.nroreng)?.nroreng
+                    }?`}
+            />
             <DataSheet
                 formData={formData}
                 /*       isPending={handleLoading}
@@ -135,7 +163,7 @@ export const FsolmodTable: React.FC<DataInputProps> = ({
                     refetch();
                 }}
             />
-            <SimpleBackdrop show={false} />
+            <SimpleBackdrop show={isDeleting} />
         </>
     );
 };

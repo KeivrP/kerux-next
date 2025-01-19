@@ -9,8 +9,10 @@ import ActionCardHeader from "@/components/card/actionCardHeader";
 import { Acciones, columnsFilter, columnsHeaders, columnsOrder } from "./header-table";
 import { BaseTable } from "@/components/table-material/genericTable";
 import { formatCurrency, formatDate } from "@/utils/main";
-import {BadgeTipodoc} from "@/components/badge/badge-estatus";
+import { BadgeTipodoc } from "@/components/badge/badge-estatus";
 import { BaseTablePagination } from "@/components/table-material/baseTablePagination";
+import HistoriaDocumento from "./data-sheet";
+import { set } from "lodash";
 
 
 export const TcdclogTable = () => {
@@ -52,25 +54,25 @@ export const TcdclogTable = () => {
     []
   );
 
-  const handleDelete = (tipodoc: string) => {
-    console.log(`Delete ${tipodoc}`);
-  };
+  const [isOpen, setIsOpen] = useState(false)
+  const [id, setId] = useState<number>(0)
 
-  const handleEdit = (tipodoc: string) => {
-    console.log(`Edit ${tipodoc}`);
+  const handleEdit = (tipodoc: number) => {
+    setId(tipodoc)
+    setIsOpen(true)
   };
 
   return (
     <>
-     <ActionCardHeader
-                isAddButtonVisible={false}
-                onApplyFilter={(filters) => setFilter(filters)}
-                columnsFilter={columnsFilter}
-                onApplyOrder={(orders) => setOrder(orders)}
-                columnsOrder={columnsOrder}
-                setFilter={setFilter}
-                setOrder={setOrder}
-            />
+      <ActionCardHeader
+        isAddButtonVisible={false}
+        onApplyFilter={(filters) => setFilter(filters)}
+        columnsFilter={columnsFilter}
+        onApplyOrder={(orders) => setOrder(orders)}
+        columnsOrder={columnsOrder}
+        setFilter={setFilter}
+        setOrder={setOrder}
+      />
       <br />
       <div
         style={{
@@ -87,18 +89,17 @@ export const TcdclogTable = () => {
           collapsible={{
             visible: (row) => [
               { content: row.iddoc, handleCollapse: true, align: "left" },
-              { content: <BadgeTipodoc tipo={row.stsdoc}/>, align: "center" },
+              { content: <BadgeTipodoc tipo={row.stsdoc} />, align: "center" },
               { content: `${row.tipodoc} - ${row.desctipodoc}`, align: "left" },
-              { content: row.refdoc , align: "center" },
-              { content: formatDate(row.fecdoc) , align: "center" },
-              { content: <BadgeTipodoc tipo={row.stsapr}/>, align: "center" },
+              { content: row.refdoc, align: "center" },
+              { content: formatDate(row.fecdoc), align: "center" },
+              { content: <BadgeTipodoc tipo={row.stsapr} />, align: "center" },
               { content: formatCurrency(row.montoorig), align: "right" },
-             
+
               {
                 content: (
                   <Acciones
                     row={row}
-                    onDelete={handleDelete}
                     onEdit={handleEdit}
                   />
                 ),
@@ -113,7 +114,7 @@ export const TcdclogTable = () => {
                 name: "Beneficiario",
                 content: `${row.numidbenef} - ${row.nombre}`,
               },
-              
+
             ],
           }}
         ></BaseTable>
@@ -125,6 +126,9 @@ export const TcdclogTable = () => {
           handleChangeRowsPerPage={handleChangeRowsPerPage}
         ></BaseTablePagination>
       </div>
+      {id > 0 &&
+        <HistoriaDocumento id={id} isOpen={isOpen} onClose={() => { setIsOpen(false); setId(0) }} />
+      }
     </>
   );
 };

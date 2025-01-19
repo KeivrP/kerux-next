@@ -10,6 +10,7 @@ import { useGenerateTnivsum, useUpdateFsolsum } from "../../../tsolsum/hook/useT
 import { useFormContextTsolmod } from "@/provider/tsolmod-provider";
 import SupplyRequestForm from "./data-input";
 import { FsolmodTable } from "./table";
+import { useGenerateTsolmod, useUpdateTsolmod } from "../../hook/useTsolmod";
 
 interface DataSheetProps {
   id: string;
@@ -31,16 +32,16 @@ const DataSheet = ({ id }: DataSheetProps) => {
   console.log(data);
 
 
-  const { mutate: generateMutate, isPending: isGenerating, isSuccess: isSuccesgen } = useGenerateTnivsum();
-  const { mutate: updateMutate, isPending: isUpdating, isSuccess: isSuccesup } = useUpdateFsolsum();
+  const { mutate: generateMutate, isPending: isGenerating, isSuccess: isSuccesgen } = useGenerateTsolmod();
+  const { mutate: updateMutate, isPending: isUpdating, isSuccess: isSuccesup } = useUpdateTsolmod();
 
 
 
   React.useEffect(() => {
-    if (isSuccesgen) {
+    if (isSuccesgen || isSuccesup) {
       refetch();
     }
-  }, [isSuccesgen])
+  }, [isSuccesgen || isSuccesup])
 
   // Actualizar formData cuando lleguen nuevos datos
   React.useEffect(() => {
@@ -62,11 +63,11 @@ const DataSheet = ({ id }: DataSheetProps) => {
       label: "Datos de la Solicitud",
       children: (
         <SupplyRequestForm
-        isLoading={isLoading}
-        formData={formData}
-        setFormData={setFormData}
-        initialData={initialData}
-        
+          isLoading={isLoading}
+          formData={formData}
+          setFormData={setFormData}
+          initialData={initialData}
+
         />
       ),
     },
@@ -81,16 +82,16 @@ const DataSheet = ({ id }: DataSheetProps) => {
           setFormData={setFormData}
           initialData={initialData}
           refetch={refetch}
-          />
+        />
       ),
     },
   ], [id, isLoading, formData, setFormData, initialData]);
 
-  const isLoaderVisible = isGenerating;
+  const isLoaderVisible = isGenerating || isUpdating;
 
   const handleSave = () => {
     const id = formData?.cabssmod.numsolsum || null;
-    console.log({ id, data: formData.cabssmod });
+    updateMutate({ id, data: formData.cabssmod });
   };
 
   return (

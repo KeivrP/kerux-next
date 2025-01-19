@@ -1,9 +1,6 @@
 import { Filter } from "@/components/button/FilterButton";
 import { Order } from "@/components/button/OrderButton";
 import { HeadersName } from "@/components/table-material/genericTable";
-import { Cambiolist } from "../tcambioss-types";
-import { IconButton, Tooltip, useTheme } from "@mui/material";
-import { DeleteIcon, OpenIcon } from "@/components/icons/table-icon";
 
 export const columnsFilter: Filter[] = [
   { id: "idsolsum", type: "number", column: "ID Solsum", value: "" },
@@ -41,79 +38,48 @@ export const columnsHeaders: HeadersName[] = [
   },
 ];
 
+
 export const columnsHeadersSheet: HeadersName[] = [
-  { label: "Código", align: "center", minWidth: 140 },
+  { label: "Nro", align: "right", minWidth: 20 },
   {
-    label: "Descripción",
+    label: "Tipo",
 
     align: "center",
-    minWidth: 140,
+    minWidth: 60,
   },
-  { label: "Cant. Original", minWidth: 180 },
+  { label: "Item/serv", minWidth: 100, align: "center" },
   {
-    label: "Precio Original",
-    align: "center",
-    minWidth: 140,
+    label: "Descripción",
+    align: "left",
+    minWidth: 220,
   },
   {
-    label: "Precio Cambio",
+    label: "Unidad",
     align: "center",
-    minWidth: 140,
+    minWidth: 60,
+  },
+  {
+    label: "Cantidad",
+    align: "center",
+    minWidth: 60,
+  },
+  {
+    label: "Costo Unitario",
+    align: "center",
+    minWidth: 100,
+  },
+  {
+    label: "Nvo.Cost.Unit",
+    align: "center",
+    minWidth: 100,
+
+  },
+  {
+    label: "%",
+    align: "center",
+    minWidth: 20,
   },
   { label: "Total", align: "center", width: 100 },
 ];
 
-export const Acciones = ({
-  row,
-  onDelete,
-  onEdit,
-}: {
-  row: Cambiolist;
-  onDelete: (idsolsum: number) => void;
-  onEdit: (idsolsum: number) => void;
-}) => {
-  const theme = useTheme();
 
-  return (
-    <span
-      style={{
-        color: theme.palette.primary.main,
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        gap: "10px",
-        paddingLeft: "16px",
-        paddingRight: "16px",
-      }}
-    >
-      <Tooltip
-        sx={{
-          backgroundColor: theme.palette.background.default,
-          borderRadius: "50%",
-        }}
-        title="Abrir"
-      >
-        <IconButton
-          onClick={() => onEdit(row.idsolsum)}
-          color="primary"
-          size="small"
-        >
-          <OpenIcon />
-        </IconButton>
-      </Tooltip>
-
-      <Tooltip
-        sx={{ backgroundColor: theme.palette.background.default }}
-        title="Eliminar"
-      >
-        <IconButton
-          onClick={() => onDelete(row.idsolsum)}
-          color="primary"
-          size="small"
-        >
-          <DeleteIcon />
-        </IconButton>
-      </Tooltip>
-    </span>
-  );
-};
