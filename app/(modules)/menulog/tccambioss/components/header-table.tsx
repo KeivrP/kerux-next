@@ -79,7 +79,12 @@ export const columnsHeadersSheet: HeadersName[] = [
     align: "center",
     minWidth: 20,
   },
-  { label: "Total", align: "center", width: 100 },
+  {
+    label: "Destino",
+    align: "center",
+    minWidth: 40,
+  },
+  { label: "Total Renglon", align: "center", width: 100 },
 ];
 
 

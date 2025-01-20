@@ -146,7 +146,7 @@ export default function DataSheet({
                                         <Autocomplete
                                             fullWidth
                                             size="small"
-                                            {...register("tipodoc", { required: "Tipo requerido" })}
+                                            {...register("tipodoc")}
                                             options={
                                                 Array.isArray(tipo) ? tipo : []
                                             }
@@ -172,7 +172,7 @@ export default function DataSheet({
                                         />
                                         {!!errors.tipodoc && (
                                             <Typography color="error" sx={{ fontSize: 9, fontWeight: "bold" }}>
-                                                {errors.tipodoc?.message} ff
+                                                {errors.tipodoc?.message}
                                             </Typography>
                                         )}
                                     </>
@@ -224,7 +224,7 @@ export default function DataSheet({
                                     loading={isLoadingTdres}
 
                                     size="small"
-                                    {...register("tipodocres", { required: "Tipo requerido" })}
+                                    {...register("tipodocres")}
                                     options={
                                         Array.isArray(tdres) ? tdres : []
                                     }
@@ -245,11 +245,7 @@ export default function DataSheet({
                                         );
                                     }}
                                 />
-                                {!!errors.tipodocres && (
-                                    <Typography color="error" sx={{ fontSize: 9, fontWeight: "bold" }}>
-                                        {errors.tipodocres?.message} ff
-                                    </Typography>
-                                )}
+
                             </ConditionalWrapper>
                         </Grid>
 
@@ -277,7 +273,7 @@ export default function DataSheet({
                                 <Autocomplete
                                     fullWidth
                                     size="small"
-                                    {...register("tipodocrespre", { required: "Tipo requerido" })}
+                                    {...register("tipodocrespre")}
                                     options={
                                         Array.isArray(tdres) ? tdres : []
                                     }
@@ -299,11 +295,7 @@ export default function DataSheet({
                                         );
                                     }}
                                 />
-                                {!!errors.tipodocrespre && (
-                                    <Typography color="error" sx={{ fontSize: 9, fontWeight: "bold" }}>
-                                        {errors.tipodocrespre?.message} ff
-                                    </Typography>
-                                )}
+
                             </ConditionalWrapper>
                         </Grid>
 
@@ -324,7 +316,7 @@ export default function DataSheet({
                         <Grid size={4.5}>
 
                             <Typography variant="h3" color="primary" mb={1}>
-                                Tipo Documento aumentada reserva
+                                Tipo de Documento de Aumento de Reserva
                             </Typography>
                             <ConditionalWrapper condition={isLoadingTdres} wrapper={SkeletonInput}>
 
@@ -333,7 +325,7 @@ export default function DataSheet({
                                     loading={isLoadingTdres}
 
                                     size="small"
-                                    {...register("tipodocaumres", { required: "Tipo requerido" })}
+                                    {...register("tipodocaumres")}
                                     options={
                                         Array.isArray(tdres) ? tdres : []
                                     }
@@ -354,11 +346,7 @@ export default function DataSheet({
                                         );
                                     }}
                                 />
-                                {!!errors.tipodocaumres && (
-                                    <Typography color="error" sx={{ fontSize: 9, fontWeight: "bold" }}>
-                                        {errors.tipodocaumres?.message} ff
-                                    </Typography>
-                                )}
+
                             </ConditionalWrapper>
                         </Grid>
 

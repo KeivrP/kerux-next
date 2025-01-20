@@ -9,6 +9,7 @@ import { Box } from "@mui/material";
 import { BaseTable } from "@/components/table-material/genericTable";
 import { BadgeTipodoc } from "@/components/badge/badge-estatus";
 import { columnsHeaders, columnsHeadersSheet } from "./header-table";
+import BadgeModule from "@/components/badge/badge-mod";
 
 
 export default function TtcambiossQuery(): JSX.Element {
@@ -143,6 +144,7 @@ export default function TtcambiossQuery(): JSX.Element {
                                                             { content: formatCurrency(row.precioorig), align: "center" },
                                                             { content: formatCurrency(row.preciocambio), align: "center" },
                                                             { content: formatCurrency(row.porcimptocamb), align: "center" },
+                                                            { content: <BadgeModule codmenu={row.destino} />, align: "center" },
                                                             { content: formatCurrency(row.mtototreng), align: "center" },
 
 
