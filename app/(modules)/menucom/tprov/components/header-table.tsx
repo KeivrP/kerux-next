@@ -10,18 +10,18 @@ import { DeleteIcon, OpenIcon } from "@/components/icons/table-icon";
 export const columnsFilter: Filter[] = [
   { id: "numprov", type: "number", column: "Número", value: "" },
   { id: "nomprov", type: "desc", column: "Nombre del Proveedor", value: "" },
-  { id: "tipoprov", type: "desc", column: "Tipo", value: "" },
-  { id: "numbenef", type: "number", column: "Benef.", value: "" },
+  { id: "FAB_PRO.tipoprov", type: "desc", column: "Tipo", value: "" },
+  { id: "FAB_PRO.numbenef", type: "number", column: "Benef.", value: "" },
   { id: "fecing", type: "date", column: "Fecha Ingreso", value: "" },
-  { id: "fecvigenciareg", type: "date", column: "Fecha Vigencia", value: "" },
+  //{ id: "fecvigenciareg", type: "date", column: "Fecha Vigencia", value: "" },
 ];
 export const columnsOrder: Order[] = [
   { id: "numprov", column: "Número",  },
   { id: "nomprov", column: "Nombre del Proveedor" },
-  { id: "tipoprov", column: "Tipo" },
-  { id: "numbenef", column: "Benef." },
+  { id: "FAB_PRO.tipoprov", column: "Tipo" },
+  { id: "FAB_PRO.numbenef", column: "Benef." },
   { id: "fecing", column: "Fecha Ingreso" },
-  { id: "fecvigenciareg", column: "Fecha Vigencia" },
+  //{ id: "fecvigenciareg", column: "Fecha Vigencia" },
 ];
 
 export const columnsHeadersTprov: HeadersName[] = [

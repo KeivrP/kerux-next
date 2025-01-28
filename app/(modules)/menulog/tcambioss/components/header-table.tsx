@@ -125,6 +125,21 @@ export const AccionesSheet = ({
           <OpenIcon />
         </IconButton>
       </Tooltip>
+      <Tooltip
+        sx={{
+          backgroundColor: theme.palette.background.default,
+          borderRadius: "50%",
+        }}
+        title="Abrir"
+      >
+        <IconButton
+          onClick={() => onEdit(row.nroreng)}
+          color="primary"
+          size="small"
+        >
+          <DeleteIcon />
+        </IconButton>
+      </Tooltip>
     </span>
   );
 };

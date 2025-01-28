@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import ModalDialog from '@/components/modal/modalDialog';
 import BadgeModule from '@/components/badge/badge-mod';
-import { ConditionalWrapper, formatDate } from '@/utils/main';
+import { ConditionalWrapper, formatCurrency, formatDate } from '@/utils/main';
 import ButtonForms from '@/components/button/buttonForms';
 import { BaseTable } from '@/components/table-material/genericTable';
 import { columnsHeadersSheet } from './header-table';
@@ -18,6 +18,7 @@ import { Cabiddoc, Detstsdoc, DocuemtosRoot } from '../doc-types';
 import { SkeletonInput } from '@/components/skeleton/detail';
 import { Input, Textarea } from '@/components/ui/input';
 import { BadgeTipoComp } from '@/components/badge/badge-estatus';
+import { BadgeAct } from '@/components/badge/badge-act';
 
 interface HistoriaDocumentoProps {
   isOpen: boolean;
@@ -72,12 +73,27 @@ const HistoriaDocumento = ({ isOpen, onClose, id }: HistoriaDocumentoProps) => {
                 <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
                   <Input
                     className='bg-muted'
-                    
+
                     disabled
                     defaultValue={cabecera?.iddoc}
                   />
                 </ConditionalWrapper>
               </Grid>
+
+              <Grid size={10}>
+                <Typography variant="h3" color="primary" >
+                  Descripción
+                </Typography>
+                <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
+                  <Input
+                    className='bg-muted'
+
+                    disabled
+                    defaultValue={cabecera?.descdoc}
+                  />
+                </ConditionalWrapper>
+              </Grid>
+
               <Grid size={2}>
                 <Typography variant="h3" color="primary" >
                   Tipo
@@ -85,30 +101,48 @@ const HistoriaDocumento = ({ isOpen, onClose, id }: HistoriaDocumentoProps) => {
                 <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
                   <Input
                     className='bg-muted'
-                    
+
                     disabled
                     defaultValue={cabecera?.tipodoc}
                   />
                 </ConditionalWrapper>
               </Grid>
-              <Grid size={8} mt={2.5}>
+              <Grid size={7} mt={2.5}>
                 <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
                   <Input
                     className='bg-muted'
-                    
+
                     disabled
-                    defaultValue={cabecera?.descdoc}
+                    defaultValue={cabecera?.TipoDocumento.desctipodoc}
                   />
                 </ConditionalWrapper>
               </Grid>
-              <Grid size={6}>
+              <Grid size={1}>
+                <Typography variant="h3" color="primary" >
+                  Reverso?
+                </Typography>
+                <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
+                  <BadgeAct status={cabecera?.indreverso as "S" | "N"} />
+
+                </ConditionalWrapper>
+              </Grid>
+              <Grid size={2}>
+                <Typography variant="h3" color="primary" >
+                  Estatus
+                </Typography>
+                <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
+                  <BadgeTipoComp tipo={cabecera?.stsdoc} />
+
+                </ConditionalWrapper>
+              </Grid>
+              <Grid size={12}>
                 <Typography variant="h3" color="primary" >
                   Descripción Extendida
                 </Typography>
                 <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
                   <Textarea
                     className='bg-muted'
-                    
+
                     disabled
                     defaultValue={cabecera?.descdocext}
                   />
@@ -121,7 +155,7 @@ const HistoriaDocumento = ({ isOpen, onClose, id }: HistoriaDocumentoProps) => {
                 <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
                   <Input
                     className='bg-muted'
-                    
+
                     disabled
                     defaultValue={cabecera?.refdoc}
                   />
@@ -134,13 +168,38 @@ const HistoriaDocumento = ({ isOpen, onClose, id }: HistoriaDocumentoProps) => {
                 <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
                   <Input
                     className='bg-muted'
-                    
+
                     disabled
-                    defaultValue={formatDate(cabecera?.fecdoc ?? '')}
+                    defaultValue={formatDate(cabecera?.fecdoc!)}
                   />
                 </ConditionalWrapper>
               </Grid>
               <Grid size={2}>
+                <Typography variant="h3" color="primary" >
+                  Doc Referecia
+                </Typography>
+                <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
+                  <Input
+                    className='bg-muted'
+
+                    disabled
+                    defaultValue={cabecera?.iddocres}
+                  />
+                </ConditionalWrapper>
+              </Grid>
+              <Grid size={2}>
+                <Typography variant="h3" color="primary" >
+                  Monto
+                </Typography>
+                <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
+                  <Input
+                    className='bg-muted'
+                    disabled
+                    defaultValue={formatCurrency(cabecera?.mtodoc!)}
+                  />
+                </ConditionalWrapper>
+              </Grid>
+              <Grid size={1}>
                 <Typography variant="h3" color="primary" >
                   Origen
                 </Typography>
@@ -155,13 +214,13 @@ const HistoriaDocumento = ({ isOpen, onClose, id }: HistoriaDocumentoProps) => {
         <Grid size={12} >
           <Card style={{ backgroundColor: '#f1f5f9' }} className="bg-muted">
             <CardContent className="pt-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                 <div className="space-y-2">
                   <Typography variant="h3" color="primary" >
                     Situación actual
                   </Typography>
                   <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-                    <div className="text-sm">Recibido por {cabecera?.maximo_evento?.CodSisDest?.descripcion ?? ""} desde {formatDate(cabecera?.maximo_evento?.fecevento!)} </div>
+                    <div className="text-sm">El Documento esta {cabecera?.maximo_evento.descstsevento ?? ""} por {cabecera?.maximo_evento?.CodSisDest?.descripcion ?? ""} desde {formatDate(cabecera?.maximo_evento?.fecevento!)} </div>
                   </ConditionalWrapper>
                 </div>
               </div>
@@ -188,7 +247,7 @@ const HistoriaDocumento = ({ isOpen, onClose, id }: HistoriaDocumentoProps) => {
                   collapsible={{
                     visible: (row: Detstsdoc) => [
                       { content: row.idsts, align: "center" },
-                      { content: <BadgeTipoComp tipo={row.stsant!}/>, align: "center" },
+                      { content: <BadgeTipoComp tipo={row.stsant!} />, align: "center" },
                       { content: <BadgeTipoComp tipo={row.stsdoc} />, align: "center" },
                       { content: formatDate(row.fecsts), align: "center" },
                       { content: row.ususts, align: "left" },

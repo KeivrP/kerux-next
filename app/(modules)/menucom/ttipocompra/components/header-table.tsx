@@ -10,7 +10,7 @@ import { DeleteIcon, OpenIcon } from "@/components/icons/table-icon";
 export const columnsFilter: Filter[] = [
   { id: "tipocompra", type: "number", column: "Tipo", value: "" },
   { id: "desctipocom", type: "desc", column: "Desc. Tipo Compra", value: "" },
-  { id: "tipodoc", type: "number", column: "Tipo Doc.", value: "" },
+  { id: "tipodoc", type: "desc", column: "Tipo Doc.", value: "" },
   { id: "desctipodoc", type: "desc", column: "Desc. Tipo Doc", value: "" },
 ];
 export const columnsOrder: Order[] = [
@@ -22,10 +22,10 @@ export const columnsOrder: Order[] = [
 
 export const columnsHeadersTtipocomp: HeadersName[] = [
 
-  { label: "Tipo", icon: null, align: "left", minWidth: 130 },
-  { label: "Desc. Tipo Compra", icon: null, align: "center", minWidth: 130 },
-  { label: "Tipo Doc.", icon: null, align: "left", minWidth: 130 },
-  { label: "Desc. Tipo Doc", icon: null, align: "center", minWidth: 130 },
+  { label: "Tipo", icon: null, align: "center", minWidth: 130 },
+  { label: "Desc. Tipo Compra", icon: null, align: "left", minWidth: 130 },
+  { label: "Tipo Doc.", icon: null, align: "center", minWidth: 130 },
+  { label: "Desc. Tipo Doc", icon: null, align: "left", minWidth: 130 },
   {
       label: "Acciones",
       icon: null,

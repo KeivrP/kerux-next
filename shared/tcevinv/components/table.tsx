@@ -182,7 +182,7 @@ export const TcevinvTable = ({ codsis }: TcevinvTableProps) => {
           onSelectionChange={(selectedRowIndices) => {
             const updateSelect = selectedRowIndices.map((index) => rows[index]); // Seleccionar todo lo que aparezca
             setSelectedRows(updateSelect);
-          }}
+        }}
           collapsible={{
             visible: (row) => [
               {
@@ -195,7 +195,7 @@ export const TcevinvTable = ({ codsis }: TcevinvTableProps) => {
               },
               { content: row.idevento, handleCollapse: true, align: "left" },
               { content: row.descdoc, align: "left" },
-              { content: <BadgeTipodoc tipo={row.tipoevento} /> },
+              { content: <BadgeTipodoc tipo={row.stsevento} /> },
               { content: formatDate(row.fecevento), align: "center" },
               { content: row.iddoc, align: "center" },
               { content: row.tipodoc, align: "center" },

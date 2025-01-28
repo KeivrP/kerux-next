@@ -25,8 +25,6 @@ export const Ttdpcomp = () => {
 
   /* ------------------ USEEFFECT PARA TRAER LA DATA DE LA BD ----------------- */
 
-
-
   const { data, isLoading } = useQueryData({
     entity: "tipos_doc",
     api: 'comp',
@@ -109,6 +107,7 @@ export const Ttdpcomp = () => {
             visible: (row) => [
                      { content: row.tipodoc, align: "left" },
                      { content: row.desctipodoc, align: "left" },
+                     { content: <BadgeAct status={row.definido}/>, align: "left" },
               {
                 content: (
                   <Acciones
