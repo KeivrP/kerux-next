@@ -1,70 +1,83 @@
-'use client';
-import { CodMenu, completdMenus, getMenuIcon, MenuItemUser, getColor } from "@/components/ui/sidebar/sidebar-utils";
-import { useMenu } from "@/server/session/useSession";
-import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+'use client'
+
+import { Suspense, useEffect, useState } from "react"
+import { motion } from "framer-motion"
+
+import { CodMenu, completdMenus, MenuItemUser } from "@/components/ui/sidebar/sidebar-utils"
+import { useMenu } from "@/server/session/useSession"
+import Loader from "@/components/backdrop/loader"
+import { ModuleCard } from "@/components/ui/sidebar/module-card"
 
 export default function Home() {
-  const { data: session } = useSession();
-  const [menus, setMenus] = useState<MenuItemUser[]>([]);
-  const { data, isLoading } = useMenu();
+  const [menus, setMenus] = useState<MenuItemUser[]>([])
+  const { data, isLoading } = useMenu()
 
   useEffect(() => {
     if (data) {
-      const menuFin = completdMenus(data);
-      setMenus(menuFin);
+      const menuFin = completdMenus(data)
+      setMenus(menuFin)
     }
-  }, [data, isLoading]);
+  }, [data, isLoading])
 
   return (
-    <section className="py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-14 text-center">
-
-          <h2 className="text-4xl text-center font-bold text-gray-900 py-5">
-            KERUX: Innovación en la Gestión Administrativa
-          </h2>
-          <p className="text-lg font-normal text-gray-500 max-w-md md:max-w-2xl mx-auto">
-            KERUX es un sistema administrativo integral desarrollado por Kentron, diseñado para optimizar la gestión financiera y administrativa de las entidades públicas. Con una variedad de módulos, este sistema mejora la eficiencia en el manejo de recursos y promueve la transparencia en la administración. Su implementación busca fortalecer la confianza de la ciudadanía en las instituciones gubernamentales.          </p>
-        </div>
-        <div
-          className="flex justify-center items-center gap-x-5 gap-y-8 lg:gap-y-0 flex-wrap md:flex-wrap lg:flex-nowrap lg:flex-row lg:justify-between lg:gap-x-8">
-          {menus.map((module, index) => (
-
-            <a
-              href={module.path} key={index} className="relative w-full text-center max-md:max-w-sm max-md:mx-auto group md:w-2/5 lg:w-1/4">
-                <div className="bg-indigo-50 rounded-lg flex justify-center items-center mb-5 w-20 h-20 mx-auto cursor-pointer transition-all duration-500 group-hover:bg-[#142F62]" >
-                {getMenuIcon(module.menu as CodMenu)}
-                </div>
-              <h4 className="text-lg font-medium text-gray-900 mb-3 capitalize">
-                {module.label}
-              </h4>
-              <p className="text-sm font-normal text-gray-500">
-                Descripcion
+    <Suspense fallback={<Loader />}>
+      <div className="min-h-full bg-gradient-to-b from-blue-50 to-white">
+        <section className="relative py-16 overflow-hidden">
+          <div className="absolute inset-0 z-0">
+            <div className="w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#142F62] via-[#001944] to-[#575E71]">
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#141b2c]/50"></div>
+            </div>
+          </div>
+          <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-center"
+            >
+              <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl">
+                Bienvenido a KERUX: Innovación en la Gestión Administrativa
+              </h1>
+              <p className="mx-auto mt-3 max-w-md text-base text-blue-100 sm:text-lg md:mt-5 md:max-w-3xl md:text-xl">
+                Optimizando la gestión financiera y administrativa de entidades públicas para un futuro más eficiente y transparente.
               </p>
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
+            </motion.div>
+          </div>
+        </section>
 
-  );
+        <section className="py-16">
+          <div className="px-4 sm:px-6 lg:px-8">
+            <div className="mb-12 text-center">
+              <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+                Nuestros Módulos
+              </h2>
+              <p className="mt-4 text-lg text-gray-600">
+                Explore las diversas funcionalidades de KERUX diseñadas para mejorar la eficiencia administrativa.
+              </p>
+            </div>
+            <div className="container mx-auto px-4 py-8">
+              <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 ${
+                menus.length > 4 ? 'lg:grid-cols-5' : 'lg:grid-cols-4'
+              } gap-6 mx-auto justify-items-center ${
+                menus.length <= 4 ? 'max-w-5xl' : 'max-w-7xl'
+              }`}>
+                {menus.map((module, index) => (
+                  <ModuleCard
+                    key={index}
+                    title={module.label}
+                    description="Descripción detallada del módulo y sus funcionalidades principales."
+                    icon={module.menu as CodMenu}
+                    path={module.path}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+      </div>
+    </Suspense>
+  )
 }
 
-{/* <div className="flex flex-col h-full items-center justify-center bg-gray-100">
-  <h1 className="text-3xl font-bold mb-8">¡Bienvenido a la Aplicación!</h1>
-  <h1 className="text-3xl font-bold mb-8">{session?.user.name}</h1>
-  <div className="flex flex-wrap justify-center">
-    {menus.map((module, index) => (
-      <a
-      href={module.path}
-      style={{ backgroundColor: getColor(module.menu as CodMenu) }}
-        className="bg-white border justify-center w-32 border-gray-300 rounded-lg shadow-md p-4 m-2 flex flex-col items-center transition-transform transform hover:scale-105"
-        key={index}
-      >
-        <span className="text-4xl ">{getMenuIcon(module.menu as CodMenu)}</span>
-      </a>        <span className="mt-2 font-semibold text-center">{module.label}</span>
-
-    ))}
-  </div>
-</div> */}

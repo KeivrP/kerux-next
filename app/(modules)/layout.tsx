@@ -1,29 +1,35 @@
+'use client';
+
+import { getSession, SessionProvider } from "next-auth/react";
+import { useEffect, useState } from "react";
 import Container from "@/lib/container";
 import { FormProviderHcdocorg } from "@/provider/hcdocorg-provider";
 import { SideProvider } from "@/provider/sideProvider";
-import { Metadata } from "next";
-import React from "react";
+import { Session } from "next-auth";
+import Loader from "@/components/backdrop/loader";
 
-export const metadata: Metadata = {
-  title: "Kerux Web | Aporta Soluciones",
-  description: "Aporta Soluciones",
-};
+export default function Layout({ children }: { children: React.ReactNode }) {
+  const [session, setSession] = useState<Session | null>(null);
 
-const Layout = ({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) => {
+  useEffect(() => {
+    // Obtén la sesión en el cliente
+    getSession().then((sessionData) => {
+      setSession(sessionData);
+    });
+  }, []);
+
+  if (session === null) {
+    // Puedes agregar un estado de carga aquí
+    return <Loader/>;
+  }
+
   return (
-
-    <SideProvider>
-      <FormProviderHcdocorg>
-        <Container>
-          {children}
-        </Container>
-      </FormProviderHcdocorg>
-    </SideProvider>
+    <SessionProvider session={session}>
+      <SideProvider>
+        <FormProviderHcdocorg>
+          <Container>{children}</Container>
+        </FormProviderHcdocorg>
+      </SideProvider>
+    </SessionProvider>
   );
-};
-
-export default Layout;
+}

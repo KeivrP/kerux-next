@@ -10,28 +10,27 @@ import { DeleteIcon, OpenIcon } from "@/components/icons/table-icon";
 export const columnsFilter: Filter[] = [
   { id: "numprov", type: "number", column: "Número", value: "" },
   { id: "nomprov", type: "desc", column: "Nombre del Proveedor", value: "" },
-  { id: "tipoprov", type: "desc", column: "Tipo", value: "" },
-  { id: "numbenef", type: "number", column: "Benef.", value: "" },
-  { id: "fecing", type: "desc", column: "Fecha Ingreso", value: "" },
-  { id: "fecvigenciareg", type: "desc", column: "Fecha Vigencia", value: "" },
+  { id: "FAB_PRO.tipoprov", type: "desc", column: "Tipo", value: "" },
+  { id: "FAB_PRO.numbenef", type: "number", column: "Benef.", value: "" },
+  { id: "fecing", type: "date", column: "Fecha Ingreso", value: "" },
+  //{ id: "fecvigenciareg", type: "date", column: "Fecha Vigencia", value: "" },
 ];
 export const columnsOrder: Order[] = [
-  { id: "numprov", column: "Número" },
+  { id: "numprov", column: "Número",  },
   { id: "nomprov", column: "Nombre del Proveedor" },
-  { id: "tipoprov", column: "Tipo" },
-  { id: "numbenef", column: "Benef." },
+  { id: "FAB_PRO.tipoprov", column: "Tipo" },
+  { id: "FAB_PRO.numbenef", column: "Benef." },
   { id: "fecing", column: "Fecha Ingreso" },
-  { id: "fecvigenciareg", column: "Fecha Vigencia" },
+  //{ id: "fecvigenciareg", column: "Fecha Vigencia" },
 ];
 
 export const columnsHeadersTprov: HeadersName[] = [
 
-  { label: "Número", icon: null, align: "left", minWidth: 130 },
-  { label: "Nombre del Proveedor", icon: null, align: "center", minWidth: 130 },
-  { label: "Tipo", icon: null,  align: "center", minWidth: 130 },
-  { label: "Benef.", icon: null, align: "left", minWidth: 130 },
-  { label: "Fecha Ingreso", icon: null, align: "left", minWidth: 130 },
-  { label: "Fecha Vigencia", icon: null, align: "left", minWidth: 130 },
+  { label: "Número", icon: null, align: "center", minWidth: 80 },
+  { label: "Nombre del Proveedor", icon: null, align: "left", minWidth: 130 },
+  { label: "Tipo Benef.", icon: null,  align: "left", minWidth: 80 },
+  { label: "Fecha Ingreso", icon: null, align: "center", minWidth: 130 },
+  { label: "Fecha Vigencia", icon: null, align: "center", minWidth: 130 },
     {
       label: "Acciones",
       icon: null,

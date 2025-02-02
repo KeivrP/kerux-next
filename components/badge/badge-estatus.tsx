@@ -33,6 +33,12 @@ export const BadgeTipodoc: React.FC<BadgeProps> = ({ tipo }) => {
                     {tipo}
                 </span>
             );
+        case "APR":
+            return (
+                <span className={`${commonClasses} bg-amber-50 text-amber-600`}>
+                    {tipo}
+                </span>
+            );
         case "GEN":
             return (
                 <span className={`${commonClasses} bg-emerald-50 text-emerald-600`}>
@@ -57,8 +63,14 @@ export const BadgeTipodoc: React.FC<BadgeProps> = ({ tipo }) => {
                     {tipo}
                 </span>
             );
+        case "REV":
+            return (
+                <span className={`${commonClasses} bg-pink-50 text-pink-600`}>
+                    {tipo}
+                </span>
+            );
         default:
-            return <span>{tipo}</span>;
+            return <span className={`${commonClasses} bg-gray-50 text-gray-600`} >{tipo}</span>;
     }
 };
 

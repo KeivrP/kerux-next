@@ -186,13 +186,13 @@ export const TreaundejecTable = () => {
                         ],
 
                         collapsed: (row) => [
-                            { name: "Descripcion", content: row.descdoc },
+                            { name: "Descripción", content: row.descdoc },
                             { name: "Num Benef", content: row.numidbenef },
                             {
-                                name: "Descrripcion Tipo de documento",
+                                name: "Descripción Tipo de documento",
                                 content: row.desctipodoc,
                             },
-                            { name: "Descripcion U/A", content: row.desccodundpro },
+                            { name: "Descripción U/A", content: row.desccodundpro },
                         ],
                     }}
                 ></BaseTable>

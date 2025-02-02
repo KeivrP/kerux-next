@@ -9,10 +9,16 @@ import ActionCardHeader from "@/components/card/actionCardHeader";
 import { Acciones, columnsFilter, columnsHeaders, columnsOrder } from "./header-table";
 import { BaseTable } from "@/components/table-material/genericTable";
 import { BaseTablePagination } from "@/components/table-material/baseTablePagination";
+import { usePathname, useRouter } from "next/navigation";
+import { ConfirmDialog } from "@/components/modal/confirmDialog";
+import { useDeleteTsolmod, useGenerateTsolmod } from "../hook/useTsolmod";
+import SimpleBackdrop from "@/components/backdrop/backdrop";
 
 
 export const TsolmodTable = () => {
   const theme = useTheme();
+  const { mutate: deleteRng, isPending: isDeleting, isSuccess: isDelete } = useDeleteTsolmod();
+  const { mutate: generaRng, isPending: isGenerando, isSuccess: isGenerado } = useGenerateTsolmod();
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
@@ -22,10 +28,12 @@ export const TsolmodTable = () => {
   ]);
   const [filter, setFilter] = useState<Filter[]>([]);
   const [count, setCount] = useState(0);
+  const router = useRouter()
+  const pathname = usePathname();
 
   /* ------------------ USEEFFECT PARA TRAER LA DATA DE LA BD ----------------- */
 
-  const { data, isLoading } = useQueryData({
+  const { data, isLoading, refetch } = useQueryData({
     entity: "sols_sums_mods",
     params: { page: page + 1, per: rowsPerPage, filter, order },
     dependency: [filter, order],
@@ -49,30 +57,74 @@ export const TsolmodTable = () => {
     },
     []
   );
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [deleteRowId, setDeleteRowId] = useState<number>(0);
 
-  const handleDelete = (numsolsum: number) => {
-    console.log(`Delete ${numsolsum}`);
+  const [openConfirm, setOpenConfirm] = useState<boolean>(false);
+  const [confirmRowId, setConfirmRowId] = useState<number>(0);
+
+  const handleDelete = (id: number) => {
+    setDeleteRowId(id);
+    setOpenDialog(true);
   };
 
-  const handleEdit = (numsolsum: number) => {
-    console.log(`Edit ${numsolsum}`);
+  const handleCancelDelete = () => {
+    setOpenDialog(false);
   };
 
-  const handleGenerate = (numsolsum: number) => {
-    console.log(`Generate ${numsolsum}`);
-  }
+  const handleConfirmDelete = () => {
+    const rowToDelete = rows.find((row) => row.numsolsum === deleteRowId)?.numsolsum;
+    if (rowToDelete) {
+      deleteRng({ id: rowToDelete });
+    } else {
+      console.log(`Row with id ${deleteRowId} not found`);
+    }
+    setOpenDialog(false);
+  };
+
+  const handleOpen = (id: number) => {
+    if (id) {
+      router.push(`${pathname}/${id}`);
+
+    }
+  };
+
+  useEffect(() => {
+    if (isDelete || isGenerado) {
+      refetch();
+    }
+  }, [isDelete, isGenerado])
+
+  const handleGenerate = (id: number) => {
+    setConfirmRowId(id);
+    setOpenConfirm(true);
+  };
+
+  const handleCancelConfirm = () => {
+    setOpenConfirm(false);
+  };
+
+  const handleConfirmConfirm = () => {
+    const rowToConfirm = rows.find((row) => row.numsolsum === confirmRowId)?.numsolsum;
+    if (rowToConfirm) {
+      generaRng({ id: rowToConfirm });
+    } else {
+      console.log(`Row with id ${confirmRowId} not found`);
+    }
+    setOpenConfirm(false);
+  };
 
   return (
     <>
-       <ActionCardHeader
-                isAddButtonVisible={false}
-                onApplyFilter={(filters) => setFilter(filters)}
-                columnsFilter={columnsFilter}
-                onApplyOrder={(orders) => setOrder(orders)}
-                columnsOrder={columnsOrder}
-                setFilter={setFilter}
-                setOrder={setOrder}
-            />
+      <ActionCardHeader
+        isAddButtonVisible={false}
+        onApplyFilter={(filters) => setFilter(filters)}
+        columnsFilter={columnsFilter}
+        onApplyOrder={(orders) => setOrder(orders)}
+        columnsOrder={columnsOrder}
+        setFilter={setFilter}
+        setOrder={setOrder}
+      />
       <div
         style={{
           height: "71vh",
@@ -87,17 +139,17 @@ export const TsolmodTable = () => {
           rowAction={(row) => console.log(row)}
           collapsible={{
             visible: (row) => [
-                { content: row.numsolsum, handleCollapse: true, align: "left" },
-                { content: row.ano, align: "center" },
-                { content: row.codaccint, align: "center" },
-                { content: row.ccosto, align: "center" },
-                { content: row.desccorta, align: "left" },
+              { content: row.numsolsum, handleCollapse: true, align: "left" },
+              { content: row.ano, align: "center" },
+              { content: row.codaccint, align: "center" },
+              { content: row.ccosto, align: "center" },
+              { content: row.desccorta, align: "left" },
               {
                 content: (
                   <Acciones
                     row={row}
                     onDelete={handleDelete}
-                    onOpen={handleEdit}
+                    onOpen={handleOpen}
                     onGenerate={handleGenerate}
                   />
                 ),
@@ -107,11 +159,11 @@ export const TsolmodTable = () => {
             ],
 
             collapsed: (row) => [
-                
-                { name: "Acción Interna", content: row.descaccint },
-                { name: "Centro de Costo", content: row.desccosto },
-        
-              ],
+
+              { name: "Acción Interna", content: row.descaccint },
+              { name: "Centro de Costo", content: row.desccosto },
+
+            ],
           }}
         ></BaseTable>
         <BaseTablePagination
@@ -122,6 +174,23 @@ export const TsolmodTable = () => {
           handleChangeRowsPerPage={handleChangeRowsPerPage}
         ></BaseTablePagination>
       </div>
+      <ConfirmDialog
+        mode={"delete"}
+        open={openDialog}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+        text={`¿Estas seguro que deseas eliminar el numero de renglon ${rows.find((row) => row.numsolsum === deleteRowId)?.numsolsum
+          }?`}
+      />
+      <ConfirmDialog
+        mode="confirm"
+        open={openConfirm}
+        onConfirm={handleConfirmConfirm}
+        onCancel={handleCancelConfirm}
+        text={`¿Estas seguro que deseas generar el numero de renglon ${rows.find((row) => row.numsolsum === confirmRowId)?.numsolsum
+          }?`}
+      />
+      <SimpleBackdrop show={isDeleting || isGenerando} />
     </>
   );
 };

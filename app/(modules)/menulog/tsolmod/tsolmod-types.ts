@@ -7,3 +7,101 @@ export interface Solsummodlist {
   desccosto: string;
   numsolsum: number;
 }
+
+export interface Root {
+  cabssmod: Cabssmod
+  detssmod: Detssmod[]
+}
+
+export interface Cabssmod {
+  numsolsum: number
+  nomubic: string
+  desccorta: string
+  ccosto: string
+  descsolsum: string
+  codaccint: string
+  ano: number
+  codmoneda: string
+  CentCosto: CentCosto
+  AccInt: AccInt
+}
+
+export interface CentCosto {
+  nombre: string
+}
+
+export interface AccInt {
+  descripcion: string
+}
+
+export interface Detssmod {
+  numsolsum: number
+  nroreng: number
+  tiporeng: string
+  descreng: string
+  destino: string
+  unidbasica: string
+  cantsol: string
+  coditem: string
+  descadiitem: any
+  destant: any
+  codcta: string
+  precio: string
+  codclasifsnc: any
+  codserv: any
+  dsp_CodNombNorm: string
+  dsp_DescNombNorm: string
+  dsp_DescCodCta: string
+  dsp_DescTipoReng: string
+  dsp_MtoTotReng: number
+}
+
+
+export const initialRenglon: Detssmod = {
+  numsolsum: 0,
+  nroreng: 0,
+  tiporeng: "",
+  descreng: "",
+  destino: "",
+  unidbasica: "",
+  cantsol: "",
+  coditem: "",
+  descadiitem: null,
+  destant: null,
+  codcta: "",
+  precio: "",
+  codclasifsnc: null,
+  codserv: null,
+  dsp_CodNombNorm: "",
+  dsp_DescNombNorm: "",
+  dsp_DescCodCta: "",
+  dsp_DescTipoReng: "",
+  dsp_MtoTotReng: 0
+}
+
+export const initialData: Root = {
+  cabssmod: {
+    numsolsum: 0,
+    nomubic: "",
+    desccorta: "",
+    ccosto: "",
+    descsolsum: "",
+    codaccint: "",
+    ano: 0,
+    codmoneda: "",
+    CentCosto: {
+      nombre: ""
+    },
+    AccInt: {
+      descripcion: ""
+    }
+  },
+  detssmod: []
+};
+
+export interface FormContextProps {
+  formData: Root;
+  setFormData: React.Dispatch<React.SetStateAction<Root>>;
+  initialData: Root;
+}
+

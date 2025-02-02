@@ -11,19 +11,22 @@ import { Order } from "@/components/button/OrderButton";
 import { ConfirmDialog } from "@/components/modal/confirmDialog";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { formatDate } from "@/utils/main";
-import {BadgeTipodoc} from "@/components/badge/badge-estatus";
+import { BadgeTipodoc } from "@/components/badge/badge-estatus";
 import { useDeleteTcambio } from "../hook/useTcambios";
+import { usePathname, useRouter } from "next/navigation";
 
 export const TcambiosTable = () => {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [rows, setRows] = useState<Cambiolist[]>([]);
-  const [order, setOrder] = useState<Order[]>([         { column: "N°", id: "idsolsum", operator: "DESC" },
+  const [order, setOrder] = useState<Order[]>([{ column: "N°", id: "idsolsum", operator: "DESC" },
   ]);
   const [filter, setFilter] = useState<Filter[]>([]);
   const [count, setCount] = useState(0);
   const [isPending, handleLoading] = useState(false);
+      const router = useRouter()
+      const pathname = usePathname();
 
   /* ------------------ USEEFFECT PARA TRAER LA DATA DE LA BD ----------------- */
 
@@ -98,17 +101,19 @@ export const TcambiosTable = () => {
     } setOpenDialog(false);
   }
 
-
-
-  const handleEdit = (idsolsum: number) => {
-    console.log(`Edit ${idsolsum}`);
+  const handleOpen = (id: number, cambio: number) => {
+    if (id) {
+      const encodedIds = (`${id}-${cambio}`)
+      router.push(`${pathname}/${encodedIds}`);
+    }
   };
+
 
 
   return (
     <>
       <ActionCardHeader
-        add={() => { console.log('anadir') }}
+        add={() => router.push(`${pathname}/${"-"}`)}
         onApplyFilter={(filters) => setFilter(filters)}
         columnsFilter={columnsFilter}
         onApplyOrder={(orders) => setOrder(orders)}
@@ -143,7 +148,7 @@ export const TcambiosTable = () => {
                   <Acciones
                     row={row}
                     onDelete={handleDelete}
-                    onEdit={handleEdit}
+                    onEdit={handleOpen}
                   />
                 ),
                 action: () => null,

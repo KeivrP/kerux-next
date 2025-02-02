@@ -55,7 +55,7 @@ export type CollapsedRow = {
 type CollapsibleRowProps = {
   visible: VisibleRow[];
   collapsed: CollapsedRow[] | React.ReactNode;
-  rowAction?: (() => false | void) | undefined;
+  rowAction?: ((row: any) => void);
 };
 
 // Define el componente de la fila colapsable
@@ -85,7 +85,8 @@ export const CollapsibleRow: React.FC<CollapsibleRowProps> = ({
             <StyledTableCell
               className={vRow.className}
               align={vRow.align || "center"}
-              onClick={vRow.handleCollapse ? toggle : vRow.action || rowAction}
+              onClick={vRow.handleCollapse ? toggle : vRow.action || (rowAction ? () => rowAction(vRow) : undefined)}
+              style={{ padding: vRow.padding }}
             >
               {vRow.handleCollapse ? (
                 <div className="flex items-center">
@@ -96,7 +97,9 @@ export const CollapsibleRow: React.FC<CollapsibleRowProps> = ({
                   </IconButton>
 
                   <Typography className="whitespace-nowrap text-pretty text-xs leading-6 font-medium text-gray-900 ml-2">
-                    {vRow.content}
+                    <>
+                      {vRow.content}
+                    </>
                   </Typography>
                 </div>
               ) : (
@@ -127,34 +130,34 @@ export const CollapsibleRow: React.FC<CollapsibleRowProps> = ({
               {/* Si collapsed es un array, crea una sección para cada elemento */}
               {Array.isArray(collapsed)
                 ? collapsed.map((cRow) => {
-                    return (
-                      !!cRow.content && (
-                        <div
-                          key={`cRow-${cRow.name}`}
-                          className="flex items-center mt-2"
-                        >
-                          <div>
-                            <Typography
-                              style={{ fontSize: 12 }}
-                              component="span"
-                            >
-                              <b>{cRow.name}</b>:
-                            </Typography>
-                          </div>
-                          <div className="ml-1">
-                            <Typography
-                              style={{ fontSize: 12 }}
-                              component="span"
-                            >
-                              {cRow.content}
-                            </Typography>
-                          </div>
+                  return (
+                    !!cRow.content && (
+                      <div
+                        key={`cRow-${cRow.name}`}
+                        className="flex items-center mt-2"
+                      >
+                        <div>
+                          <Typography
+                            style={{ fontSize: 12 }}
+                            component="span"
+                          >
+                            <b>{cRow.name}</b>:
+                          </Typography>
                         </div>
-                      )
-                    );
-                  })
+                        <div className="ml-1">
+                          <Typography
+                            style={{ fontSize: 12 }}
+                            component="span"
+                          >
+                            {cRow.content}
+                          </Typography>
+                        </div>
+                      </div>
+                    )
+                  );
+                })
                 : // Si collapsed no es un array, muestra el contenido tal cual
-                  collapsed}
+                collapsed}
             </div>
           </Collapse>
         </TableCell>

@@ -1,14 +1,14 @@
-// middleware.ts
 import { NextResponse } from 'next/server'
-import { auth } from './auth'  // Importa la configuración de auth que ya tienes
+import { auth } from './auth' // Importa la configuración de auth que ya tienes
 
 export default auth((req) => {
   const isAuthenticated = !!req.auth
-  const { pathname } = req.nextUrl
+
+  const { pathname, origin } = req.nextUrl
 
   // Lista de rutas públicas que no requieren autenticación
   const publicRoutes = ['/auth/signin', '/api/auth']
-  
+
   // Si la ruta es pública, permitir acceso
   if (publicRoutes.some(route => pathname.startsWith(route))) {
     return NextResponse.next()
@@ -16,7 +16,7 @@ export default auth((req) => {
 
   // Si no está autenticado y no es una ruta pública, redirigir al login
   if (!isAuthenticated) {
-    const signInUrl = new URL('/auth/signin', req.url)
+    const signInUrl = new URL('/auth/signin', origin) // Usa el origen dinámico del servidor
     signInUrl.searchParams.set('callbackUrl', pathname)
     return NextResponse.redirect(signInUrl)
   }
@@ -29,6 +29,6 @@ export default auth((req) => {
 export const config = {
   matcher: [
     // Rutas que requieren autenticación
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|bg-2.jpg|/public).*)', // Excluye recursos específicos
   ]
 }

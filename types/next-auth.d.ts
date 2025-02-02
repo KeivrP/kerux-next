@@ -32,3 +32,20 @@ declare module "next-auth/jwt" {
     user: User;
   }
 }
+
+export interface Session {
+  status: string
+  request: Request
+}
+
+export interface Request {
+  auth: Auth
+}
+
+export interface Auth {
+  user: User
+  expires: string
+}
+
+
+

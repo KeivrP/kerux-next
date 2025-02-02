@@ -107,9 +107,9 @@ export const Ttipocomp = () => {
           rowAction={(row) => console.log(row)}
           collapsible={{
             visible: (row) => [
-              { content: row.tipocompra, align: "left" },
+              { content: row.tipocompra, align: "center" },
               { content: row.desctipocom, align: "left" },
-              { content: row.tipodoc, align: "left" },
+              { content: row.tipodoc, align: "center" },
               { content: row.desctipodoc, align: "left" },
               {
                 content: (
@@ -140,7 +140,7 @@ export const Ttipocomp = () => {
         open={openDialog}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
-        text={`¿Estas seguro que deseas eliminar el beneficiario ${rows.find((row) => row.tipocompra == deleteRowId)?.tipocompra}?`}
+        text={`¿Estas seguro que deseas eliminar el Tipo de compra ${rows.find((row) => row.tipocompra == deleteRowId)?.tipocompra}?`}
       />
     </>
   );

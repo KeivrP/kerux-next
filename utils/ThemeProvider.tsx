@@ -9,9 +9,9 @@ import {
 import { esES } from "@mui/material/locale";
 import { TypographyOptions } from "@mui/material/styles/createTypography";
 // Importar la fuente Inter
-{/* <style>
+ <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
-</style>; */}
+</style>; 
 
 interface ThemeProviderProps {
   children: ReactNode;
@@ -74,7 +74,7 @@ const lightTheme = createTheme(
       },
       h2: {
         //fontFamily: 'Inter',
-        fontSize: "1rem",
+        fontSize: "0.95rem",
         fontStyle: "normal",
         fontWeight: 400,
         lineHeight: "1.5rem" /* 150% */,
@@ -82,7 +82,7 @@ const lightTheme = createTheme(
       },
       h3: {
         //fontFamily: 'Inter',
-        fontSize: "0.9375rem",
+        fontSize: "0.8375rem",
         fontStyle: "normal",
         fontWeight: 700,
         lineHeight: "1.25rem" /* 150% */,
@@ -97,7 +97,7 @@ const lightTheme = createTheme(
       },
       h1: {
         //fontFamily: 'Inter',
-        fontSize: "1rem",
+        fontSize: "0.95rem",
         fontStyle: "normal",
         fontWeight: 700,
         lineHeight: "1.5rem" /* 150% */,

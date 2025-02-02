@@ -9,14 +9,14 @@ import { DeleteIcon, OpenIcon } from "@/components/icons/table-icon";
 
 export const columnsFilter: Filter[] = [
   { id: "tipodoc", type: "desc", column: "Tipo", value: "" },
-  { id: "desctipodoc", type: "desc", column: "Descripcion", value: "" },
+  { id: "desctipodoc", type: "desc", column: "Descripción", value: "" },
   { id: "codruta", type: "desc", column: "Ruta", value: "" },
   { id: "indactivo", type: "check", column: "Activo", value: "" },
 ];
 export const columnsOrder: Order[] = [
   { id: "tipodoc", column: "Tipo" },
   { id: "codruta", column: "Ruta" },
-  { id: "desctipodoc", column: "Descripcion" },
+  { id: "desctipodoc", column: "Descripción" },
   { id: "indactivo", column: "Activo" },
 ];
 

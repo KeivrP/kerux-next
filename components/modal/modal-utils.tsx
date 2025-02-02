@@ -14,7 +14,6 @@ export const getIconByMode = (
         >
           <g
             id="fluent-mdl2:status-error-full"
-            clip-path="url(#clip0_562_14000)"
           >
             <path
               id="Vector"

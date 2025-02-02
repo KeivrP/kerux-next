@@ -2,6 +2,7 @@ import { AxiosError } from "axios"; // Importa el tipo de error de Axios
 import { Api_Comp, Api_Cont, Api_Doc, Api_Ing, Api_Log, Api_Proseg } from "./API"; // Importa las APIs
 import { entities } from "./entity"; // Importa las entidades
 import { useQuery } from "@tanstack/react-query"; // Importa el hook useQuery de React Query
+import { showNotification } from "@/components/toast/toast";
 
 // Define los tipos de claves de las entidades
 type EntityKeys = keyof typeof entities;
@@ -23,15 +24,18 @@ interface Query {
   dependency?: any[] | any; // Dependencias opcionales para la consulta
   type?: string; // Tipo de consulta opcional
   api?: keyof typeof apiUrls; // Propiedad para elegir la API a utilizar
+  enabled?: boolean;
 }
 
 // Hook personalizado para realizar consultas
-export function useQueryData({ entity, params, dependency, type, api }: Query) {
-  // Selecciona la URL de la API según la propiedad 'api' o utiliza la de 'log' por defecto
+export function useQueryData({ entity, params, dependency, type, api, enabled = true }: Query) {
   const selectedApiUrl = apiUrls[api || "log"]; 
 
   // Función para realizar la consulta a la API
   const functionFetch = async () => {
+    if (!enabled) { // Si enabled es false, no se ejecuta la consulta
+      return null; // O un array vacío, según tus necesidades
+    }
     // Construye el endpoint basado en la entidad y el tipo
     const endpoint = type ? `${entities[entity]}/${type}` : entities[entity];
 
@@ -39,12 +43,19 @@ export function useQueryData({ entity, params, dependency, type, api }: Query) {
     const response = await selectedApiUrl.get(endpoint, {
       params, // Pasa los parámetros a la solicitud
     });
+
+    // Verifica si la respuesta contiene un mensaje de error
+    if (response.data.message && response.data.mode === "error") {
+      showNotification(response.data); // Llama a showNotification con la respuesta
+      return []; // Retorna un array vacío
+    }
+
     return response.data; // Retorna los datos de la respuesta
   };
 
   // Utiliza el hook useQuery para gestionar la consulta
   const { data, error, isLoading, isFetching, refetch, isError } = useQuery({
-    queryKey: [entity, params, type, api], // Clave de consulta única
+    queryKey: [entity, params, type, api, dependency], // Clave de consulta única que incluye la dependencia
     queryFn: functionFetch, // Función de obtención de datos
   });
 
