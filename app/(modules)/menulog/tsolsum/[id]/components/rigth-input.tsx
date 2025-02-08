@@ -138,7 +138,7 @@ const RightInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
           color="primary"
           sx={{ marginBottom: "0.65rem" }}
         >
-          Recepcion
+          Recepción
         </Typography>
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
           <Input

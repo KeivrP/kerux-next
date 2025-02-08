@@ -182,10 +182,10 @@ export const TdocfinTable = () => {
                             { name: "Origen", content: row.origen },
                             { name: "Referencia", content: row.refdoc },
                             {
-                                name: "Descripcion Tipo de documento",
+                                name: "Descripción Tipo de documento",
                                 content: row.desctipodoc,
                             },
-                            { name: "Descripcion U/A", content: row.desccodundpro },
+                            { name: "Descripción U/A", content: row.desccodundpro },
                         ],
                     }}
                 ></BaseTable>

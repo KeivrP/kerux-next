@@ -111,12 +111,12 @@ const EditTrutas: React.FC<EditTrutasProps> = ({
 
           <div className="mb-4 p-4">
             <Typography variant="h3" color="primary">
-              Descripcion Ruta
+              Descripción Ruta
             </Typography>
             <TextField
               id="descruta"
               {...register("descruta", {
-                required: "Descripcion ruta es requerida",
+                required: "Descripción ruta es requerida",
               })}
               size="small"
               variant="outlined"

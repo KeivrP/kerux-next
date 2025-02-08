@@ -8,17 +8,17 @@ import { Criterioslist } from "../tcevalprov-type";
 
 export const columnsFilter: Filter[] = [
   { id: "codcritevalprov", type: "desc", column: "Codigo", value: "" },
-  { id: "desccrievalprov", type: "desc", column: "Descripcion", value: "" },
+  { id: "desccrievalprov", type: "desc", column: "Descripción", value: "" },
 ];
 export const columnsOrder: Order[] = [
   { id: "codcritevalprov", column: "Codigo"},
-  { id: "desccrievalprov", column: "Descripcion" },
+  { id: "desccrievalprov", column: "Descripción" },
 ];
 
 export const columnsHeaders: HeadersName[] = [
   { label: "Codigo", icon: null, align: "left", minWidth: 100 },
   {
-    label: "Descripcion",
+    label: "Descripción",
     icon: null,
     align: "left",
     minWidth: 140,

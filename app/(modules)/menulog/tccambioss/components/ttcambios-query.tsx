@@ -155,7 +155,7 @@ export default function TtcambiossQuery(): JSX.Element {
                                                         collapsed: (row) => [
                                                             { name: "Cuenta Presupuestaria", content: row.codcta },
                                                         {
-                                                            name: "Descripcion de cuenta presupuestaria",
+                                                            name: "Descripción de cuenta presupuestaria",
                                                             content: row.desccta,
                                                         },
                                                         {
@@ -167,7 +167,7 @@ export default function TtcambiossQuery(): JSX.Element {
                                                             content: row.codmoneda,
                                                         },
                                                         {
-                                                            name: "Descripcion Adicional",
+                                                            name: "Descripción Adicional",
                                                             content: row.descadiitem,
                                                         },
                                                                                                             

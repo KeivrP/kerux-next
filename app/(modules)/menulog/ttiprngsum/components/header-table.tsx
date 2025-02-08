@@ -7,12 +7,12 @@ import { Tiporngsumlist } from "../ttiprngsum-types";
 
 export const columnsFilter: Filter[] = [
     { id: "tiporengsumin", type: "desc", column: "Tipo", value: "" },
-    { id: "desctiporeng", type: "desc", column: "Descripcion", value: "" },
+    { id: "desctiporeng", type: "desc", column: "Descripción", value: "" },
     { id: "limitundtrib", type: "number", column: "Limite", value: "" },
 ];
 export const columnsOrder: Order[] = [
     { id: "tiporengsumin", column: "Tipo" },
-    { id: "desctiporeng", column: "Descripcion" },
+    { id: "desctiporeng", column: "Descripción" },
     { id: "limitundtrib", column: "Limite" },
 
 ];
@@ -21,7 +21,7 @@ export const columnsOrder: Order[] = [
 export const columnsHeaders: HeadersName[] = [
   { label: "Tipo", icon: null, align: "left", minWidth: 100 },
   {
-    label: "Descripcion",
+    label: "Descripción",
     icon: null,
     align: "left",
     minWidth: 175,

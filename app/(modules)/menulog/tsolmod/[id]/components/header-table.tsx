@@ -8,13 +8,13 @@ export const columnsHeaders: HeadersName[] = [
   { label: "Tipo", align: "left", minWidth: 100 },
   { label: "Nombre", align: "left", minWidth: 180 },
   { label: "Item/Serv", align: "center", minWidth: 100 },
-  { label: "Descripcion", align: "left", minWidth: 240 },
+  { label: "Descripción", align: "left", minWidth: 240 },
   { label: "Unidad", align: "center", width: 80 },
   { label: "Cant", align: "center", width: 80 },
   { label: "Costo unitario", align: "center", minWidth: 80 },
   { label: "Destino", align: "center", width: 80 },
   { label: "Total", align: "center", minWidth: 80 },
-  { label: "Accion", align: "center", width: 80 },
+  { label: "Acción", align: "center", width: 80 },
 ];
 
 export const Acciones = ({

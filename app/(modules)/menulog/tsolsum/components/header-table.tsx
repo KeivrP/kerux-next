@@ -8,14 +8,14 @@ import { ITsolsum } from "../tsolsum-types";
 export const columnsFilter: Filter[] = [
     { id: "idsolsum", type: "number", column: "Id Solicitud", value: "" },
     { id: "fecsol", type: "date", column: "Fecha", value: "" },
-    { id: "desccorta", type: "desc", column: "Descripcion", value: "" },
+    { id: "desccorta", type: "desc", column: "Descripción", value: "" },
     { id: "CENTS_COSTO.ccosto", type: "number", column: "Centro de Costo", value: "" },
     { id: "stssol", type: "desc", column: "Estatus", value: "" },
   ];
   export const columnsOrder: Order[] = [
     { id: "idsolsum", column: "Id solicitud" },
     { id: "fecsol", column: "Fecha" },
-    { id: "desccorta", column: "Descripcion" },
+    { id: "desccorta", column: "Descripción" },
     { id: "ccosto",  column: "Centro de Costo" },
     { id: "stssol",  column: "Estatus" },
   ];
@@ -23,7 +23,7 @@ export const columnsFilter: Filter[] = [
   export const columnsHeaders: HeadersName[] = [
     { label: "ID Solicitud",  align: "center",  minWidth:140 },
     { label: "Fecha",  align: "center", minWidth: 140 },
-    { label: "Descripcion"},
+    { label: "Descripción"},
     { label: "Centro de Costo", align: "center", minWidth: 175 },
     { label: "Estatus",  align: "center", minWidth: 145 },
     { label: "Acciones",  align: "center", width: 100  },

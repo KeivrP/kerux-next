@@ -10,6 +10,7 @@ import { BaseTable } from "@/components/table-material/genericTable";
 import { formatDate } from "@/utils/main";
 import {BadgeTipodoc} from "@/components/badge/badge-estatus";
 import BadgeModule from "@/components/badge/badge-mod";
+import { BadgeStsDoc, BadgeTipoEven } from "@/components/badge/badge-log";
 
 interface FielTablesProps extends FormContextProps {
   isLoading: boolean;
@@ -90,7 +91,7 @@ function FieldTables({
           visible: (row) => [
             { content: row.idevento, align: "center" },
             {
-              content: <BadgeTipodoc tipo={row.tipoevento} />,
+              content: <BadgeTipoEven tipo={row.tipoevento} />,
               align: "center",
             },
             { content: formatDate(row.fecevento), align: "center" },
@@ -98,7 +99,7 @@ function FieldTables({
               content: <BadgeModule codmenu={row.codsisgen} />,
               align: "center",
             },
-            { content: <BadgeTipodoc tipo={row.stsevento} />, align: "center" },
+            { content: <BadgeStsDoc tipo={row.stsevento} />, align: "center" },
             { content: formatDate(row.fecsts), align: "center" },
             {
               content: <BadgeModule codmenu={row.codsisdest} />,

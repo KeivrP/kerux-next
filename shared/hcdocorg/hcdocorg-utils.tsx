@@ -142,22 +142,22 @@ export const columnsHeadersHcdocorg: HeadersName[] = [
     align: "center",
     minWidth: 160,
   },
-  { label: "Tipo de Evento", icon: null, align: "left", minWidth: 180 },
+  { label: "Tipo de Evento", icon: null, align: "center", minWidth: 180 },
   {
     label: "Fecha del Evento",
     icon: null,
     align: "center",
     minWidth: 180,
   },
-  { label: "Origen", icon: null, minWidth: 120 },
-  { label: "Estatus", icon: null, minWidth: 130 },
+  { label: "Origen", icon: null, minWidth: 120, align: "center" },
+  { label: "Estatus", icon: null, minWidth: 130, align: "center" },
   {
     label: "Fecha",
     icon: null,
     align: "center",
     minWidth: 100,
   },
-  { label: "Destino", icon: null, minWidth: 120 },
+  { label: "Destino", icon: null, minWidth: 120, align: "center" },
   { label: "Acciones", icon: null, align: "center", minWidth: 130 },
 ];
 

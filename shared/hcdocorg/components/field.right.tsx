@@ -18,9 +18,9 @@ import { useEffect, useMemo, useState } from "react";
 import { FormContextProps } from "../hcdocorg-utils";
 import BadgeModule from "@/components/badge/badge-mod";
 import Grid from "@mui/material/Grid2";
-import {BadgeTipodoc} from "@/components/badge/badge-estatus";
 import { Input } from "@/components/ui/input";
 import { BadgeAct } from "@/components/badge/badge-act";
+import { BadgeStsDoc } from "@/components/badge/badge-log";
 
 interface FieldRightProps extends FormContextProps {
   onIdCambio: (nuevoId: number) => void; // Una función que recibe un nuevo ID como argumento y lo pasa al componente padre
@@ -94,7 +94,7 @@ function FieldRight({
         <Typography variant="h3" sx={{ marginBottom: 1, color: theme.palette.primary.main }}>
           <div style={{ gap: 1 }}>
             Estatus
-            <BadgeTipodoc tipo={Detalle.stsdoc} />
+            <BadgeStsDoc tipo={Detalle.stsdoc} />
           </div>
         </Typography>
         <Box sx={{ bgcolor: theme.palette.pending.light, padding: 1, borderRadius: 1 }}>

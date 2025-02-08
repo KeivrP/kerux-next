@@ -23,7 +23,7 @@ export const columnsOrder: Order[] = [
 export const columnsHeaders: HeadersName[] = [
   { label: "Tipo", icon: null, align: "center", minWidth: 140 },
   {
-    label: "Descripcion",
+    label: "Descripción",
     icon: null,
     align: "left",
     minWidth: 140,

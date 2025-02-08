@@ -107,12 +107,12 @@ export default function DataSheet({
             </div>
             <div className="col-span-2">
               <Typography variant="h3" color="primary">
-                Descripcion Nivel Sum
+                Descripción Nivel Sum
               </Typography>
               <TextField
                 id="descnivsum"
                 {...register("descnivel", {
-                  required: "Descripcion nivel",
+                  required: "Descripción nivel",
                 })}
                 size="small"
                 variant="outlined"

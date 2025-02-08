@@ -106,12 +106,12 @@ export default function DataSheet({
 
             <div className="col-span-2">
               <Typography variant="h3" color="primary">
-                Descripcion
+                Descripción
               </Typography>
               <TextField
                 id="descnivsum"
                 {...register("desccrievalprov", {
-                  required: "Descripcion",
+                  required: "Descripción",
                 })}
                 size="small"
                 variant="outlined"

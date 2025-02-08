@@ -8,14 +8,14 @@ import { ITipodoc } from "../ttdocsum-types";
 
 export const columnsFilter: Filter[] = [
   { id: "TIPO_DOC_LOG.tipodoc", type: "desc", column: "Tipo Doc", value: "" },
-  { id: "desctipodoc", type: "desc", column: "Descripcion", value: "" },
+  { id: "desctipodoc", type: "desc", column: "Descripción", value: "" },
   { id: "TIPO_DOC_LOG.codsis", type: "desc", column: "Sistema", value: "" },
   { id: "TIPO_DOC_LOG.tiposis", type: "desc", column: "Tipo Sistema", value: "" },
 ];
 export const columnsOrder: Order[] = [
   { id: "TIPO_DOC_LOG.tipodoc", column: "Tipo Doc" },
   { id: "TIPO_DOC_LOG.codsis", column: "Sistema" },
-  { id: "desctipodoc", column: "Descripcion" },
+  { id: "desctipodoc", column: "Descripción" },
   { id: "TIPO_DOC_LOG.tiposis", column: "Tipo Sistema" },
 ];
 

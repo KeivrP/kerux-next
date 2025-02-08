@@ -109,7 +109,7 @@ export const TcdclogTable = () => {
             ],
 
             collapsed: (row) => [
-              { name: "Descripcion del Documento", content: row.descdoc },
+              { name: "Descripción del Documento", content: row.descdoc },
               {
                 name: "Beneficiario",
                 content: `${row.numidbenef} - ${row.nombre}`,

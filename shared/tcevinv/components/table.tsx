@@ -215,7 +215,7 @@ export const TcevinvTable = ({ codsis }: TcevinvTableProps) => {
             ],
 
             collapsed: (row) => [
-              { name: "Descripcion de Tipo", content: row.nomubic },
+              { name: "Descripción de Tipo", content: row.nomubic },
               {
                 name: "Unidad de Proceso",
                 content:
