@@ -124,7 +124,7 @@ const HistoriaDocumento = ({ isOpen, onClose, id }: HistoriaDocumentoProps) => {
                   Estatus
                 </Typography>
                 <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-                  <BadgeTipoEven tipo={cabecera?.stsdoc} />
+                  <BadgeTipoEven tipo={cabecera?.stsdoc ?? ""} />
 
                 </ConditionalWrapper>
               </Grid>

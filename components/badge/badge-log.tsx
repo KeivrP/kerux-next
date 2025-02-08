@@ -241,7 +241,7 @@ export const BadgeSolSum: React.FC<BadgeProps> = ({ tipo }) => {
                     </span>
                 </span>
             );
-        case "DEV":
+        case "REV":
             return (
                 <span className="relative group">
 
@@ -252,7 +252,7 @@ export const BadgeSolSum: React.FC<BadgeProps> = ({ tipo }) => {
                         className="absolute bottom-full left-1/2 z-20  -translate-x-1/2 whitespace-nowrap border border-gray-300 rounded-full bg-white py-2 px-4 text-xs text-gray-800 font-medium transition-opacity duration-300 shadow-[0px_12px_30px_-4px_rgba(16,24,40,0.08);] opacity-0 group-hover:opacity-100"
                         role="tooltip"
                     >
-                        Devuelto
+                        Revision
                     </span>
                 </span>
             );
