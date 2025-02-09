@@ -92,9 +92,11 @@ export const columnsHeadersSheet: HeadersName[] = [
 export const AccionesSheet = ({
   row,
   onEdit,
+  onDelete
 }: {
   row: Rengcambio;
-  onEdit: (idsolsum: number) => void;
+  onEdit: (data : Rengcambio) => void;
+  onDelete: (idsolsum: number) => void;
 }) => {
   const theme = useTheme();
 
@@ -118,7 +120,7 @@ export const AccionesSheet = ({
         title="Abrir"
       >
         <IconButton
-          onClick={() => onEdit(row.nroreng)}
+          onClick={() => onEdit(row)}
           color="primary"
           size="small"
         >
@@ -133,7 +135,7 @@ export const AccionesSheet = ({
         title="Abrir"
       >
         <IconButton
-          onClick={() => onEdit(row.nroreng)}
+          onClick={() => onDelete(row.idsolsum)}
           color="primary"
           size="small"
         >

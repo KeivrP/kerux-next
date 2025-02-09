@@ -22,6 +22,7 @@ import { BadgeAct } from '@/components/badge/badge-act';
 import { BadgeTipoEven } from '@/components/badge/badge-log';
 import { Box } from '@mui/material';
 import { EraserIcon, RouteIcon } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface HistoriaDocumentoProps {
   isOpen: boolean;
@@ -32,6 +33,9 @@ interface HistoriaDocumentoProps {
 const HistoriaDocumento = ({ isOpen, onClose, id }: HistoriaDocumentoProps) => {
   const [rows, setRoiws] = useState<DocuemtosRoot>()
   const [cabecera, setCabecera] = useState<Cabiddoc>()
+    const router = useRouter()
+    const pathname = usePathname();
+
 
   const { data, isLoading } = useQueryData({
     entity: "hdoc",
@@ -45,6 +49,14 @@ const HistoriaDocumento = ({ isOpen, onClose, id }: HistoriaDocumentoProps) => {
       setCabecera(data.cabiddoc[0])
     }
   }, [data])
+    
+  const handleEdit = () => {
+ 
+    router.push(`tsolpen/${cabecera?.idsolsum}`);
+
+
+};
+
   const theme = useTheme();
   return (
     <ModalDialog
@@ -62,7 +74,7 @@ const HistoriaDocumento = ({ isOpen, onClose, id }: HistoriaDocumentoProps) => {
           </Typography>
         </span>
 
-        <ButtonForms variant="contained" color="primary" sx={{ mr: 2 }}>
+        <ButtonForms variant="contained" color="primary" sx={{ mr: 2 }} onClick={handleEdit} disabled={!cabecera?.idsolsum}>
           Solicitud
         </ButtonForms>
 

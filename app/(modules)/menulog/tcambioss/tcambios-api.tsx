@@ -13,3 +13,34 @@ export const deleteTcambio = async (idsolsum: string, nrocambio: string): Promis
         throw error;
     }
 }
+
+export const UpdateCambio = async (idsolsum: string, nrocambio: string, nroreng: string, data: any): Promise<Response> => {
+    try {
+        const res = await Api_Log.put(`/rengs_camb_crud`, {
+            idsolsum,
+            nrocambio,
+            nroreng,
+            ...data
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+export const DeleteCambio = async (idsolsum: string, nrocambio: string, nroreng: string): Promise<Response> => {
+    try {
+        const res = await Api_Log.delete(`/rengs_camb_crud`, {
+            params: {
+                idsolsum,
+                nrocambio,
+                nroreng
+            }
+        });
+        return res.data;
+        } catch (error) {
+        console.log(error);
+        throw error;
+        }
+}

@@ -13,6 +13,7 @@ import { formatDate } from "@/utils/main";
 import { BadgeTipodoc } from "@/components/badge/badge-estatus";
 import { BaseTablePagination } from "@/components/table-material/baseTablePagination";
 import HistoriaDocumento from "@/shared/hcdlog/data-sheet";
+import { usePathname, useRouter } from "next/navigation";
 
 
 export const TsolpenTable = () => {
@@ -25,9 +26,6 @@ export const TsolpenTable = () => {
   ]);
   const [filter, setFilter] = useState<Filter[]>([]);
   const [count, setCount] = useState(0);
-  const openFile = (row: string) => {
-    console.log(row);
-  };
 
   const { data, isLoading: updateLoading, refetch } = useQueryData({
     entity: "sols_sums",
@@ -57,11 +55,14 @@ export const TsolpenTable = () => {
     []
   );
 
-  const [open, setOpen] = useState(false);
+  const router = useRouter()
+  const pathname = usePathname();
 
   const handleEdit = (id: number) => {
-    setOpen(true);
-    console.log(id);
+    if (id) {
+      router.push(`${pathname}/${id}`);
+
+    }
   };
 
   const openGenerate = (id: number) => {
@@ -90,7 +91,6 @@ export const TsolpenTable = () => {
           loading={updateLoading}
           rows={rows}
           headers={columnsHeaders}
-          rowAction={(row) => openFile(row)}
           collapsible={{
             visible: (row) => [
               { content: row.idsolsum, handleCollapse: true, align: "left" },
@@ -126,12 +126,6 @@ export const TsolpenTable = () => {
           handleChangeRowsPerPage={handleChangeRowsPerPage}
         ></BaseTablePagination>
       </div>
-
-      <HistoriaDocumento
-        isOpen={open}
-        onClose={setOpen}
-      />
-
     </>
   );
 };
