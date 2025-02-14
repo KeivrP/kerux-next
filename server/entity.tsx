@@ -17,6 +17,7 @@ export const entities = {
 
   // Lists
   log_coddependencia: "/sols_sums_crud/lst_coddependencia",
+  list_renglones: "/listas/lst_rengss_cambio",
   ccosto: "/sols_sums_crud/lst_ccosto",
   lst_tipodoc_log: "/listas/lst_tipodoc_log",
   lst_tdres_log: "/listas/lst_tdres_log",

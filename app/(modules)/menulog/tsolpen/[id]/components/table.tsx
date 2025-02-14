@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import DataSheet from "./edit-table";
 import { calcularTotales } from "../utils";
 import { BadgeSolSum } from "@/components/badge/badge-log";
+import Frengcom from "./frengcomp";
 
 interface DataInputProps extends FormContextProps {
   isLoading: boolean;
@@ -50,6 +51,9 @@ export const FsolsumTable: React.FC<DataInputProps> = ({
   };
 
   const { total, totalIVA, subtotal } = calcularTotales(formData);
+
+  const [open, setOpen] = useState(false)
+
 
   return (
     <>
@@ -167,6 +171,9 @@ export const FsolsumTable: React.FC<DataInputProps> = ({
         }}
       />
       <SimpleBackdrop show={false} />
+
+      <Frengcom open={open} handleClose={() => { setOpen(false) }} row={1} idsolsum={6282} nrorng={1} />
+
     </>
   );
 };

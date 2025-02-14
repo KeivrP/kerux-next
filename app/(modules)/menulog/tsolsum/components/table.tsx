@@ -31,7 +31,6 @@ export const TsolsumTable = () => {
     const [filter, setFilter] = useState<Filter[]>([]);
     const [count, setCount] = useState(0);
     const [isPending, handleLoading] = useState<boolean>(false);
-    const [openModal, setOpenModal] = useState<boolean>(false)
     const router = useRouter()
     const pathname = usePathname();
 

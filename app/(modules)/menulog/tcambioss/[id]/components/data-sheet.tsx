@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from "react";
-import { Autocomplete, Card, CardContent, CardHeader, Checkbox, FormControlLabel, Radio, RadioGroup, TextField, Typography } from "@mui/material";
+import { Autocomplete, Button, Card, CardContent, CardHeader, Checkbox, FormControlLabel, Radio, RadioGroup, TextField, Typography } from "@mui/material";
 import { useQueryData } from "@/server/fetch-data";
 import { AccionesSheet, columnsHeadersSheet } from "../../components/header-table";
 import { BaseTable } from "@/components/table-material/genericTable";
@@ -18,6 +18,9 @@ import EditSheet from "./edit-sheet";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { ConfirmDialog } from "@/components/modal/confirmDialog";
 import { useDeleteRenglon } from "../../hook/useTcambios";
+import ButtonForms from "@/components/button/buttonForms";
+import Frengcom from "../../../tsolpen/[id]/components/frengcomp";
+import NewSheet from "./new-sheet";
 
 interface DataSheetProps {
     id: number;
@@ -168,14 +171,14 @@ export default function DataSheet({
         setOpenDialog(false)
     }
 
-
-
+    const [open, setOpen] = useState(false)
 
 
 
     return (
 
-        <div className="">
+        <div>
+
             {/* Supply Request Section */}
             <Card className="mb-4">
                 <CardHeader className="bg-muted py-2 text-[#142F62]" title="Solicitud de suministro" />
@@ -429,8 +432,19 @@ export default function DataSheet({
 
             {/* Supply Request Details Section */}
             <Card className="mb-4">
-                <CardHeader className="bg-muted py-2 text-[#142F62]" title="Renglones de la solicitud de suministro">
-                </CardHeader>
+                <CardHeader className="bg-muted py-2 text-[#142F62] flex justify-between items-center"
+                    title="Renglones de la solicitud de suministro"
+                    action={
+                        <Button
+                        onClick={() => setOpen(true)}
+                        variant="contained"
+                        color={"primary"}
+                        sx={{ textTransform: "none" }}
+                      >
+                        <Typography variant="h3">{ "+ AÑADIR"}</Typography>
+                      </Button>
+                    }
+                />
                 <CardContent className="p-4">
                     <div
                         style={{
@@ -503,6 +517,7 @@ export default function DataSheet({
 
             <EditSheet refetch={() => refetch()} isOpen={isOpen} onClose={() => { setIsOpen(false); setDataRow(null) }} data={dataRow as Rengcambio} />
             <SimpleBackdrop show={isFetching} />
+            <NewSheet idsolsum={idsolsum} nrocambio={(rows?.rengcambio?.length || 0) + 1} onClose={() => { setOpen(false); setDataRow(null) } } refetch={() => refetch()} isOpen={open}  />
         </div>
     );
 }

@@ -79,16 +79,17 @@ export const FsolsumTable: React.FC<DataInputProps> = ({
               { content: row.dsp_DescNombNorm, align: "left" },
               { content: row.tiporeng !== "MT" ? row.codserv : row.coditem, align: "center" },
               { content: row.descreng, align: "left" },
-              {
-                content: <BadgeModule codmenu={row.destino} />,
-                align: "center",
-              },
-              { content: <BadgeSolSum tipo={row.stsrngsol} />, align: "center" },
+             
               { content: row.unidbasica, align: "center" },
               { content: row.cantsol, align: "center" },
               { content: formatCurrency(row?.precio), align: "center" },
               { content: row.porcimptos, align: "center" },
               { content: formatCurrency(row.dsp_MtoTotReng), align: "center" },
+              {
+                content: <BadgeModule codmenu={row.destino} />,
+                align: "center",
+              },
+              { content: <BadgeSolSum tipo={row.stsrngsol} />, align: "center" },
               {
                 content: (
                   <Acciones

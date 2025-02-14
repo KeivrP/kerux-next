@@ -52,10 +52,11 @@ export default function DataSheet({
       codclasifsnc: "",
       destino: "",
       descadiitem: "",
-      stsrngsol: "",
+      stsrngsol: "PGN",
       mtototrng: "",
       codserv: "",
       codnombre: "",
+      idsolsum: 0
     }
   });
 
@@ -63,6 +64,8 @@ export default function DataSheet({
   const coditem = watch("coditem");
   const codnombre = watch("codnombre");
   const unidbasica = watch('unidbasica')
+
+  console.log(row)
 
   useEffect(() => {
     if (isOpen) {
@@ -80,9 +83,10 @@ export default function DataSheet({
         codclasifsnc: row.codclasifsnc || "",
         destino: row.destino,
         descadiitem: row.descadiitem,
-        stsrngsol: row.stsrngsol,
+        stsrngsol: row.stsrngsol === "" ? "PGN" : row.stsrngsol,
         mtototrng: row.mtototrng,
         codserv: row.codserv,
+        idsolsum: formData.cabsolsum.idsolsum
       });
     }
   }, [isOpen, row, reset]);
@@ -106,24 +110,28 @@ export default function DataSheet({
   );
 
   useEffect(() => {
-    if (tiporeng === "SV") {
-      setValue("destino", "COMP");
-    } else if (tiporeng === "MA") {
-      setValue("destino", "MTTO");
-    } else if (["OB", "AD"].includes(tiporeng)) {
-      setValue("destino", "CTTO");
-    } else {
-      setValue("destino", "");
+    if (row.destino === "") {
+      if (tiporeng === "SV") {
+        setValue("destino", "COMP");
+      } else if (tiporeng === "MA") {
+        setValue("destino", "MTTO");
+      } else if (["OB", "AD"].includes(tiporeng)) {
+        setValue("destino", "CTTO");
+      } else {
+        setValue("destino", "");
+      }
     }
   }, [tiporeng]);
 
   const { data: lst_nombnorm, isLoading: isLoadingNombnorm } = useQueryData({
     entity: "nombnorm",
+    enabled: tiporeng === "MT",
     dependency: [tiporeng],
   });
 
   const { data: lst_itemcat, isLoading: isLoadingItemcat } = useQueryData({
     entity: "itemcat",
+    enabled: watch("tiporeng") === "MT" && watch("codnombre") !== "",
     params: {
       idsolsum: formData.cabsolsum.idsolsum,
       codnombre: codnombre,
@@ -144,6 +152,7 @@ export default function DataSheet({
   const { data: lst_servicioscat, isLoading: isLoadingServicioscat } =
     useQueryData({
       entity: "servicioscat",
+      enabled: tiporeng !== "MT" && tiporeng !== "",
       params: {
         tiporeng: tiporeng,
         idsolsum: formData.cabsolsum.idsolsum,
@@ -214,7 +223,7 @@ export default function DataSheet({
               setValue("unidbasica", newValue ? newValue.unidbasica : "");
               setValue("codcta", newValue ? newValue.codcta : "");
               setValue("codclasifsnc", newValue ? newValue.codclasifsnc : "");
-              setValue("destino", newValue ? newValue.tiposumin : "");
+              setValue("destino", newValue ? newValue.tiposumin : row.destino);
               setValue("descadiitem", newValue ? newValue.descadicional : "");
               setValue("descreng", newValue ? newValue.dsp_DescAmpliada : "");
               /*                     setValue("codmoneda", newValue ? newValue.codmoneda : ""); */
@@ -264,7 +273,7 @@ export default function DataSheet({
               setValue("unidbasica", newValue ? newValue.unidbasica : "");
               setValue("codcta", newValue ? newValue.codcta : "");
               setValue("codclasifsnc", newValue ? newValue.codclasifsnc : "");
-              setValue("destino", newValue ? newValue.tiposumin : "");
+              setValue("destino", newValue ? newValue.tiposumin : row.destino);
               setValue("descadiitem", newValue ? newValue.descadicional : "");
               setValue("descreng", newValue ? newValue.dsp_DescAmpliada : "");
               /*                     setValue("codmoneda", newValue ? newValue.codmoneda : ""); */
@@ -361,7 +370,7 @@ export default function DataSheet({
           <Grid container spacing={2} padding={2}>
             <Grid size={2.5}>
               <Typography variant="h3" color="primary" mb={2}>
-                Tipo Renglón
+                Tipo
               </Typography>
               <ConditionalWrapper
                 condition={isLoadingTipo}
@@ -403,7 +412,7 @@ export default function DataSheet({
 
             <Grid size={3.5}>
               <Typography variant="h3" color="primary" mb={2}>
-                Nombre Renglón
+                Nombre Normalizado
               </Typography>
               <ConditionalWrapper
                 condition={isLoadingNombnorm}
@@ -497,42 +506,48 @@ export default function DataSheet({
                 id="cantsol"
                 {...register("cantsol", {
                   required: "Cantidad requerida",
-                  pattern: {
-                    value: /^[0-9]+$/,
-                    message: "Solo se permiten números",
-                  },
+ 
                 })}
                 size="small"
-                type="number"
-                inputMode="numeric"
+                inputMode="decimal"
                 fullWidth
                 margin="normal"
                 error={!!errors.cantsol}
                 helperText={errors.cantsol?.message}
+                InputProps={{
+                  inputProps: {
+                  step: "0.01",
+                  },
+                }}
               />
             </Grid>
 
             <Grid size={4}>
               <Typography variant="h3" color="primary">
-                Costo Unidad
+              Costo Unidad
               </Typography>
               <TextField
-                id="precio"
-                {...register("precio", {
-                  required:
-                    formData.cabsolsum.reserva !== "N"
-                      ? "Costo requerido"
-                      : undefined,
-                })}
-                size="small"
-                variant="outlined"
-                type="number"
-                fullWidth
-                inputMode="numeric"
-                margin="normal"
-                error={!!errors.precio}
-                helperText={errors.precio?.message}
-                disabled={formData.cabsolsum.reserva === "N"}
+              id="precio"
+              {...register("precio", {
+                required:
+                formData.cabsolsum.reserva !== "N"
+                  ? "Costo requerido"
+                  : undefined,
+              })}
+              size="small"
+              variant="outlined"
+              type="number"
+              fullWidth
+              inputMode="decimal"
+              margin="normal"
+              error={!!errors.precio}
+              helperText={errors.precio?.message}
+              disabled={formData.cabsolsum.reserva === "N"}
+              InputProps={{
+                inputProps: {
+                step: "0.01",
+                },
+              }}
               />
             </Grid>
 

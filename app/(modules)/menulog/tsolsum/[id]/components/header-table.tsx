@@ -5,17 +5,17 @@ import { Detsolsum } from "../../tsolsum-types";
 
 export const columnsHeaders: HeadersName[] = [
   { label: "N°", align: "center", minWidth: 60 },
-  { label: "Tipo", align: "left", minWidth: 140 },
-  { label: "Nombre", align: "left", minWidth: 180 },
+  { label: "Tipo", align: "left", minWidth: 80 },
+  { label: "Nombre", align: "left", minWidth: 120 },
   { label: "Item", align: "center", minWidth: 100 },
-  { label: "Descripción", align: "left", width: 240 },
-  { label: "Destino", align: "center", width: 80 },
-  { label: "Estatus", align: "center", width: 80 },
+  { label: "Descripción", align: "left", minWidth: 240 },
   { label: "Und.", align: "center", width: 80 },
   { label: "Cant", align: "center", width: 80 },
   { label: "Costo unitario", align: "center", minWidth: 80 },
   { label: "Iva", align: "center", width: 80 },
   { label: "Total", align: "center", minWidth: 80 },
+  { label: "Destino", align: "center", width: 80 },
+  { label: "Estatus", align: "center", width: 80 },
   { label: "Acción", align: "center", width: 80 },
 ];
 

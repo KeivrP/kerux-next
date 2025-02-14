@@ -1,4 +1,4 @@
-import { CircleCheck, CircleMinus } from "lucide-react";
+import { CheckCircle, Circle } from "lucide-react";
 import React from "react";
 
 interface BadgeActProps {
@@ -10,13 +10,13 @@ export function BadgeAct({ status }: BadgeActProps) {
     case "S":
       return (
         <span className="flex justify-center items-center">
-          <CircleCheck className="text-emerald-500" />
+          <CheckCircle className="text-emerald-500" />
         </span>
       );
     case "N":
       return (
         <span className="flex justify-center items-center">
-          <CircleMinus className="text-red-500" />
+          <Circle className="text-red-500" />
         </span>
       );
     default:

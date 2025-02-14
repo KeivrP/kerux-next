@@ -28,6 +28,17 @@ export const UpdateCambio = async (idsolsum: string, nrocambio: string, nroreng:
         throw error;
     }
 }
+export const CreateCambio = async ( data: any): Promise<Response> => {
+    try {
+        const res = await Api_Log.post(`/rengs_camb_crud`, {
+            rengcambioss: data
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
 
 export const DeleteCambio = async (idsolsum: string, nrocambio: string, nroreng: string): Promise<Response> => {
     try {
