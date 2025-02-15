@@ -11,11 +11,13 @@ import { Order } from "@/components/button/OrderButton";
 import { ConfirmDialog } from "@/components/modal/confirmDialog";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { BadgeAct } from "@/components/badge/badge-act";
+import ActionCardReasignarHeader from "@/components/card/actionCardReasignarHeader";
+import Checkbox from "@/components/checkbox/checkbox";
+import { useReAsignar } from "../hook/useReasignAll";
 
 export const Treacotcomp = () => {
 
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(25);
   const [rows, setRows] = useState<ITreacotcomp[]>([]);
   const [order, setOrder] = useState<Order[]>([
   {}
@@ -23,12 +25,16 @@ export const Treacotcomp = () => {
   const [filter, setFilter] = useState<Filter[]>([]);
   const [count, setCount] = useState(0);
 
+  const [rowsPerPage, setRowsPerPage] = useState(25);
+  const [selectedRows, setSelectedRows] = useState<ITreacotcomp[]>([]);
+  const [isSelected, setIsSelected] = useState<boolean>(false);
   const isPending = false;
   /* ------------------ USEEFFECT PARA TRAER LA DATA DE LA BD ----------------- */
 
 
+  const { mutate, isPending: reAsingLoading } = useReAsignar();
 
-  const { data, isLoading } = useQueryData({
+  const { data, isLoading, refetch } = useQueryData({
     entity: "cotizaciones",
     api: 'comp',
     params: {
@@ -43,6 +49,10 @@ export const Treacotcomp = () => {
     setRows(data?.Cotizacioneslist || []);
     setCount(data?.total);
   }, [data]);
+
+  useEffect(() => {
+    refetch();
+  }, [reAsingLoading]);
 
   const handlePageChange = useCallback(
     (_: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
@@ -83,9 +93,32 @@ export const Treacotcomp = () => {
     console.log(`Edit ${idsolsum}`);
   };
 
+    const handleRowSelect = (row: ITreacotcomp) => {
+        setSelectedRows((prevRows) => {
+            // Si el row ya está seleccionado, lo removemos del array
+            var selectedRows = prevRows;
+            if (prevRows.includes(row)) {
+               selectedRows = prevRows.filter((item) => item !== row);
+            }
+            // Si el row no está seleccionado, lo agregamos al array
+            else {
+                selectedRows = [...prevRows, row];
+            }
+
+
+           if (selectedRows.length > 0) {
+            setIsSelected(true);
+           }
+           else {
+            setIsSelected(false);
+           }
+
+          return selectedRows;
+        });
+    };
   return (
     <>
-      <ActionCardHeader
+      <ActionCardReasignarHeader
         add={() => { console.log('anadir') }}
         onApplyFilter={(filters) => setFilter(filters)}
         columnsFilter={columnsFilter}
@@ -93,6 +126,10 @@ export const Treacotcomp = () => {
         columnsOrder={columnsOrder}
         setFilter={setFilter}
         setOrder={setOrder}
+        isAddButtonVisible={false}
+        titleButton={"REASIGNAR"}
+        isAddButtonAdicionalActive={!isSelected}
+        reasignar={(codComprador) => { mutate({numcot:selectedRows.map((item) => item.numcot),codcomprador:codComprador})} }
       />
 
       <div
@@ -106,8 +143,27 @@ export const Treacotcomp = () => {
           rows={rows}
           headers={columnsHeadersTreacotcomp }
           rowAction={(row) => console.log(row)}
+                    addCheckboxColumn={true}
+                    onSelectionChange={(selectedRowIndices) => {
+                        const updateSelect = selectedRowIndices.map((index) => rows[index]); // Seleccionar todo lo que aparezca
+                        setSelectedRows(updateSelect);
+                        if (selectedRowIndices.length > 0) {
+                          setIsSelected(true);
+                        }
+                        else {
+                          setIsSelected(false);
+                        }
+                    }}
           collapsible={{
             visible: (row) => [
+                            {
+                                content: (
+                                    <Checkbox //selecionar uno a uno
+                                        checked={selectedRows.includes(row)}
+                                        onChange={() => handleRowSelect(row)}
+                                    />
+                                ),
+                            },
                      { content: row.numcot, align: "left" },
                      { content: row.stscot, align: "left" },
                      { content: row.feccot, align: "left" },
