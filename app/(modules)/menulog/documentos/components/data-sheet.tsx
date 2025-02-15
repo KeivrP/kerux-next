@@ -19,6 +19,10 @@ import { SkeletonInput } from '@/components/skeleton/detail';
 import { Input, Textarea } from '@/components/ui/input';
 import { BadgeTipoComp } from '@/components/badge/badge-estatus';
 import { BadgeAct } from '@/components/badge/badge-act';
+import { BadgeTipoEven } from '@/components/badge/badge-log';
+import { Box } from '@mui/material';
+import { EraserIcon, RouteIcon } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface HistoriaDocumentoProps {
   isOpen: boolean;
@@ -29,6 +33,9 @@ interface HistoriaDocumentoProps {
 const HistoriaDocumento = ({ isOpen, onClose, id }: HistoriaDocumentoProps) => {
   const [rows, setRoiws] = useState<DocuemtosRoot>()
   const [cabecera, setCabecera] = useState<Cabiddoc>()
+    const router = useRouter()
+    const pathname = usePathname();
+
 
   const { data, isLoading } = useQueryData({
     entity: "hdoc",
@@ -42,6 +49,14 @@ const HistoriaDocumento = ({ isOpen, onClose, id }: HistoriaDocumentoProps) => {
       setCabecera(data.cabiddoc[0])
     }
   }, [data])
+    
+  const handleEdit = () => {
+ 
+    router.push(`tsolpen/${cabecera?.idsolsum}`);
+
+
+};
+
   const theme = useTheme();
   return (
     <ModalDialog
@@ -50,16 +65,21 @@ const HistoriaDocumento = ({ isOpen, onClose, id }: HistoriaDocumentoProps) => {
       dialogOpen={isOpen}
       handleClose={() => onClose()}
     >
-      <div className='flex justify-end mr-5'>
 
-        <ButtonForms variant="contained" color="primary" sx={{ mr: 2 }}>
+      <div className='flex justify-between items-center px-5'>
+        <span className='flex items-center'>
+          <RouteIcon />
+          <Typography variant="body2" style={{ marginLeft: "8px", marginRight: '8px', color: theme.palette.primary.main }}>
+            Id Doc. {cabecera?.iddoc}
+          </Typography>
+        </span>
+
+        <ButtonForms variant="contained" color="primary" sx={{ mr: 2 }} onClick={handleEdit} disabled={!cabecera?.idsolsum}>
           Solicitud
         </ButtonForms>
-        <ButtonForms color="secondary">
-          Mensaje
-        </ButtonForms>
+
       </div>
-      <Grid container spacing={4} padding={2}>
+      <Grid container spacing={2} padding={2}>
 
         {/* Información principal del documento */}
         <Card className="">
@@ -79,21 +99,6 @@ const HistoriaDocumento = ({ isOpen, onClose, id }: HistoriaDocumentoProps) => {
                   />
                 </ConditionalWrapper>
               </Grid>
-
-              <Grid size={10}>
-                <Typography variant="h3" color="primary" >
-                  Descripción
-                </Typography>
-                <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-                  <Input
-                    className='bg-muted'
-
-                    disabled
-                    defaultValue={cabecera?.descdoc}
-                  />
-                </ConditionalWrapper>
-              </Grid>
-
               <Grid size={2}>
                 <Typography variant="h3" color="primary" >
                   Tipo
@@ -107,7 +112,7 @@ const HistoriaDocumento = ({ isOpen, onClose, id }: HistoriaDocumentoProps) => {
                   />
                 </ConditionalWrapper>
               </Grid>
-              <Grid size={7} mt={2.5}>
+              <Grid size={5} mt={2.5}>
                 <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
                   <Input
                     className='bg-muted'
@@ -131,8 +136,21 @@ const HistoriaDocumento = ({ isOpen, onClose, id }: HistoriaDocumentoProps) => {
                   Estatus
                 </Typography>
                 <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-                  <BadgeTipoComp tipo={cabecera?.stsdoc} />
+                  <BadgeTipoEven tipo={cabecera?.stsdoc ?? ""} />
 
+                </ConditionalWrapper>
+              </Grid>
+              <Grid size={12}>
+                <Typography variant="h3" color="primary" >
+                  Descripción
+                </Typography>
+                <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
+                  <Input
+                    className='bg-muted'
+
+                    disabled
+                    defaultValue={cabecera?.descdoc}
+                  />
                 </ConditionalWrapper>
               </Grid>
               <Grid size={12}>
@@ -195,7 +213,7 @@ const HistoriaDocumento = ({ isOpen, onClose, id }: HistoriaDocumentoProps) => {
                   <Input
                     className='bg-muted'
                     disabled
-                    defaultValue={formatCurrency(cabecera?.mtodoc!)}
+                    defaultValue={formatCurrency(cabecera?.mtodoc ?? "0")}
                   />
                 </ConditionalWrapper>
               </Grid>
@@ -207,32 +225,39 @@ const HistoriaDocumento = ({ isOpen, onClose, id }: HistoriaDocumentoProps) => {
                   <BadgeModule codmenu={cabecera?.origen!} />
                 </ConditionalWrapper>
               </Grid>
+              <Grid size={12}>
+                {cabecera?.mensaje &&
+                  <Box sx={{ bgcolor: theme.palette.pending.light, padding: 1, borderRadius: 1 }}>
+                    <Typography>
+                      <b>Mensaje:</b> {cabecera?.mensaje}
+                    </Typography>
+                  </Box>}
+              </Grid>
             </Grid>
           </CardContent>
         </Card>
-        {/* Situación actual */}
-        <Grid size={12} >
-          <Card style={{ backgroundColor: '#f1f5f9' }} className="bg-muted">
-            <CardContent className="pt-6">
-              <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
-                <div className="space-y-2">
-                  <Typography variant="h3" color="primary" >
-                    Situación actual
-                  </Typography>
-                  <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-                    <div className="text-sm">El Documento esta {cabecera?.maximo_evento.descstsevento ?? ""} por {cabecera?.maximo_evento?.CodSisDest?.descripcion ?? ""} desde {formatDate(cabecera?.maximo_evento?.fecevento!)} </div>
-                  </ConditionalWrapper>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </Grid>
-
         {/* Historial del documento */}
         <Grid size={12}>
           <Card className="">
             <CardHeader className="bg-muted py-2 text-[#142F62]" title="Historial del Documento" />
             <CardContent className="">
+            <Typography
+            color={theme.palette.primary.dark}
+            style={{ textTransform: "capitalize", fontWeight: 600 }}
+          >
+            <div
+              style={{
+                display: "inline-block",
+                verticalAlign: "middle",
+              }}
+            >
+              <EraserIcon />
+            </div>
+            <div style={{ display: "inline-block", marginLeft: 5 }}>
+              El Documento esta {cabecera?.maximo_evento.descstsevento ?? ""} por {cabecera?.maximo_evento?.CodSisDest?.descripcion ?? ""} desde {formatDate(cabecera?.maximo_evento?.fecevento!)}
+            </div>
+          </Typography>
+
               <div
                 style={{
                   height: "25vh",

@@ -8,32 +8,28 @@ import { Search, Table } from "lucide-react";
 import { Box } from "@mui/material";
 import { BaseTable } from "@/components/table-material/genericTable";
 import { BadgeTipodoc } from "@/components/badge/badge-estatus";
-import { columnsHeaders, columnsHeadersSheet } from "./header-table";
+import { columnsFilter, columnsHeaders, columnsHeadersSheet, columnsOrder } from "./header-table";
 import BadgeModule from "@/components/badge/badge-mod";
+import ActionCardHeader from "@/components/card/actionCardHeader";
+import { Order } from "@/components/button/OrderButton";
+import { Filter } from "@/components/button/FilterButton";
 
 
 export default function TtcambiossQuery(): JSX.Element {
     const [rows, setRows] = useState([]);
-    const [searchQuery, setSearchQuery] = useState<string>("");
+      const [order, setOrder] = useState<Order[]>([
+        { column: "N°", id: "idsolsum", operator: "DESC" },
+      ]);
+      const [filter, setFilter] = useState<Filter[]>([]);
 
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-        setSearchQuery(event.target.value);
-    };
 
-    const filteredRows = rows.filter((row: any): boolean => {
-        const searchTermLower = searchQuery.toLowerCase();
-        return (
-            row.idsolsum.toString().toLowerCase().includes(searchTermLower) ||
-            row.nrocambio.toString().toLowerCase().includes(searchTermLower) ||
-            row.desccambio.toLowerCase().includes(searchTermLower) ||
-            row.stscamb.toLowerCase().includes(searchTermLower)
-        );
-    });
+
     const [selectedMovement, setSelectedMovement] = useState<any>({ idsolsum: 0 });
 
     const { data: data2, isLoading: is } = useQueryData({
         entity: "tcambioss",
-        dependency: [],
+        params: { page: 1, per: 25, filter, order },
+        dependency: [filter, order],
     });
 
     useEffect(() => {
@@ -43,6 +39,7 @@ export default function TtcambiossQuery(): JSX.Element {
     const { data, isLoading } = useQueryData({
         entity: "show_rng",
         dependency: [selectedMovement],
+        enabled: selectedMovement > 1,
         params: {
             idsolsum: selectedMovement,
             nrocambio: 1
@@ -57,11 +54,21 @@ export default function TtcambiossQuery(): JSX.Element {
                 {/* Main Content */}
                 <Grid size={12}>
 
+
                     <Grid container spacing={3}>
                         {/* Movements List */}
                         <Grid size={{ xs: 12, }}>
-                            <Card>
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, padding: 2 }}>
+                                <ActionCardHeader
+                                    isAddButtonVisible={false}
+                                    onApplyFilter={(filters) => setFilter(filters)}
+                                    columnsFilter={columnsFilter}
+                                    onApplyOrder={(orders) => setOrder(orders)}
+                                    columnsOrder={columnsOrder}
+                                    setFilter={setFilter}
+                                    setOrder={setOrder}
+                             
+                                />
+                                {/*          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, padding: 2 }}>
                                     <TextField
                                         fullWidth
                                         placeholder="Buscar movimientos..."
@@ -78,13 +85,12 @@ export default function TtcambiossQuery(): JSX.Element {
                                     <Typography variant="body2" color="text.secondary">
                                         Total: {data2?.total} registros
                                     </Typography>
-                                </Box>
+                                </Box> */}
                                 <CardHeader
                                     title="Movimientos de Cambio"
                                     titleTypographyProps={{ variant: 'h3', color: '#0f065a' }}
                                 />
                                 <Divider />
-                                <CardContent>
                                     <div
                                         style={{
                                             height: "25vh",
@@ -93,7 +99,7 @@ export default function TtcambiossQuery(): JSX.Element {
                                     >
                                         <BaseTable
                                             loading={is}
-                                            rows={filteredRows}
+                                            rows={rows}
                                             headers={columnsHeaders}
                                             collapsible={{
                                                 visible: (row) => [
@@ -112,19 +118,17 @@ export default function TtcambiossQuery(): JSX.Element {
                                             }}
                                         />
                                     </div>
-                                </CardContent>
-                            </Card>
+                     
                         </Grid>
 
                         {/* Details Panel */}
                         <Grid size={{ xs: 12, }}>
-                            <Card>
                                 <CardHeader
                                     title={selectedMovement > 1 ? 'Detalles del Movimiento' : 'Seleccione un movimiento'}
                                     titleTypographyProps={{ variant: 'h3', color: '#0f065a' }}
                                 />
                                 <Divider />
-                                <CardContent>
+                                
                                     {selectedMovement > 1 ? (
                                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                                             {/* Details Table */}
@@ -135,7 +139,7 @@ export default function TtcambiossQuery(): JSX.Element {
                                                     headers={columnsHeadersSheet}
                                                     collapsible={{
                                                         visible: (row) => [
-                                                            { content: row.nroreng, handleCollapse: true ,align: "center" },
+                                                            { content: row.nroreng, handleCollapse: true, align: "center" },
                                                             { content: row.tiporeng, align: "center" },
                                                             { content: row.codigo, align: "center" },
                                                             { content: row.descreng, align: "left" },
@@ -154,25 +158,25 @@ export default function TtcambiossQuery(): JSX.Element {
 
                                                         collapsed: (row) => [
                                                             { name: "Cuenta Presupuestaria", content: row.codcta },
-                                                        {
-                                                            name: "Descripcion de cuenta presupuestaria",
-                                                            content: row.desccta,
-                                                        },
-                                                        {
-                                                            name: "Fecha de ultima compra",
-                                                            content: row.fecultcom,
-                                                        },
-                                                        {
-                                                            name: "Moneda",
-                                                            content: row.codmoneda,
-                                                        },
-                                                        {
-                                                            name: "Descripcion Adicional",
-                                                            content: row.descadiitem,
-                                                        },
-                                                                                                            
-                                                
-                                                    ],
+                                                            {
+                                                                name: "Descripción de cuenta presupuestaria",
+                                                                content: row.desccta,
+                                                            },
+                                                            {
+                                                                name: "Fecha de ultima compra",
+                                                                content: row.fecultcom,
+                                                            },
+                                                            {
+                                                                name: "Moneda",
+                                                                content: row.codmoneda,
+                                                            },
+                                                            {
+                                                                name: "Descripción Adicional",
+                                                                content: row.descadiitem,
+                                                            },
+
+
+                                                        ],
                                                     }}
                                                 />
                                             </Paper>
@@ -185,8 +189,6 @@ export default function TtcambiossQuery(): JSX.Element {
                                             </Typography>
                                         </Box>
                                     )}
-                                </CardContent>
-                            </Card>
                         </Grid>
                     </Grid>
                 </Grid>

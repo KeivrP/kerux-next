@@ -6,7 +6,7 @@ import { HeadersName } from "@/components/table-material/genericTable";
 export const columnsFilter: Filter[] = [
   { id: "nombre", type: "desc", column: "Nombre", value: "" },
   { id: "apellido", type: "desc", column: "Apellido", value: "" },
-  { id: "cedula", type: "number", column: "cedula", value: "" },
+  { id: "cédula", type: "number", column: "cédula", value: "" },
   { id: "BENEFICIARIOS.nombre", type: "desc", column: "Nombre Beneficario", value: "" },
 ];
 export const columnsOrder: Order[] = [

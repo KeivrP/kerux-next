@@ -1,6 +1,6 @@
 import React from "react";
 import { Typography } from "@mui/material";
-import { CircleSlash, CircleX } from "lucide-react";
+import { CircleSlash, CircleX, SaveIcon } from "lucide-react";
 import { useFormContextFsolsum } from "@/provider/fsolsum-provider";
 import { useQueryData } from "@/server/fetch-data";
 import { useAnularTnivsum, useGenerateTnivsum, useUpdateFsolsum } from "../../hook/useTsolsum";
@@ -117,10 +117,12 @@ const DataSheet = ({ id }: DataSheetProps) => {
           <ButtonForms
             onClick={handleSave}
             disabled={!hasChanges}
-            variant="contained"
             color="primary"
           >
-            Guardar
+            <SaveIcon size={18} />
+            <Typography variant="h3" marginLeft={1}>
+              Guardar
+            </Typography>
           </ButtonForms>
         )}
       </Tabs>

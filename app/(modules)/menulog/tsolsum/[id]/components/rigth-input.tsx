@@ -138,7 +138,7 @@ const RightInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
           color="primary"
           sx={{ marginBottom: "0.65rem" }}
         >
-          Recepcion
+          Recepción
         </Typography>
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
           <Input
@@ -261,7 +261,7 @@ const RightInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
       </Grid>
       <Grid size={4}>
         <Typography variant="h3" color="primary">
-          ID
+          ID Reserva
         </Typography>
         <ConditionalWrapper
           condition={isLoadingIddocres || isLoading}
@@ -306,7 +306,7 @@ const RightInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
       </Grid>
       <Grid size={6}>
         <Typography variant="h3" color="primary" mb={1}>
-          Id Doc Externo
+          ID Doc Externo
         </Typography>
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
           <Input value={formData.cabsolsum.iddocexterno} disabled />

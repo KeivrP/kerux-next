@@ -51,7 +51,7 @@ export default function TrutasPage() {
             </div>
             <div className="flex-1">
               <Typography variant="h3" sx={{ marginBottom: 1, color: theme.palette.primary.main }}>
-              Descripcion
+              Descripción
               </Typography>
               <Input defaultValue={`${ruta.descruta}`} disabled />
             </div>

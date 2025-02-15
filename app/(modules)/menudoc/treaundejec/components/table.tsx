@@ -8,9 +8,7 @@ import ActionCardHeader from "@/components/card/actionCardHeader";
 import { Filter } from "@/components/button/FilterButton";
 import { Order } from "@/components/button/OrderButton";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
-import {BadgeTipodoc} from "@/components/badge/badge-estatus";
 import { formatCurrency, formatDate } from "@/utils/main";
-import Hcdocorg from "@/shared/hcdocorg/Hcdocorg";
 import Checkbox from "@/components/checkbox/checkbox";
 import { CornerUpLeft } from "lucide-react";
 import { useReassignDocumentUA } from "../hook/useReassignDoc";
@@ -18,6 +16,7 @@ import { OptionType } from "@/types/main";
 import _ from "lodash";
 import { Documentoslist } from "../../tdocfin/tdocfin-types";
 import AutocompleteAsync from "@/components/ui/autocompleteAsync";
+import { BadgeStsDoc } from "@/components/badge/badge-log";
 
 
 export const TreaundejecTable = () => {
@@ -176,7 +175,7 @@ export const TreaundejecTable = () => {
                             { content: row.iddoc, align: "left", handleCollapse: true },
                             { content: row.tipodoc, align: "center" },
                             { content: formatDate(row.fecdoc), align: "center" },
-                            { content: <BadgeTipodoc tipo={row.stsdoc} />, align: "center" },
+                            { content: <BadgeStsDoc tipo={row.stsdoc} />, align: "center" },
                             {
                                 content: `${formatCurrency(row.mtodoc)} ${row.codmonedamtodoc}`,
                                 align: "right",

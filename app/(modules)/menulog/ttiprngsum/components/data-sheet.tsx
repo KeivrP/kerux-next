@@ -94,12 +94,12 @@ export default function DataSheet({
             </div>
             <div className="col-span-1">
               <Typography variant="h3" color="primary">
-                Descripcion
+                Descripción
               </Typography>
               <TextField
                 id="desctiporeng"
                 {...register("desctiporeng", {
-                  required: "Descripcion nivel",
+                  required: "Descripción nivel",
                 })}
                 size="small"
                 variant="outlined"

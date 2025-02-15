@@ -15,11 +15,11 @@ import { Order } from "@/components/button/OrderButton";
 
 import { ITsolsum } from "../tsolsum-types";
 import { formatDate } from "@/utils/main";
-import {BadgeTipodoc} from "@/components/badge/badge-estatus";
 import { useGenerateTnivsum } from "../hook/useTsolsum";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { ConfirmDialog } from "@/components/modal/confirmDialog";
 import { usePathname, useRouter } from "next/navigation";
+import { BadgeSolSum } from "@/components/badge/badge-log";
 
 export const TsolsumTable = () => {
     const [page, setPage] = useState(0);
@@ -31,7 +31,6 @@ export const TsolsumTable = () => {
     const [filter, setFilter] = useState<Filter[]>([]);
     const [count, setCount] = useState(0);
     const [isPending, handleLoading] = useState<boolean>(false);
-    const [openModal, setOpenModal] = useState<boolean>(false)
     const router = useRouter()
     const pathname = usePathname();
 
@@ -105,15 +104,15 @@ export const TsolsumTable = () => {
     }
     const handleOpen = (id: number) => {
         if (id) {
-          router.push(`${pathname}/${id}`);
-    
+            router.push(`${pathname}/${id}`);
+
         }
-      };
+    };
 
     return (
         <>
             <ActionCardHeader
-                add={()=> router.push(`${pathname}/${"-"}`)}
+                add={() => router.push(`${pathname}/${"-"}`)}
                 onApplyFilter={(filters) => setFilter(filters)}
                 columnsFilter={columnsFilter}
                 onApplyOrder={(orders) => setOrder(orders)}
@@ -139,7 +138,7 @@ export const TsolsumTable = () => {
                             { content: formatDate(row.fecsol), align: "center" },
                             { content: row.desccorta, align: "left", whiteSpace: "normal" },
                             { content: row.ccosto, align: "center" },
-                            { content: <BadgeTipodoc tipo={row.stssol} />, align: "center" },
+                            { content: <BadgeSolSum tipo={row.stssol} />, align: "center" },
                             {
                                 content: <Acciones row={row} onOpen={handleOpen} onReject={() => { }} onGenerate={openGenerate} />,
                                 action: () => null,
@@ -148,7 +147,7 @@ export const TsolsumTable = () => {
                         ],
 
                         collapsed: (row: ITsolsum) => [
-                            { name: "Descripcion General", content: row?.descsolsum },
+                            { name: "Descripción General", content: row?.descsolsum },
                             { name: "Centro de Costo", content: row.desccosto },
                         ],
                     }}
@@ -162,7 +161,7 @@ export const TsolsumTable = () => {
                 ></BaseTablePagination>
             </div>
             <ConfirmDialog
-            title={"Generar Solicitud?"}
+                title={"Generar Solicitud?"}
                 mode={"confirm"}
                 open={openConfirm}
                 onConfirm={handleConfirmDelete}
@@ -170,7 +169,7 @@ export const TsolsumTable = () => {
                 text={`¿Estas seguro que deseas Generar la Solicitud ${rows.find((row) => row.idsolsum == generaID)?.idsolsum}?`}
             />
             <SimpleBackdrop show={isPending} />
-           
+
         </>
     );
 };

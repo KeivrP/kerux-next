@@ -24,12 +24,7 @@ export default function Home() {
         <p className="text-lg text-gray-600 mb-8">
           Gestiona tus suminstros de forma eficiente y sencilla.
         </p>
-        <a
-          href="/documentos"
-          className="inline-block px-6 py-3 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition duration-200 transform hover:scale-105"
-        >
-          Comenzar
-        </a>
+        
       </div>
     </div>
   );

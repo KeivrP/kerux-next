@@ -8,17 +8,17 @@ import LongMenu, { DeleteIcon, OpenIcon } from "@/components/icons/table-icon";
 
 export const columnsFilter: Filter[] = [
     { id: "nivelsum", type: "desc", column: "Nivel", value: "" },
-    { id: "descnivel", type: "desc", column: "Descripcion", value: "" },
+    { id: "descnivel", type: "desc", column: "Descripción", value: "" },
 ];
 export const columnsOrder: Order[] = [
     { id: "nivelsum", column: "Nivel" },
-    { id: "descnivel", column: "Descripcion" },
+    { id: "descnivel", column: "Descripción" },
 ];
 
 export const columnsHeaders: HeadersName[] = [
     { label: "Nivel", icon: null, align: "left", minWidth: 100 },
     {
-        label: "Descripcion",
+        label: "Descripción",
         icon: null,
         align: "left",
         minWidth: 175,

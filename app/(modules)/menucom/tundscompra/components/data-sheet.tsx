@@ -129,7 +129,7 @@ export default function DataSheet({
               <TextField
                 id="descnivsum"
                 {...register("nombundcmp", {
-                  required: "Descripcion nivel",
+                  required: "Descripción nivel",
                 })}
                 size="small"
                 variant="outlined"

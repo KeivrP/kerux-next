@@ -1,4 +1,4 @@
-import { CircleCheck, CircleMinus, MapPinHouse, Send } from "lucide-react";
+import { MapPinHouse, Send } from "lucide-react";
 import React from "react";
 
 interface BadgeActProps {

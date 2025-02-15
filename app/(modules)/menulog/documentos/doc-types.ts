@@ -61,6 +61,7 @@ export interface Documentoslist {
     fecdoc: string
     iddocres: any
     mtodoc: string
+    idsolsum:string
     origen: string
     ano: number
     mensaje: any

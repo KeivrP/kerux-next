@@ -10,13 +10,13 @@ import { DeleteIcon, OpenIcon } from "@/components/icons/table-icon";
 export const columnsFilter: Filter[] = [
   { id: "tipocompra", type: "number", column: "Tipo", value: "" },
   { id: "desctipocom", type: "desc", column: "Desc. Tipo Compra", value: "" },
-  { id: "tipodoc", type: "desc", column: "Tipo Doc.", value: "" },
+  { id: "TIPO_DOC_COM.tipodoc", type: "desc", column: "Tipo Doc.", value: "" },
   { id: "desctipodoc", type: "desc", column: "Desc. Tipo Doc", value: "" },
 ];
 export const columnsOrder: Order[] = [
   { id: "tipocompra", column: "Tipo" },
   { id: "desctipocom", column: "Desc. Tipo Compra" },
-  { id: "tipodoc", column: "Tipo Doc." },
+  { id: "TIPO_DOC_COM.tipodoc", column: "Tipo Doc." },
   { id: "desctipodoc", column: "Desc. Tipo Doc" },
 ];
 

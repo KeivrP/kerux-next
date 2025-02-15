@@ -126,7 +126,7 @@ const LeftInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
       </Grid>
       <Grid size={12}>
         <Typography variant="h3" color="primary" className="mb-2">
-          Descripcion
+          Descripción
         </Typography>
 
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
@@ -257,7 +257,7 @@ const LeftInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
       </Grid>
       <Grid size={12}>
         <Typography variant="h3" color="primary">
-          Accion Interna
+          Acción Interna
         </Typography>
         <Grid container spacing={1} mt={1}>
           <Grid size={{ lg: 4, xl: 3, md: 6  }}>
@@ -378,7 +378,7 @@ const LeftInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
       </Grid>
       <Grid size={6}>
         <Typography variant="h3" color="primary" className="mb-2">
-          Telefono
+          Teléfono
         </Typography>
 
         <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>

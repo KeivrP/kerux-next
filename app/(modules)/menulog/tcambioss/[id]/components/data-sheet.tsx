@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from "react";
-import { Autocomplete, Card, CardContent, CardHeader, Checkbox, FormControlLabel, Radio, RadioGroup, TextField, Typography } from "@mui/material";
+import { Autocomplete, Button, Card, CardContent, CardHeader, Checkbox, FormControlLabel, Radio, RadioGroup, TextField, Typography } from "@mui/material";
 import { useQueryData } from "@/server/fetch-data";
 import { AccionesSheet, columnsHeadersSheet } from "../../components/header-table";
 import { BaseTable } from "@/components/table-material/genericTable";
@@ -15,6 +15,12 @@ import { BadgeTipodoc } from "@/components/badge/badge-estatus";
 import BadgeModule from "@/components/badge/badge-mod";
 import { ITcambiosRoot, Rengcambio } from "../../tcambioss-types";
 import EditSheet from "./edit-sheet";
+import SimpleBackdrop from "@/components/backdrop/backdrop";
+import { ConfirmDialog } from "@/components/modal/confirmDialog";
+import { useDeleteRenglon } from "../../hook/useTcambios";
+import ButtonForms from "@/components/button/buttonForms";
+import Frengcom from "../../../tsolpen/[id]/components/frengcomp";
+import NewSheet from "./new-sheet";
 
 interface DataSheetProps {
     id: number;
@@ -95,7 +101,7 @@ export default function DataSheet({
     });
 
 
-    const { data, isLoading } = useQueryData({
+    const { data, isLoading, refetch, isFetching } = useQueryData({
         entity: "tcmabios_show",
         dependency: [id, cambio],  // Remove watch('cabsolsum.idsolsum') from here
         params: {
@@ -105,11 +111,7 @@ export default function DataSheet({
         enabled: (watch('cabsolsum.idsolsum') || id) !== 0,
 
     });
-    const { data: lst_porcmptos, isLoading: lst_porcimptos } = useQueryData({
-        entity: "lst_porcimptos",
-        dependency: [],
 
-    });
     const { data: lst_sscmabios, isLoading: lst_sscambios } = useQueryData({
         entity: "lst_sscambios",
         dependency: [],
@@ -124,12 +126,10 @@ export default function DataSheet({
     )
 
     useEffect(() => {
-        console.log('idsolsum changed:', watch('cabsolsum.idsolsum'));
     }, [watch('cabsolsum.idsolsum')]);
 
     useEffect(() => {
         if (rows && Object.keys(rows).length > 0) {
-            console.log(rows, 'jejej')
             setValue('cabsolsum', rows.cabsolsum);
             setValue('cabcambio', rows.cabcambio);
             if (rows.TotCambio) {
@@ -140,14 +140,45 @@ export default function DataSheet({
 
     const idsolsum = watch("cabsolsum.idsolsum");
 
-    const handleOpen = () => {
+    const [dataRow, setDataRow] = useState<Rengcambio | null>(null);
+    const { mutate, isPending } = useDeleteRenglon()
+
+
+    const [openDialog, setOpenDialog] = useState(false);
+
+    const [deleteRowId, setDeleteRowId] = useState(0);
+
+
+    const handleOpen = (data: Rengcambio) => {
+        setDataRow(data)
         setIsOpen(true)
     }
+
+    const handleDelete = (id: number) => {
+        setOpenDialog(true)
+        setDeleteRowId(id)
+    }
+
+    const handleCancelDelete = () => {
+        setDeleteRowId(0)
+        setOpenDialog(false)
+    }
+
+
+    const handleConfirmDelete = () => {
+        const daterow = rows?.rengcambio.find((row) => row.idsolsum == deleteRowId)
+        mutate({ idsolsum: String(daterow?.idsolsum), nrocambio: String(daterow?.nrocambio), nroreng: String(daterow?.nroreng) })
+        setOpenDialog(false)
+    }
+
+    const [open, setOpen] = useState(false)
+
 
 
     return (
 
-        <div className="">
+        <div>
+
             {/* Supply Request Section */}
             <Card className="mb-4">
                 <CardHeader className="bg-muted py-2 text-[#142F62]" title="Solicitud de suministro" />
@@ -401,8 +432,19 @@ export default function DataSheet({
 
             {/* Supply Request Details Section */}
             <Card className="mb-4">
-                <CardHeader className="bg-muted py-2 text-[#142F62]" title="Renglones de la solicitud de suministro">
-                </CardHeader>
+                <CardHeader className="bg-muted py-2 text-[#142F62] flex justify-between items-center"
+                    title="Renglones de la solicitud de suministro"
+                    action={
+                        <Button
+                        onClick={() => setOpen(true)}
+                        variant="contained"
+                        color={"primary"}
+                        sx={{ textTransform: "none" }}
+                      >
+                        <Typography variant="h3">{ "+ AÑADIR"}</Typography>
+                      </Button>
+                    }
+                />
                 <CardContent className="p-4">
                     <div
                         style={{
@@ -427,7 +469,7 @@ export default function DataSheet({
                                     { content: row.porcimptocamb, align: "center" },
                                     { content: formatCurrency(row.precioorig), align: "center" },
                                     {
-                                        content: <AccionesSheet row={row} onEdit={handleOpen} />,
+                                        content: <AccionesSheet row={row} onEdit={handleOpen} onDelete={handleDelete} />,
                                         align: "center",
 
                                     }
@@ -448,10 +490,10 @@ export default function DataSheet({
                                         name: "Fecha de última compra",
                                         content: formatDate(row.fecultcom),
                                     },
-                                        {
-                                          name: "Moneda",
-                                          content: row.codmoneda,
-                                        },
+                                    {
+                                        name: "Moneda",
+                                        content: row.codmoneda,
+                                    },
                                     {
                                         name: "Clasif. SNC",
                                         content: row.codclasifsnc,
@@ -463,8 +505,19 @@ export default function DataSheet({
                 </CardContent>
 
             </Card>
-            <EditSheet isOpen={isOpen} onClose={() => setIsOpen(false)} id={1} />
 
+            <ConfirmDialog
+                mode={"delete"}
+                open={openDialog}
+                onConfirm={handleConfirmDelete}
+                onCancel={handleCancelDelete}
+                text={`¿Estas seguro que deseas eliminar el cambio ${rows?.rengcambio.find((row) => row.idsolsum == deleteRowId)?.idsolsum
+                    }?`}
+            />
+
+            <EditSheet refetch={() => refetch()} isOpen={isOpen} onClose={() => { setIsOpen(false); setDataRow(null) }} data={dataRow as Rengcambio} />
+            <SimpleBackdrop show={isFetching} />
+            <NewSheet idsolsum={idsolsum} nrocambio={(rows?.rengcambio?.length || 0) + 1} onClose={() => { setOpen(false); setDataRow(null) } } refetch={() => refetch()} isOpen={open}  />
         </div>
     );
 }

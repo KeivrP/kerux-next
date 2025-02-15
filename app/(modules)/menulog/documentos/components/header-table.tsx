@@ -40,7 +40,7 @@ export const columnsHeaders: HeadersName[] = [
     align: "center",
     minWidth: 140,
   },
-  { label: "Status Apr", minWidth: 140, align: "center" },
+  { label: "Estatus Apr", minWidth: 140, align: "center" },
   {
     label: "Monto",
     align: "right",

@@ -19,6 +19,7 @@ import { Typography } from "@mui/material";
 import { Input } from "@/components/ui/input";
 import DataSheet from "./edit-table";
 import { calcularTotales } from "../utils";
+import { BadgeSolSum } from "@/components/badge/badge-log";
 
 interface DataInputProps extends FormContextProps {
   isLoading: boolean;
@@ -36,12 +37,12 @@ export const FsolsumTable: React.FC<DataInputProps> = ({
     useState<Detsolsum>(initialRenglon);
 
   const handleCreate = () => {
-   const data = {...initialRenglon, nroreng: formData.detsolsum.length + 1}
+    const data = { ...initialRenglon, nroreng: formData.detsolsum.length + 1 }
     setRowSelected(data);
     setDrawerOpen(true);
   };
 
-  const handleDelete = () => {};
+  const handleDelete = () => { };
 
   const handleEdit = (row: Detsolsum) => {
     setRowSelected(row);
@@ -78,16 +79,17 @@ export const FsolsumTable: React.FC<DataInputProps> = ({
               { content: row.dsp_DescNombNorm, align: "left" },
               { content: row.tiporeng !== "MT" ? row.codserv : row.coditem, align: "center" },
               { content: row.descreng, align: "left" },
-              {
-                content: <BadgeModule codmenu={row.destino} />,
-                align: "center",
-              },
-              { content: row.stsrngsol, align: "center" },
+             
               { content: row.unidbasica, align: "center" },
               { content: row.cantsol, align: "center" },
               { content: formatCurrency(row?.precio), align: "center" },
               { content: row.porcimptos, align: "center" },
               { content: formatCurrency(row.dsp_MtoTotReng), align: "center" },
+              {
+                content: <BadgeModule codmenu={row.destino} />,
+                align: "center",
+              },
+              { content: <BadgeSolSum tipo={row.stsrngsol} />, align: "center" },
               {
                 content: (
                   <Acciones
@@ -114,10 +116,10 @@ export const FsolsumTable: React.FC<DataInputProps> = ({
                 name: "Fecha de última compra",
                 content: formatDate(row.fecstsrng),
               },
-          /*     {
-                name: "Moneda",
-                content: row.DSP_CodMonedaPrecio,
-              }, */
+              /*     {
+                    name: "Moneda",
+                    content: row.DSP_CodMonedaPrecio,
+                  }, */
               {
                 name: "Clasif. SNC",
                 content: row.codclasifsnc,
@@ -159,13 +161,13 @@ export const FsolsumTable: React.FC<DataInputProps> = ({
       <DataSheet
         formData={formData}
         /*       isPending={handleLoading}
-         */ 
+         */
         row={rowSelected}
         isOpen={isDrawerOpen}
         onClose={() => setDrawerOpen(false)}
-         refetch={() => {
-        refetch();
-      }}
+        refetch={() => {
+          refetch();
+        }}
       />
       <SimpleBackdrop show={false} />
     </>

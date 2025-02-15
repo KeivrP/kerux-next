@@ -8,14 +8,14 @@ import { DeleteIcon, OpenIcon } from "@/components/icons/table-icon";
 export const columnsFilter: Filter[] = [
   { id: "idsolsum", type: "number", column: "ID Solsum", value: "" },
   { id: "nrocambio", type: "number", column: "Nro Cambio", value: "" },
-  { id: "desccambio", type: "desc", column: "Descripcion", value: "" },
+  { id: "desccambio", type: "desc", column: "Descripción", value: "" },
   { id: "feccambio", type: "date", column: "Fecha de Cambio", value: "" },
   { id: "stscamb", type: "desc", column: "Estatus", value: "" },
 ];
 export const columnsOrder: Order[] = [
   { id: "idsolsum", column: "ID Solsum" },
   { id: "nrocambio", column: "nrocambio" },
-  { id: "desccambio", column: "Descripcion" },
+  { id: "desccambio", column: "Descripción" },
   { id: "feccambio", column: "Fecha de Cambio" },
   { id: "stscamb", column: "Estatus" },
 ];
@@ -92,9 +92,11 @@ export const columnsHeadersSheet: HeadersName[] = [
 export const AccionesSheet = ({
   row,
   onEdit,
+  onDelete
 }: {
   row: Rengcambio;
-  onEdit: (idsolsum: number) => void;
+  onEdit: (data : Rengcambio) => void;
+  onDelete: (idsolsum: number) => void;
 }) => {
   const theme = useTheme();
 
@@ -118,7 +120,7 @@ export const AccionesSheet = ({
         title="Abrir"
       >
         <IconButton
-          onClick={() => onEdit(row.nroreng)}
+          onClick={() => onEdit(row)}
           color="primary"
           size="small"
         >
@@ -133,7 +135,7 @@ export const AccionesSheet = ({
         title="Abrir"
       >
         <IconButton
-          onClick={() => onEdit(row.nroreng)}
+          onClick={() => onDelete(row.idsolsum)}
           color="primary"
           size="small"
         >

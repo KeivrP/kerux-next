@@ -139,3 +139,20 @@ export interface Rengcambio {
   fecultcom: string
 }
 
+export interface NewRenCambio {
+  idsolsum: number
+  nroreng: number
+  tiporeng: string
+  codigo: string
+  coditem: string
+  codserv: any
+  descreng: string
+  unidbasica: string
+  cantsol: string
+  destino: string
+  stsrngsol: string
+  preciocambio: any
+  porcimptocamb: any
+}
+
+
