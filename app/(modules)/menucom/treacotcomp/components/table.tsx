@@ -174,7 +174,6 @@ export const Treacotcomp = () => {
                 content: (
                   <Acciones
                     row={row}
-                    onDelete={handleDelete}
                     onEdit={handleEdit}
                   />
                 ),
