@@ -22,7 +22,6 @@ export const Treacomp = () => {
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const [rows, setRows] = useState<ITreacomp[]>([]);
   const [order, setOrder] = useState<Order[]>([
-  {}
   ]);
   const [filter, setFilter] = useState<Filter[]>([]);
   const [count, setCount] = useState(0);
