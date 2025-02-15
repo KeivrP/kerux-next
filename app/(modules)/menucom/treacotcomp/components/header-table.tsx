@@ -46,11 +46,9 @@ export const columnsHeadersTreacotcomp: HeadersName[] = [
 
 export const Acciones = ({
   row,
-  onDelete,
   onEdit,
 }: {
   row: ITreacotcomp;
-  onDelete: (id: number) => void;
   onEdit: (id: number) => void;
 }) => {
   const theme = useTheme();
@@ -84,18 +82,6 @@ export const Acciones = ({
           </IconButton>
         </Tooltip>
 
-        <Tooltip
-          sx={{ backgroundColor: theme.palette.background.default }}
-          title="Eliminar"
-        >
-          <IconButton
-            onClick={() => onDelete(row.nrosc)}
-            color="primary"
-            size="small"
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
       </span>
     </span>
   );
