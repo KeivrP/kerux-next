@@ -20,7 +20,6 @@ export const Treacotcomp = () => {
   const [page, setPage] = useState(0);
   const [rows, setRows] = useState<ITreacotcomp[]>([]);
   const [order, setOrder] = useState<Order[]>([
-  {}
   ]);
   const [filter, setFilter] = useState<Filter[]>([]);
   const [count, setCount] = useState(0);

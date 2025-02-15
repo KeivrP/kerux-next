@@ -18,7 +18,6 @@ export const Tcotpenp = () => {
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [rows, setRows] = useState<ITcotpenp[]>([]);
   const [order, setOrder] = useState<Order[]>([
-  {}
   ]);
   const [filter, setFilter] = useState<Filter[]>([]);
   const [count, setCount] = useState(0);
