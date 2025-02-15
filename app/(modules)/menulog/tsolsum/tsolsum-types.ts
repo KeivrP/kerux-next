@@ -58,6 +58,11 @@ export interface Dependencia {
   descdependencia: string;
 }
 
+export interface Comprador {
+  codundcmp: string;
+  codcomprador: string;
+}
+
 export interface CentCosto {
   nombre: string;
 }

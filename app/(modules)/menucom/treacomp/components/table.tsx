@@ -5,17 +5,21 @@ import { useQueryData } from "@/server/fetch-data";
 import { BaseTable } from "@/components/table-material/genericTable";
 import { BaseTablePagination } from "@/components/table-material/baseTablePagination";
 import { Acciones, columnsFilter, columnsHeadersTreacomp, columnsOrder } from "./header-table";
-import ActionCardHeader from "@/components/card/actionCardHeader";
 import { Filter } from "@/components/button/FilterButton";
 import { Order } from "@/components/button/OrderButton";
 import { ConfirmDialog } from "@/components/modal/confirmDialog";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { BadgeAct } from "@/components/badge/badge-act";
+import ActionCardReasignarHeader from "@/components/card/actionCardReasignarHeader";
+import Checkbox from "@/components/checkbox/checkbox";
+import { useReAsignar } from "../hook/useReasignAll";
 
 export const Treacomp = () => {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
+  const [selectedRows, setSelectedRows] = useState<ITreacomp[]>([]);
+  const [isSelected, setIsSelected] = useState<boolean>(false);
   const [rows, setRows] = useState<ITreacomp[]>([]);
   const [order, setOrder] = useState<Order[]>([
   {}
@@ -26,8 +30,9 @@ export const Treacomp = () => {
   /* ------------------ USEEFFECT PARA TRAER LA DATA DE LA BD ----------------- */
 
 
+  const { mutate, isPending: reAsingLoading } = useReAsignar();
 
-  const { data, isLoading } = useQueryData({
+  const { data, isLoading, refetch } = useQueryData({
     entity: "compra",
     api: 'comp',
     params: {
@@ -42,6 +47,10 @@ export const Treacomp = () => {
     setRows(data?.solcomprslist|| []);
     setCount(data?.total);
   }, [data]);
+
+  useEffect(() => {
+    refetch();
+  }, [reAsingLoading]);
 
   const handlePageChange = useCallback(
     (_: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
@@ -71,6 +80,7 @@ export const Treacomp = () => {
     setOpenDialog(false);
   };
 
+
   const handleConfirmDelete = () => {
     const rowToDelete = rows.find((row) => row.idsolsum === deleteRowId);
     if (rowToDelete) {
@@ -83,9 +93,33 @@ export const Treacomp = () => {
     console.log(`Edit ${idsolsum}`);
   };
 
+
+    const handleRowSelect = (row: ITreacomp) => {
+        setSelectedRows((prevRows) => {
+            // Si el row ya está seleccionado, lo removemos del array
+            var selectedRows = prevRows;
+            if (prevRows.includes(row)) {
+               selectedRows = prevRows.filter((item) => item !== row);
+            }
+            // Si el row no está seleccionado, lo agregamos al array
+            else {
+                selectedRows = [...prevRows, row];
+            }
+
+
+           if (selectedRows.length > 0) {
+            setIsSelected(true);
+           }
+           else {
+            setIsSelected(false);
+           }
+
+          return selectedRows;
+        });
+    };
   return (
     <>
-      <ActionCardHeader
+      <ActionCardReasignarHeader
         add={() => { console.log('anadir') }}
         onApplyFilter={(filters) => setFilter(filters)}
         columnsFilter={columnsFilter}
@@ -93,6 +127,10 @@ export const Treacomp = () => {
         columnsOrder={columnsOrder}
         setFilter={setFilter}
         setOrder={setOrder}
+        titleButton="REASIGNAR"
+        isAddButtonVisible={false}
+        isAddButtonAdicionalActive={!isSelected}
+        reasignar={(codComprador) => { mutate({nrosc:selectedRows.map((item) => item.nrosc),codcomprador:codComprador})} }
       />
 
       <div
@@ -106,8 +144,27 @@ export const Treacomp = () => {
           rows={rows}
           headers={columnsHeadersTreacomp }
           rowAction={(row) => console.log(row)}
+                    addCheckboxColumn={true}
+                    onSelectionChange={(selectedRowIndices) => {
+                        const updateSelect = selectedRowIndices.map((index) => rows[index]); // Seleccionar todo lo que aparezca
+                        setSelectedRows(updateSelect);
+                        if (selectedRowIndices.length > 0) {
+                          setIsSelected(true);
+                        }
+                        else {
+                          setIsSelected(false);
+                        }
+                    }}
           collapsible={{
             visible: (row) => [
+                            {
+                                content: (
+                                    <Checkbox //selecionar uno a uno
+                                        checked={selectedRows.includes(row)}
+                                        onChange={() => handleRowSelect(row)}
+                                    />
+                                ),
+                            },
                      { content: row.nrosc, align: "left" },
                      { content: row.idsolsum, align: "left" },
                      { content: row.fecsol, align: "left" },
@@ -128,7 +185,10 @@ export const Treacomp = () => {
               },
             ],
 
-            collapsed: () => [],
+            collapsed: (row) => [
+
+              { name: "Descripción", content: row.descdoc },
+            ],
           }}
         ></BaseTable>
         <BaseTablePagination
