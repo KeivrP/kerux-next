@@ -118,7 +118,6 @@ export const Tcotpenp = () => {
                 content: (
                   <Acciones
                     row={row}
-                    onDelete={handleDelete}
                     onEdit={handleEdit}
                   />
                 ),
