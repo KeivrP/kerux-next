@@ -14,6 +14,7 @@ import { BadgeAct } from "@/components/badge/badge-act";
 import ActionCardReasignarHeader from "@/components/card/actionCardReasignarHeader";
 import Checkbox from "@/components/checkbox/checkbox";
 import { useReAsignar } from "../hook/useReasignAll";
+import { formatDate } from "@/utils/main";
 
 export const Treacotcomp = () => {
 
@@ -166,7 +167,7 @@ export const Treacotcomp = () => {
                             },
                      { content: row.numcot, align: "left" },
                      { content: row.stscot, align: "left" },
-                     { content: row.feccot, align: "left" },
+                     { content: formatDate( row.feccot), align: "left" },
                      { content: row.nrosc, align: "left" },
                      { content: row.numprov, align: "left" },
                      { content: row.nomprov, align: "left" },
