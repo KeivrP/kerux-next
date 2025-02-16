@@ -171,7 +171,7 @@ export const Treacomp = () => {
                      { content: formatDate(row.fecsol), align: "left" },
                      { content: formatDate(row.fecrec), align: "left" },
                      { content: row.descsc, align: "left" },
-                     { content: row.stsres, align: "left" },
+                     { content: row.stssc, align: "left" },
                      { content: row.codcomprador, align: "left" },
               {
                 content: (
