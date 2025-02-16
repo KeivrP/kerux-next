@@ -11,6 +11,7 @@ import { Order } from "@/components/button/OrderButton";
 import { ConfirmDialog } from "@/components/modal/confirmDialog";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { BadgeAct } from "@/components/badge/badge-act";
+import { formatDate } from "@/utils/main";
 
 export const Tcotpenp = () => {
 
@@ -110,9 +111,9 @@ export const Tcotpenp = () => {
             visible: (row) => [
                      { content: row.numcot, align: "left", handleCollapse: true },
                      { content: row.stscot, align: "left" },
-                     { content: row.feccot, align: "left" },
+                     { content: formatDate(row.feccot), align: "left" },
                      { content: row.nrosc, align: "left" },
-                     { content: row.fecsts, align: "left" },
+                     { content: formatDate( row.fecsts), align: "left" },
                      { content: row.numprov, align: "left" },
                      { content: row.nomprov, align: "left" },
               {

@@ -13,6 +13,7 @@ import { BadgeAct } from "@/components/badge/badge-act";
 import ActionCardReasignarHeader from "@/components/card/actionCardReasignarHeader";
 import Checkbox from "@/components/checkbox/checkbox";
 import { useReAsignar } from "../hook/useReasignAll";
+import { formatDate } from "@/utils/main";
 
 export const Treacomp = () => {
 
@@ -167,8 +168,8 @@ export const Treacomp = () => {
                             },
                      { content: row.nrosc, align: "left" },
                      { content: row.idsolsum, align: "left" },
-                     { content: row.fecsol, align: "left" },
-                     { content: row.fecrec, align: "left" },
+                     { content: formatDate(row.fecsol), align: "left" },
+                     { content: formatDate(row.fecrec), align: "left" },
                      { content: row.descsc, align: "left" },
                      { content: row.stsres, align: "left" },
                      { content: row.codcomprador, align: "left" },
