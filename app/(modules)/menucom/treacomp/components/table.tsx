@@ -39,6 +39,7 @@ export const Treacomp = () => {
       per: rowsPerPage,
       filter,
       order,
+      status: ["REC", "COT", "OCP"],
     },
     dependency: [filter, order, page, rowsPerPage],
   });
