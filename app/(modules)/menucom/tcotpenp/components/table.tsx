@@ -92,6 +92,7 @@ export const Tcotpenp = () => {
         columnsOrder={columnsOrder}
         setFilter={setFilter}
         setOrder={setOrder}
+        isAddButtonVisible={false}
       />
 
       <div
@@ -107,7 +108,7 @@ export const Tcotpenp = () => {
           rowAction={(row) => console.log(row)}
           collapsible={{
             visible: (row) => [
-                     { content: row.numcot, align: "left" },
+                     { content: row.numcot, align: "left", handleCollapse: true },
                      { content: row.stscot, align: "left" },
                      { content: row.feccot, align: "left" },
                      { content: row.nrosc, align: "left" },
@@ -126,7 +127,10 @@ export const Tcotpenp = () => {
               },
             ],
 
-            collapsed: () => [],
+            collapsed: (row) => [
+
+              {name: "Descripción", content: row.descsc},
+            ],
           }}
         ></BaseTable>
         <BaseTablePagination
