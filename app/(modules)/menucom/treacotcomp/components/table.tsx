@@ -162,6 +162,7 @@ export const Treacotcomp = () => {
                                         onChange={() => handleRowSelect(row)}
                                     />
                                 ),
+                handleCollapse: true,
                             },
                      { content: row.numcot, align: "left" },
                      { content: row.stscot, align: "left" },
@@ -182,7 +183,10 @@ export const Treacotcomp = () => {
               },
             ],
 
-            collapsed: () => [],
+            collapsed: (row) => [
+
+                     { content: row.descsc, name: "Descripción" },
+            ],
           }}
         ></BaseTable>
         <BaseTablePagination

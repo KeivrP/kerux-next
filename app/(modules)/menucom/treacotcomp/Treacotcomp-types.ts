@@ -5,7 +5,7 @@ export interface ITreacotcomp {
   stscot: string;
   feccot: string;
   nrosc: number;
-  numprov: number;
-  nomprov: Date;
-  codcomprador: Date;
+  numprov: string;
+  nomprov: string;
+  codcomprador: string;
 };
