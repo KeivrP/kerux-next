@@ -38,6 +38,7 @@ export const Tcotresp = () => {
       per: rowsPerPage,
       filter,
       order,
+      status: "REC",
     },
     dependency: [filter, order, page, rowsPerPage],
   });
