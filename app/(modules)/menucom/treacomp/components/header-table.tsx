@@ -13,7 +13,7 @@ export const columnsFilter: Filter[] = [
   { id: "fecsol", type: "date", column: "F. Solicitud", value: "" },
   { id: "fecrec", type: "date", column: "F. Recep.", value: "" },
   { id: "descsc", type: "desc", column: "Descripción", value: "" },
-  { id: "stsres", type: "desc", column: "Sts", value: "" },
+  { id: "stssc", type: "desc", column: "Sts", value: "" },
   { id: "sol_compras.codcomprador", type: "desc", column: "Comprador", value: "" },
 ];
 export const columnsOrder: Order[] = [
@@ -22,7 +22,7 @@ export const columnsOrder: Order[] = [
   { id: "fecsol", column: "F. Solicitud" },
   { id: "fecrec", column: "F. Recep." },
   { id: "descsc", column: "Descripción" },
-  { id: "stsres", column: "Sts" },
+  { id: "stssc", column: "Sts" },
 ];
 
 export const columnsHeadersTreacomp: HeadersName[] = [
