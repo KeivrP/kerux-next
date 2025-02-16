@@ -13,8 +13,8 @@ export const columnsFilter: Filter[] = [
   { id: "feccot", type: "date", column: "F. Cotización", value: "" },
   { id: "nrosc", type: "number", column: "Nro. SC", value: "" },
   { id: "numprov", type: "number", column: "Cod. Pro", value: "" },
-  { id: "nomprov", type: "date", column: "Proveedor", value: "" },
-  { id: "codcomprador", type: "date", column: "Comprador", value: "" },
+  { id: "nomprov", type: "desc", column: "Proveedor", value: "" },
+  { id: "codcomprador", type: "desc", column: "Comprador", value: "" },
 ];
 export const columnsOrder: Order[] = [
   { id: "numcot", column: "Nro. Cotiz." },
