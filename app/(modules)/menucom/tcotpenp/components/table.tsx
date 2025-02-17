@@ -86,7 +86,7 @@ export const Tcotpenp = () => {
     setOpenDialog(false);
   };
 
-  const handleConfirmReject = (data) => {
+  const handleConfirmReject = (data: string) => {
     const rowToDelete = rows.find((row) => row.numcot === deleteRowId);
     if (rowToDelete) {
 
