@@ -162,7 +162,7 @@ export const Tcotpenp = () => {
       </div>
       <DevDialog
         open={openDialog}
-        title="Rechazar respuesta a proveedor"
+        title="Anular respuesta a proveedor"
         fecsol={hoy.getFullYear()+"-"+(hoy.getMonth()+1)+"-"+hoy.getDate()}
         handleClose={handleCancelDelete}
         handleConfirm={handleConfirmReject}
