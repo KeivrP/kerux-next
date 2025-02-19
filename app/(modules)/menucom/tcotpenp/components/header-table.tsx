@@ -5,7 +5,7 @@ import { HeadersName } from "@/components/table-material/genericTable";
 import { ITcotpenp } from "../Tcotpenp-types";
 import { Filter } from "@/components/button/FilterButton";
 import { Order } from "@/components/button/OrderButton";
-import { DeleteIcon, OpenIcon } from "@/components/icons/table-icon";
+import { DevolverIcon, OpenIcon } from "@/components/icons/table-icon";
 
 export const columnsFilter: Filter[] = [
   { id: "numcot", type: "number", column: "Nro. Cotiz.", value: "" },
@@ -47,9 +47,11 @@ export const columnsHeadersTcotpenp: HeadersName[] = [
 export const Acciones = ({
   row,
   onEdit,
+  onReject,
 }: {
   row: ITcotpenp;
   onEdit: (id: number) => void;
+  onReject: (id: number) => void;
 }) => {
   const theme = useTheme();
 
@@ -81,8 +83,19 @@ export const Acciones = ({
             <OpenIcon />
           </IconButton>
         </Tooltip>
-        
 
+        <Tooltip
+          sx={{ backgroundColor: theme.palette.background.default }}
+          title="Anular"
+        >
+          <IconButton
+            onClick={() => onReject(row.numcot)}
+            color="primary"
+            size="small"
+          >
+            <DevolverIcon />
+          </IconButton>
+        </Tooltip>
       </span>
     </span>
   );

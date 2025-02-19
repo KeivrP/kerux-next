@@ -12,6 +12,9 @@ import { ConfirmDialog } from "@/components/modal/confirmDialog";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { BadgeAct } from "@/components/badge/badge-act";
 import { formatDate } from "@/utils/main";
+import ModalDialog from "@/components/modal/modalDialog";
+import DevDialog from "@/components/modal/devDialog";
+import { useReject } from "../hook/useReject";
 
 export const Tcotpenp = () => {
 
@@ -23,13 +26,15 @@ export const Tcotpenp = () => {
   ]);
   const [filter, setFilter] = useState<Filter[]>([]);
   const [count, setCount] = useState(0);
+  var hoy = new Date();
+  const { mutate, isPending: reAsingLoading } = useReject();
 
   /* ------------------ USEEFFECT PARA TRAER LA DATA DE LA BD ----------------- */
 
 
 
   const isPending = false
-  const { data, isLoading } = useQueryData({
+  const { data, isLoading, refetch } = useQueryData({
     entity: "cotizaciones",
     api: 'comp',
     params: {
@@ -44,6 +49,11 @@ export const Tcotpenp = () => {
     setRows(data?.Cotizacioneslist || []);
     setCount(data?.total);
   }, [data]);
+
+  useEffect(() => {
+    refetch();
+
+  }, [isPending]);
 
   const handlePageChange = useCallback(
     (_: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
@@ -68,13 +78,19 @@ export const Tcotpenp = () => {
     setOpenDialog(true);
   };
 
+  const handleReject = (idsolsum: number) => {
+    setDeleteRowId(idsolsum);
+    setOpenDialog(true);
+  };
   const handleCancelDelete = () => {
     setOpenDialog(false);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmReject = (data: string) => {
     const rowToDelete = rows.find((row) => row.numcot === deleteRowId);
     if (rowToDelete) {
+
+      mutate({numcot:deleteRowId, fecanu: hoy.getFullYear()+"-"+(hoy.getMonth()+1)+"-"+hoy.getDate() , motivo: data});
     } else {
       console.log(`Row with id ${deleteRowId} not found`);
     } setOpenDialog(false);
@@ -121,6 +137,7 @@ export const Tcotpenp = () => {
                 content: (
                   <Acciones
                     row={row}
+                    onReject={handleReject}
                     onEdit={handleEdit}
                   />
                 ),
@@ -143,12 +160,12 @@ export const Tcotpenp = () => {
           handleChangeRowsPerPage={handleChangeRowsPerPage}
         ></BaseTablePagination>
       </div>
-      <ConfirmDialog
-        mode={"delete"}
+      <DevDialog
         open={openDialog}
-        onConfirm={handleConfirmDelete}
-        onCancel={handleCancelDelete}
-        text={`¿Estas seguro que deseas eliminar el beneficiario ${rows.find((row) => row.numcot == deleteRowId)?.numcot}?`}
+        title="Anular respuesta a proveedor"
+        fecsol={hoy.getFullYear()+"-"+(hoy.getMonth()+1)+"-"+hoy.getDate()}
+        handleClose={handleCancelDelete}
+        handleConfirm={handleConfirmReject}
       />
       <SimpleBackdrop show={isPending} />
     </>
