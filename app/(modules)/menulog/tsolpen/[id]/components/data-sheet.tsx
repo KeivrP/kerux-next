@@ -78,7 +78,16 @@ const DataSheet = ({ id }: DataSheetProps) => {
   return (
     <div>
       <Tabs tabs={tabs} >
-        <></>
+       
+      <ButtonForms
+          onClick={() => console.log({ id: formData?.cabsolsum?.idsolsum })}
+          sx={{ color: "alert" }}
+        >
+          <SaveIcon size={18} />
+          <Typography variant="h3" marginLeft={1}>
+           Crear Modelo
+          </Typography>
+        </ButtonForms>
         </Tabs>
   
 

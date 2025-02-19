@@ -17,7 +17,6 @@ import BadgeModule from "@/components/badge/badge-mod";
 import { formatCurrency, formatDate } from "@/utils/main";
 import { Typography } from "@mui/material";
 import { Input } from "@/components/ui/input";
-import DataSheet from "./edit-table";
 import { calcularTotales } from "../utils";
 import { BadgeSolSum } from "@/components/badge/badge-log";
 import Frengcom from "./frengcomp";
@@ -37,143 +36,121 @@ export const FsolsumTable: React.FC<DataInputProps> = ({
   const [rowSelected, setRowSelected] =
     useState<Detsolsum>(initialRenglon);
 
-  const handleCreate = () => {
-    const data = { ...initialRenglon, nroreng: formData.detsolsum.length + 1 }
-    setRowSelected(data);
-    setDrawerOpen(true);
-  };
 
-  const handleDelete = () => { };
 
   const handleEdit = (row: Detsolsum) => {
-    setRowSelected(row);
+    if (row.destino === "COMP") {
+      setRowSelected(row);
     setDrawerOpen(true);
-  };
+    } else {
+     
+    }
+};
 
-  const { total, totalIVA, subtotal } = calcularTotales(formData);
+const { total, totalIVA, subtotal } = calcularTotales(formData);
 
-  const [open, setOpen] = useState(false)
+const [open, setOpen] = useState(false)
 
 
-  return (
-    <>
-      <ActionCardHeader
-        isAddFilterVisible={false}
-        isAddOrderVisible={false}
-        isAddButtonVisible={false}
-      />
+return (
+  <>
+    <ActionCardHeader
+      isAddFilterVisible={false}
+      isAddOrderVisible={false}
+      isAddButtonVisible={false}
+    />
 
-      <div
-        style={{
-          height: "70vh",
-          width: "100%",
+    <div
+      style={{
+        height: "70vh",
+        width: "100%",
+      }}
+    >
+      <BaseTable
+        loading={isLoading}
+        rows={formData.detsolsum}
+        headers={columnsHeaders}
+        rowAction={(row) => console.log(row)}
+        collapsible={{
+          visible: (row: Detsolsum) => [
+            { content: row.nroreng, handleCollapse: true, align: "center" },
+            { content: row.dsp_DescTipoReng, align: "left" },
+            { content: row.dsp_DescNombNorm, align: "left" },
+            { content: row.tiporeng !== "MT" ? row.codserv : row.coditem, align: "center" },
+            { content: row.descreng, align: "left" },
+            {
+              content: <BadgeModule codmenu={row.destino} />,
+              align: "center",
+            },
+            { content: <BadgeSolSum tipo={row.stsrngsol} />, align: "center" },
+            { content: row.unidbasica, align: "center" },
+            { content: row.cantsol, align: "center" },
+            { content: formatCurrency(row?.precio), align: "center" },
+            { content: row.porcimptos, align: "center" },
+            { content: formatCurrency(row.dsp_MtoTotReng), align: "center" },
+            {
+              content: (
+                <Acciones
+                  row={row}
+                  onEdit={handleEdit}
+                />
+              ),
+              action: () => null,
+              disableTooltip: true,
+            },
+          ],
+
+          collapsed: (row: Detsolsum) => [
+            {
+              name: "Descripción del servicio, mantenimiento u obra",
+              content: row.descreng,
+            },
+            {
+              name: "Cuenta Presupuestaria",
+              content: `${row.codcta} - ${row.dsp_DescCodCta}`,
+            },
+            {
+              name: "Fecha de última compra",
+              content: formatDate(row.fecstsrng),
+            },
+            /*     {
+                  name: "Moneda",
+                  content: row.DSP_CodMonedaPrecio,
+                }, */
+            {
+              name: "Clasif. SNC",
+              content: row.codclasifsnc,
+            },
+          ],
         }}
       >
-        <BaseTable
-          loading={isLoading}
-          rows={formData.detsolsum}
-          headers={columnsHeaders}
-          rowAction={(row) => console.log(row)}
-          collapsible={{
-            visible: (row: Detsolsum) => [
-              { content: row.nroreng, handleCollapse: true, align: "center" },
-              { content: row.dsp_DescTipoReng, align: "left" },
-              { content: row.dsp_DescNombNorm, align: "left" },
-              { content: row.tiporeng !== "MT" ? row.codserv : row.coditem, align: "center" },
-              { content: row.descreng, align: "left" },
-              {
-                content: <BadgeModule codmenu={row.destino} />,
-                align: "center",
-              },
-              { content: <BadgeSolSum tipo={row.stsrngsol} />, align: "center" },
-              { content: row.unidbasica, align: "center" },
-              { content: row.cantsol, align: "center" },
-              { content: formatCurrency(row?.precio), align: "center" },
-              { content: row.porcimptos, align: "center" },
-              { content: formatCurrency(row.dsp_MtoTotReng), align: "center" },
-              {
-                content: (
-                  <Acciones
-                    row={row}
-                    onDelete={handleDelete}
-                    onEdit={handleEdit}
-                  />
-                ),
-                action: () => null,
-                disableTooltip: true,
-              },
-            ],
-
-            collapsed: (row: Detsolsum) => [
-              {
-                name: "Descripción del servicio, mantenimiento u obra",
-                content: row.descreng,
-              },
-              {
-                name: "Cuenta Presupuestaria",
-                content: `${row.codcta} - ${row.dsp_DescCodCta}`,
-              },
-              {
-                name: "Fecha de última compra",
-                content: formatDate(row.fecstsrng),
-              },
-              /*     {
-                    name: "Moneda",
-                    content: row.DSP_CodMonedaPrecio,
-                  }, */
-              {
-                name: "Clasif. SNC",
-                content: row.codclasifsnc,
-              },
-            ],
-          }}
-        >
-          <Grid container spacing={2} mt={2}>
-            <Grid size={4}>
-              <Typography variant="h3" color="primary" mb={1.5}>
-                SubTotal
-              </Typography>
-              <Input value={formatCurrency(subtotal)} disabled />
-            </Grid>
-            <Grid size={4}>
-              <Typography variant="h3" color="primary" mb={1.5}>
-                Impuesto
-              </Typography>
-              <Input value={formatCurrency(totalIVA)} disabled />
-            </Grid>
-            <Grid size={4}>
-              <Typography variant="h3" color="primary" mb={1.5}>
-                Total
-              </Typography>
-              <Input value={formatCurrency(total)} disabled />
-            </Grid>
+        <Grid container spacing={2} mt={2}>
+          <Grid size={4}>
+            <Typography variant="h3" color="primary" mb={1.5}>
+              SubTotal
+            </Typography>
+            <Input value={formatCurrency(subtotal)} disabled />
           </Grid>
-        </BaseTable>
-      </div>
-      {/*  <ConfirmDialog
-      mode={"delete"}
-      open={openDialog}
-      onConfirm={handleConfirmDelete}
-      onCancel={handleCancelDelete}
-      text={`¿Estas seguro que deseas eliminar la ruta ${
-        rows.find((row) => row.codruta)?.codruta
-      }?`}
-      /> */}
-      <DataSheet
-        formData={formData}
-        /*       isPending={handleLoading}
-         */
-        row={rowSelected}
-        isOpen={isDrawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        refetch={() => {
-          refetch();
-        }}
-      />
-      <SimpleBackdrop show={false} />
+          <Grid size={4}>
+            <Typography variant="h3" color="primary" mb={1.5}>
+              Impuesto
+            </Typography>
+            <Input value={formatCurrency(totalIVA)} disabled />
+          </Grid>
+          <Grid size={4}>
+            <Typography variant="h3" color="primary" mb={1.5}>
+              Total
+            </Typography>
+            <Input value={formatCurrency(total)} disabled />
+          </Grid>
+        </Grid>
+      </BaseTable>
+    </div>
 
-      <Frengcom open={open} handleClose={() => { setOpen(false) }} row={1} idsolsum={6282} nrorng={1} />
+    <SimpleBackdrop show={false} />
 
-    </>
-  );
+    <Frengcom open={isDrawerOpen} handleClose={() => { setDrawerOpen(false) }} idsolsum={formData.cabsolsum.idsolsum} nrorng={rowSelected.nroreng} />
+
+  </>
+);
 };

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ModalDialog from '@/components/modal/modalDialog';
 import ButtonForms from '@/components/button/buttonForms';
 import { Controller, useForm } from 'react-hook-form';
@@ -6,7 +6,7 @@ import { Autocomplete, Grid2 as Grid, TextField, Typography } from '@mui/materia
 import { ConditionalWrapper } from '@/utils/main';
 import { useQueryData } from '@/server/fetch-data';
 import { SkeletonInput } from '@/components/skeleton/detail';
-import { useUpdateRenglon } from '../../hook/useTcambios';
+import { useCreateRenglon, useUpdateRenglon } from '../../hook/useTcambios';
 import { Rengcambio } from '../../tcambioss-types';
 import SimpleBackdrop from '@/components/backdrop/backdrop';
 
@@ -15,15 +15,38 @@ interface HistoriaDocumentoProps {
     onClose: () => void;
     data: Rengcambio;
     refetch: () => void;
+    isNew?: boolean
+
 }
 
-const EditSheet = ({ isOpen, onClose, data, refetch }: HistoriaDocumentoProps) => {
+const EditSheet = ({ isOpen, onClose, data, refetch, isNew = false }: HistoriaDocumentoProps) => {
     const { data: lst_porcmptos, isLoading: lst_porcimptos } = useQueryData({
         entity: "lst_porcimptos",
         dependency: [],
     });
 
+    const [arrayLst, setarrayLst] = useState<any[]>([])
+
+    const { data: lst_renglones, isLoading: lst_renglonesLoading } = useQueryData({
+        entity: "list_renglones",
+        enabled: isNew ? false : data?.idsolsum != 0 && data?.nrocambio != 0,
+        params: { idsolsum: data?.idsolsum, nrocambio: data?.nrocambio },
+        dependency: [data?.idsolsum, data?.nrocambio],
+    });
+
+    useEffect(() => {
+        if (!Array.isArray(lst_renglones)) {
+            console.log('lst_renglones is not an array:', lst_renglones);
+            setarrayLst([]);
+
+        } else {
+            setarrayLst(lst_renglones);
+        }
+    }, [lst_renglones]);
+
     const { mutate, isSuccess, isPending } = useUpdateRenglon();
+    const { mutate: create, isSuccess: iscreate, isPending: isprencreate } = useCreateRenglon();
+    
 
     const { setValue, handleSubmit, register, control, watch } = useForm({
         defaultValues: {
@@ -37,7 +60,16 @@ const EditSheet = ({ isOpen, onClose, data, refetch }: HistoriaDocumentoProps) =
             precioorig: '',
             codserv: '',
             cantsolorig: '',
-            nroreng: 0
+            nroreng: '',
+            tiporeng: '',
+            codigo: '',
+            desccatg: '',
+            descreng: '',
+            stsrngsol: '',
+            destino: '',
+            cantsol: ''
+
+
         }
     });
 
@@ -61,6 +93,28 @@ const EditSheet = ({ isOpen, onClose, data, refetch }: HistoriaDocumentoProps) =
     const onSubmit = (formData: any, event?: React.BaseSyntheticEvent) => {
         if (event) event.preventDefault(); // Evita comportamiento inesperado
 
+        if(isNew){
+            const rengcambioss = {
+                idsolum: data?.idsolsum,
+                nrocambio: data?.nrocambio,
+                nroreng: formData.nroreng,
+                tiporeng: formData.tiporeng,
+                codigo: formData.codigo,
+                coditem: formData.coditem,
+                codserv: formData.codserv,
+                descreng: formData.descreng,
+                unidbasica: formData.unidbasica,
+                cantsol: formData.cantsol,
+                destino: formData.destino,
+                stsrngsol: formData.stsrngsol,
+                preciocambio: formData.preciocambio,
+                porcimptocamb: formData.porcimptocamb,
+                desccatg: formData.desccatg
+            };
+    
+            create({ data: rengcambioss }); // Envía los datos al backend
+        } else {
+
         const rengcambioss = {
             rengcambioss: {
                 coditem: formData.coditem,
@@ -77,22 +131,22 @@ const EditSheet = ({ isOpen, onClose, data, refetch }: HistoriaDocumentoProps) =
         };
 
         mutate({ idsolsum: data.idsolsum.toString(), nrocambio: data.nrocambio.toString(), nroreng: data.nroreng.toString(), data: rengcambioss }); // Envía los datos al backend
-
+    }
     };
 
     useEffect(() => {
-        if (isSuccess) {
+        if (isSuccess || iscreate) {
             onClose();
             refetch()
         }
-    }, [isSuccess])
+    }, [isSuccess, iscreate])
 
     return (
         <>
 
             <ModalDialog
                 width="md"
-                title={`Renglon - ${data?.idsolsum}`}
+                title={`Renglon - ${data?.nroreng}`}
                 dialogOpen={isOpen}
                 handleClose={onClose}
             >
@@ -104,6 +158,47 @@ const EditSheet = ({ isOpen, onClose, data, refetch }: HistoriaDocumentoProps) =
                     </div>
 
                     <Grid container spacing={2} padding={2}>
+                        {isNew && (
+                            <Grid size={12}>
+                                <Typography variant="h3" color="primary" mb={2}>
+                                    Cambio Agregar
+                                </Typography>
+                                <ConditionalWrapper condition={lst_porcimptos} wrapper={SkeletonInput}>
+                                    <Controller
+                                        name="nroreng"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Autocomplete
+                                                {...field}
+                                                fullWidth
+                                                size="small"
+                                                options={Array.isArray(arrayLst) ? arrayLst : []}
+                                                getOptionLabel={(option: any) => `${option.nroreng} - ${option.descreng}`}
+                                                value={arrayLst?.find((option: { nroreng: string }) => option.nroreng === watch('nroreng')) || null}
+                                                onChange={(_, newValue) => {
+                                                    setValue('nroreng', newValue.nroreng);
+                                                    setValue('tiporeng', newValue.tiporeng);
+                                                    setValue('codigo', newValue.codigo);
+                                                    setValue('desccatg', newValue.desccatg);
+                                                    setValue('coditem', newValue.coditem);
+                                                    setValue('codserv', newValue.codserv);
+                                                    setValue('descreng', newValue.descreng);
+                                                    setValue('unidbasica', newValue.unidbasica);
+                                                    setValue('cantsol', newValue.cantsol);
+                                                    setValue('destino', newValue.destino);
+                                                    setValue('stsrngsol', newValue.stsrngsol);
+                                                    setValue('preciocambio', newValue.preciocambio);
+                                                    setValue('porcimptocamb', newValue.porcimptocamb);
+
+                                                }
+                                                }
+                                                renderInput={(params) => <TextField {...params} />}
+                                            />
+                                        )}
+                                    />
+                                </ConditionalWrapper>
+                            </Grid>
+                        )}
                         <Grid size={6}>
                             <Typography variant="h3" color="primary" mb={2}>
                                 Nuevo %
@@ -153,7 +248,7 @@ const EditSheet = ({ isOpen, onClose, data, refetch }: HistoriaDocumentoProps) =
                     </Grid>
                 </form>
             </ModalDialog>
-            <SimpleBackdrop show={isPending} />
+            <SimpleBackdrop show={isPending || isprencreate} />
         </>
     );
 };

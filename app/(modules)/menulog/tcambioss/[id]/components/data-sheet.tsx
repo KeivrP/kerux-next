@@ -18,9 +18,7 @@ import EditSheet from "./edit-sheet";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { ConfirmDialog } from "@/components/modal/confirmDialog";
 import { useDeleteRenglon } from "../../hook/useTcambios";
-import ButtonForms from "@/components/button/buttonForms";
-import Frengcom from "../../../tsolpen/[id]/components/frengcomp";
-import NewSheet from "./new-sheet";
+
 
 interface DataSheetProps {
     id: number;
@@ -139,6 +137,8 @@ export default function DataSheet({
     }, [rows])
 
     const idsolsum = watch("cabsolsum.idsolsum");
+    const nrocambio = watch("cabcambio.nrocambio");
+
 
     const [dataRow, setDataRow] = useState<Rengcambio | null>(null);
     const { mutate, isPending } = useDeleteRenglon()
@@ -172,7 +172,6 @@ export default function DataSheet({
     }
 
     const [open, setOpen] = useState(false)
-
 
 
     return (
@@ -436,7 +435,7 @@ export default function DataSheet({
                     title="Renglones de la solicitud de suministro"
                     action={
                         <Button
-                        onClick={() => setOpen(true)}
+                        onClick={() =>{ setOpen(true); handleOpen(rows?.rengcambio[0] ? rows?.rengcambio[0] : {idsolsum, nrocambio} as Rengcambio)}}
                         variant="contained"
                         color={"primary"}
                         sx={{ textTransform: "none" }}
@@ -515,9 +514,8 @@ export default function DataSheet({
                     }?`}
             />
 
-            <EditSheet refetch={() => refetch()} isOpen={isOpen} onClose={() => { setIsOpen(false); setDataRow(null) }} data={dataRow as Rengcambio} />
+            <EditSheet isNew={open} refetch={() => refetch()} isOpen={isOpen} onClose={() => { setIsOpen(false); setDataRow(null), setOpen(false) }} data={dataRow as Rengcambio} />
             <SimpleBackdrop show={isFetching} />
-            <NewSheet idsolsum={idsolsum} nrocambio={(rows?.rengcambio?.length || 0) + 1} onClose={() => { setOpen(false); setDataRow(null) } } refetch={() => refetch()} isOpen={open}  />
         </div>
     );
 }

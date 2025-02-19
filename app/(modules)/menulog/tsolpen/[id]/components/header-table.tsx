@@ -1,6 +1,6 @@
 import { HeadersName } from "@/components/table-material/genericTable";
 import { IconButton, Tooltip, useTheme } from "@mui/material";
-import { DeleteIcon, EditIcon } from "@/components/icons/table-icon";
+import { DeleteIcon, EditIcon, OpenIcon } from "@/components/icons/table-icon";
 import { Detsolsum } from "../../../tsolsum/tsolsum-types"
 
 export const columnsHeaders: HeadersName[] = [
@@ -21,11 +21,9 @@ export const columnsHeaders: HeadersName[] = [
 
 export const Acciones = ({
   row,
-  onDelete,
   onEdit,
 }: {
   row: Detsolsum;
-  onDelete: (id: number) => void;
   onEdit: (id: Detsolsum) => void;
 }) => {
   const theme = useTheme();
@@ -55,22 +53,11 @@ export const Acciones = ({
             color="primary"
             size="small"
           >
-            <EditIcon />
+            <OpenIcon />
           </IconButton>
         </Tooltip>
 
-        <Tooltip
-          sx={{ backgroundColor: theme.palette.background.default }}
-          title="Eliminar"
-        >
-          <IconButton
-            onClick={() => onDelete(row.nroreng)}
-            color="primary"
-            size="small"
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
+       
       </span>
     </span>
   );

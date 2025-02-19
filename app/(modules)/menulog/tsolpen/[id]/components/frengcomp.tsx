@@ -15,7 +15,6 @@ import { Rengsolsum, Solcompra } from "./frecomp/frecomp-types";
 interface FrengComProps {
   open: boolean;
   handleClose: () => void;
-  row: number;
   nrorng: number;
   idsolsum: number;
 }
@@ -23,7 +22,6 @@ interface FrengComProps {
 const Frengcom = ({
   open,
   handleClose,
-  row,
   nrorng,
   idsolsum,
 }: FrengComProps) => {
@@ -36,11 +34,12 @@ const Frengcom = ({
   const { data, isLoading } = useQueryData({
     entity: "rengs_sums",
     api: "log",
+    enabled: nrorng !== 0,
     params: {
-      idsolsum: idsolsum,
+      idsolsum,
       nroreng: nrorng,
     },
-    dependency: [row],
+    dependency: [nrorng, nrorng],
   });
 
   useEffect(() => {
@@ -79,20 +78,19 @@ const Frengcom = ({
           <CardHeader className="bg-muted py-2 text-[#142F62]" title="Cotizaciones" />
           <CardContent className="p-4">
             <Grid size={12}>
-              <FrengcomTable cotizacion={rengsolsum?.sit_renglon_compras.cotizacion || []} isLoading={isLoading} />
+              <FrengcomTable cnsprov={cnsprov} cotizacion={rengsolsum?.sit_renglon_compras.cotizacion || []} isLoading={isLoading} />
             </Grid>
           </CardContent>
         </Card>
-        {cnsprov === "S" && (
           <Card className="">
             <CardHeader className="bg-muted py-2 text-[#142F62]" title="Ordenes de Compra" />
             <CardContent className="p-4">
               <Grid size={12}>
-                <FrengcomTable2 orden_compra={rengsolsum?.sit_renglon_compras.orden_compra || []} isLoading={isLoading} />
+                <FrengcomTable2 cnsprov={cnsprov} orden_compra={rengsolsum?.sit_renglon_compras.orden_compra || []} isLoading={isLoading} />
               </Grid>
             </CardContent>
           </Card>
-        )}
+      
       </Grid>
     </ModalDialog>
   );
