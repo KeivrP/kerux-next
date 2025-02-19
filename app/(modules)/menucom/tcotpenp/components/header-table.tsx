@@ -86,7 +86,7 @@ export const Acciones = ({
 
         <Tooltip
           sx={{ backgroundColor: theme.palette.background.default }}
-          title="Rechazar"
+          title="Anular"
         >
           <IconButton
             onClick={() => onReject(row.numcot)}
