@@ -13,6 +13,7 @@ export const entities = {
   tcmabios_show: '/cambios_crud/show',
   hdoc: 'docs_logs_crud',
   moneda: '/sols_sums_crud/lst_codmoneda',
+  beneficiarios_crud: 'beneficiarios_crud',
 
 
   // Lists
@@ -92,5 +93,6 @@ export const entities = {
   tipos_doc_com: '/tipos_doc_com',
   tipos_doc: '/tipos_doc',
   sols_sums: '/sols_sums/?',
+  
 };
 

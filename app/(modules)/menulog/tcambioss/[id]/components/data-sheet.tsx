@@ -17,7 +17,9 @@ import { ITcambiosRoot, Rengcambio } from "../../tcambioss-types";
 import EditSheet from "./edit-sheet";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { ConfirmDialog } from "@/components/modal/confirmDialog";
-import { useDeleteRenglon } from "../../hook/useTcambios";
+import { useDeleteRenglon, useProcesarCambio } from "../../hook/useTcambios";
+import ButtonForms from "@/components/button/buttonForms";
+import { CircleSlash } from "lucide-react";
 
 
 interface DataSheetProps {
@@ -173,11 +175,24 @@ export default function DataSheet({
 
     const [open, setOpen] = useState(false)
 
+    const { mutate: generateMutate, isPending: procesarLoading } = useProcesarCambio();
+
 
     return (
 
         <div>
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
 
+                <ButtonForms
+                    onClick={() => generateMutate({ idsolsum: String(watch('cabsolsum.idsolsum')), nrocambio: String(watch('cabcambio.nrocambio')) })}
+                    sx={{ color: "alert", alignItems: "center" }}
+                >
+                    <CircleSlash size={18} />
+                    <Typography variant="h3" marginLeft={1}>
+                        Procesar
+                    </Typography>
+                </ButtonForms>
+            </div>
             {/* Supply Request Section */}
             <Card className="mb-4">
                 <CardHeader className="bg-muted py-2 text-[#142F62]" title="Solicitud de suministro" />
@@ -435,13 +450,13 @@ export default function DataSheet({
                     title="Renglones de la solicitud de suministro"
                     action={
                         <Button
-                        onClick={() =>{ setOpen(true); handleOpen(rows?.rengcambio[0] ? rows?.rengcambio[0] : {idsolsum, nrocambio} as Rengcambio)}}
-                        variant="contained"
-                        color={"primary"}
-                        sx={{ textTransform: "none" }}
-                      >
-                        <Typography variant="h3">{ "+ AÑADIR"}</Typography>
-                      </Button>
+                            onClick={() => { setOpen(true); handleOpen(rows?.rengcambio[0] ? rows?.rengcambio[0] : { idsolsum, nrocambio } as Rengcambio) }}
+                            variant="contained"
+                            color={"primary"}
+                            sx={{ textTransform: "none" }}
+                        >
+                            <Typography variant="h3">{"+ AÑADIR"}</Typography>
+                        </Button>
                     }
                 />
                 <CardContent className="p-4">
@@ -515,7 +530,7 @@ export default function DataSheet({
             />
 
             <EditSheet isNew={open} refetch={() => refetch()} isOpen={isOpen} onClose={() => { setIsOpen(false); setDataRow(null), setOpen(false) }} data={dataRow as Rengcambio} />
-            <SimpleBackdrop show={isFetching} />
+            <SimpleBackdrop show={isFetching || isPending || procesarLoading} />
         </div>
     );
 }

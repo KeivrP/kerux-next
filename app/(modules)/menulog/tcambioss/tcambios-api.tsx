@@ -55,3 +55,16 @@ export const DeleteCambio = async (idsolsum: string, nrocambio: string, nroreng:
         throw error;
         }
 }
+
+export const ProcesarCambio = async (idsolsum: string, nrocambio: string): Promise<Response> => {
+    try {
+        const res = await Api_Log.post(`/cambios_crud/boton_procesar_cambio`, {
+            idsolsum,
+            nrocambio
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}

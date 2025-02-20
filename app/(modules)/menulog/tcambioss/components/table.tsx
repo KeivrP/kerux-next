@@ -12,7 +12,7 @@ import { ConfirmDialog } from "@/components/modal/confirmDialog";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { formatDate } from "@/utils/main";
 import { BadgeTipodoc } from "@/components/badge/badge-estatus";
-import { useDeleteTcambio } from "../hook/useTcambios";
+import { useDeleteTcambio, useProcesarCambio } from "../hook/useTcambios";
 import { usePathname, useRouter } from "next/navigation";
 
 export const TcambiosTable = () => {
@@ -108,6 +108,15 @@ export const TcambiosTable = () => {
     }
   };
 
+  const { mutate: procesar, isPending: procesarLoading } = useProcesarCambio();
+
+  const handleProcesar = (idsolsum: number, nrocambio: number) => {
+    procesar({
+      idsolsum: idsolsum.toString(),
+      nrocambio: nrocambio.toString(),
+    });
+  };
+
 
 
   return (
@@ -149,6 +158,7 @@ export const TcambiosTable = () => {
                     row={row}
                     onDelete={handleDelete}
                     onEdit={handleOpen}
+                    onProcesar={handleProcesar}
                   />
                 ),
                 action: () => null,
@@ -174,7 +184,7 @@ export const TcambiosTable = () => {
         onCancel={handleCancelDelete}
         text={`¿Estas seguro que deseas eliminar la solicitud ${rows.find((row) => row.idsolsum == deleteRowId)?.idsolsum}?`}
       />
-      <SimpleBackdrop show={isPending} />
+      <SimpleBackdrop show={isPending || procesarLoading} />
     </>
   );
 };

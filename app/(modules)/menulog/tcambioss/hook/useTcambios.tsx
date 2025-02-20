@@ -1,5 +1,5 @@
 import { showNotification } from "@/components/toast/toast";
-import { CreateCambio, DeleteCambio, deleteTcambio, UpdateCambio } from "../tcambios-api";
+import { CreateCambio, DeleteCambio, deleteTcambio, ProcesarCambio, UpdateCambio } from "../tcambios-api";
 import { useMutation } from "@tanstack/react-query";
 import { error } from "console";
 
@@ -44,6 +44,18 @@ export const useCreateRenglon = () => {
 export const useDeleteRenglon = () => {
   return useMutation({
     mutationFn: ({ idsolsum, nrocambio, nroreng }: { idsolsum: string, nrocambio: string, nroreng: string }) => DeleteCambio(idsolsum, nrocambio, nroreng),
+    onSuccess(res) {
+      showNotification(res);
+    },
+    onError: (error) => {
+      console.error('Error uploading documents:', error);
+    }
+  });
+}
+
+export const useProcesarCambio = () => {
+  return useMutation({
+    mutationFn: ({ idsolsum, nrocambio }: { idsolsum: string, nrocambio: string }) => ProcesarCambio(idsolsum, nrocambio),
     onSuccess(res) {
       showNotification(res);
     },
