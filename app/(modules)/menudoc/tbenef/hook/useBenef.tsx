@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { deleteBenef } from "../tbenef-api";
+import { createBenef, deleteBenef, updateBenef } from "../tbenef-api";
 import { showNotification } from "@/components/toast/toast";
 
 export const useDeleteBenef = () => {
@@ -14,3 +14,29 @@ export const useDeleteBenef = () => {
     },
   });
 };
+
+export const useUpdateBenef = () => {
+  return useMutation({
+    mutationFn: ({ id, data }: { id: number; data: any }) => updateBenef(id, data),
+    onSuccess: (res) => {
+      console.log(res)
+      showNotification(res);
+    },
+    onError: (error) => {
+      console.error("Error uploading documents:", error);
+    },
+  });
+}
+
+export const useCreateBenef = () => {
+  return useMutation({
+    mutationFn: (data: any) => createBenef(data),
+    onSuccess: (res) => {
+      console.log(res)
+      showNotification(res);
+    },
+    onError: (error) => {
+      console.error("Error uploading documents:", error);
+    },
+  });
+}

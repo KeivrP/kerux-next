@@ -53,6 +53,8 @@ export const entities = {
   controlog: '/sols_sums_crud/lst_controlog',
   lst_sscambios: '/listas/lst_sscambio_gen',
   lst_porcimptos: 'listas/lst_porcimptos',
+  lst_ubgeo: '/listas/lst_ubic_geog',
+  lst_prov: '/listas/lst_tipo_prov',
 
 
   // Other entities
