@@ -48,7 +48,7 @@ const EditSheet = ({ isOpen, onClose, data, refetch, isNew = false }: HistoriaDo
     const { mutate: create, isSuccess: iscreate, isPending: isprencreate } = useCreateRenglon();
     
 
-    const { setValue, handleSubmit, register, control, watch } = useForm({
+    const { setValue, handleSubmit, register, control, watch, reset } = useForm({
         defaultValues: {
             porcimptocamb: '',
             preciocambio: 0,
@@ -74,6 +74,12 @@ const EditSheet = ({ isOpen, onClose, data, refetch, isNew = false }: HistoriaDo
     });
 
     useEffect(() => {
+        if(isNew){
+            reset()
+        }
+    }, [isNew])
+
+    useEffect(() => {
         if (data) {
             setValue('porcimptocamb', data.porcimptocamb);
             setValue('preciocambio', Number(data.preciocambio));
@@ -87,6 +93,8 @@ const EditSheet = ({ isOpen, onClose, data, refetch, isNew = false }: HistoriaDo
             setValue('cantsolorig', data.cantsolorig);
             setValue('nroreng', data.nroreng.toString());
 
+        } else {
+            reset();
         }
     }, [data, setValue]);
 
@@ -136,8 +144,8 @@ const EditSheet = ({ isOpen, onClose, data, refetch, isNew = false }: HistoriaDo
 
     useEffect(() => {
         if (isSuccess || iscreate) {
-            onClose();
             refetch()
+            onClose();
         }
     }, [isSuccess, iscreate])
 

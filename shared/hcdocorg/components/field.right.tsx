@@ -19,7 +19,7 @@ import { FormContextProps } from "../hcdocorg-utils";
 import BadgeModule from "@/components/badge/badge-mod";
 import Grid from "@mui/material/Grid2";
 import { Input } from "@/components/ui/input";
-import { BadgeAct } from "@/components/badge/badge-act";
+import { BadgeAct, BadgeReverso } from "@/components/badge/badge-act";
 import { BadgeStsDoc } from "@/components/badge/badge-log";
 
 interface FieldRightProps extends FormContextProps {
@@ -176,7 +176,7 @@ function FieldRight({
                 { content: row.iddoc, align: "center" },
                 { content: row.tipodoc, align: "center" },
                 {
-                  content: <BadgeAct status={row.indreverso} />,
+                  content: <BadgeReverso status={row.indreverso} />,
                   align: "center",
                 },
                 {

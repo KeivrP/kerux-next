@@ -17,7 +17,7 @@ export const useDeleteBenef = () => {
 
 export const useUpdateBenef = () => {
   return useMutation({
-    mutationFn: ({ id, data }: { id: number; data: any }) => updateBenef(id, data),
+    mutationFn: ({ id, beneficiario }: { id: number; beneficiario: any }) => updateBenef(id, beneficiario),
     onSuccess: (res) => {
       console.log(res)
       showNotification(res);
@@ -30,7 +30,7 @@ export const useUpdateBenef = () => {
 
 export const useCreateBenef = () => {
   return useMutation({
-    mutationFn: (data: any) => createBenef(data),
+    mutationFn: (beneficiario: any) => createBenef(beneficiario),
     onSuccess: (res) => {
       console.log(res)
       showNotification(res);

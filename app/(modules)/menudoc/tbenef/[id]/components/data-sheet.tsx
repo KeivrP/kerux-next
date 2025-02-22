@@ -12,6 +12,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useCreateBenef, useUpdateBenef } from "../../hook/useBenef";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { set } from "zod";
+import { usePathname, useRouter } from "next/navigation";
 
 interface BeneficiaryData {
     nombre: string
@@ -65,6 +66,8 @@ export default function DataSheet({
 
 }: DataSheetProps): JSX.Element {
     const { control, handleSubmit, reset, watch, setValue, register } = useForm<BeneficiaryData>()
+    const router = useRouter()
+
 
     const tipobenef = watch("tipobenef")
 
@@ -76,7 +79,7 @@ export default function DataSheet({
         dependency: [id],
     });
 
-    const {data: lst_prov, isLoading: lst_prov_loading} = useQueryData({
+    const { data: lst_prov, isLoading: lst_prov_loading } = useQueryData({
         entity: "lst_prov",
         api: 'doc',
         params: {
@@ -86,20 +89,20 @@ export default function DataSheet({
         dependency: [tipobenef],
     })
 
-    const {data: lst_ubic_geog, isLoading: lst_ubic_geog_loading} = useQueryData({
+    const { data: lst_ubic_geog, isLoading: lst_ubic_geog_loading } = useQueryData({
         entity: "lst_ubgeo",
         api: 'doc',
         dependency: [],
     })
 
 
-    const { mutate: create, isPending: isPendingCreate } = useCreateBenef()
+    const { mutate: create, isPending: isPendingCreate, isSuccess: isSuccessCreate } = useCreateBenef()
     const { mutate: update, isPending: isPendingUpdate } = useUpdateBenef()
 
     useEffect(() => {
-        if (data) {
+        if (data && data.beneficiario) {
             const initialData = Object.fromEntries(
-                Object.entries(data.beneficiario).map(([key, value]) => [key, value === null ? "" : value]),
+                Object.entries(data.beneficiario[0]).map(([key, value]) => [key, value === null ? "" : value]),
             ) as unknown as BeneficiaryData
             reset(initialData)
         }
@@ -107,24 +110,31 @@ export default function DataSheet({
 
     }, [data])
 
-    const onSubmit = (data: BeneficiaryData) => {
+    const onSubmit = (beneficiario: BeneficiaryData) => {
         if (id !== "-" && id !== "") {
-            update({ id: parseInt(id), data })
+            update({ id: parseInt(id), beneficiario })
         } else {
-            create({ data })
+            create({ beneficiario })
             reset()
         }
 
-        console.log(data)
+        console.log(beneficiario)
     }
 
-const codubicac = useMemo(() => {
-    const selectedOption = lst_ubic_geog?.find((option: { codubicg: string }) => option.codubicg === watch("codubicg"));
-    return selectedOption ? selectedOption.descubica : null;
-}, [watch("codubicg"), lst_ubic_geog]);
+    useEffect(() => {
+        if (isSuccessCreate) {
+            router.push(`/menudoc/tbenef/`)
+        }
+    }, [isSuccessCreate])
 
 
-console.log(data)
+    const codubicac = useMemo(() => {
+        const selectedOption = lst_ubic_geog?.find((option: { codubicg: string }) => option.codubicg === watch("codubicg"));
+        return selectedOption ? selectedOption.descubica : null;
+    }, [watch("codubicg"), lst_ubic_geog]);
+
+
+    const [open, setOpen] = useState(false)
 
 
     return (
@@ -142,6 +152,15 @@ console.log(data)
                                 Contacto
                             </Typography>
                         </ButtonForms>
+                        <ButtonForms
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            sx={{ width: 100 }}
+                        >
+                            Guardar
+                        </ButtonForms>
                     </div>
                     {/* Supply Request Section */}
                     <Card className="mb-4">
@@ -152,17 +171,20 @@ console.log(data)
                                 <Grid size={{ xs: 12, md: 4 }}>
                                     <Grid container spacing={1}>
                                         <Grid size={6}>
-                                            <Label className="text-sm text-[#142F62]">Numero</Label>
+                                            <Label className="text-sm text-[#142F62]">Número</Label>
                                             <ConditionalWrapper condition={false} wrapper={SkeletonInput}>
                                                 <Controller
                                                     name="numbenef"
+                                                    disabled
                                                     control={control}
-                                                    render={({ field }) => (
+                                                    render={({ field, fieldState }) => (
                                                         <TextField
                                                             {...field}
                                                             size="small"
                                                             value={field.value || ""}
                                                             sx={{ backgroundColor: "white" }}
+                                                            error={!!fieldState.error}
+                                                            helperText={fieldState.error ? fieldState.error.message : null}
                                                         />
                                                     )}
                                                 />
@@ -179,23 +201,37 @@ console.log(data)
                                                                 <Controller
                                                                     name="letraid"
                                                                     control={control}
+                                                                    rules={{ required: "Letra id" }}
+
                                                                     render={({ field }) => (
-                                                                        <TextField
+                                                                        <Select
                                                                             {...field}
                                                                             size="small"
                                                                             value={field.value || ""}
                                                                             sx={{ backgroundColor: "white" }}
-                                                                        />
+                                                                        >
+                                                                            <MenuItem value={"V"}>V</MenuItem>
+                                                                            <MenuItem value={"J"}>J</MenuItem>
+                                                                            <MenuItem value={"G"}>G</MenuItem>
+                                                                            <MenuItem value={"P"}>P</MenuItem>
+                                                                            <MenuItem value={"C"}>C</MenuItem>
+                                                                            <MenuItem value={"N"}>N</MenuItem>
+                                                                            <MenuItem value={"E"}>E</MenuItem>
+                                                                        </Select>
                                                                     )}
                                                                 />
                                                             </Grid>
                                                             <Grid size={9}>
                                                                 <Controller
                                                                     name="numid"
+                                                                    rules={{ required: "Numero de identificacion" }}
+
                                                                     control={control}
                                                                     render={({ field }) => (
                                                                         <TextField
                                                                             {...field}
+                                                                            inputProps={{ maxLength: 12 }}
+                                                                            type="number"
                                                                             size="small"
                                                                             value={field.value || ""}
                                                                             sx={{ backgroundColor: "white" }}
@@ -219,6 +255,7 @@ console.log(data)
                                                     <TextField
                                                         {...field}
                                                         size="small"
+                                                        inputProps={{ maxLength: 2 }}
                                                         value={field.value || ""}
                                                         sx={{ backgroundColor: "white" }}
                                                     />
@@ -235,7 +272,9 @@ console.log(data)
                                                     <TextField
                                                         {...field}
                                                         size="small"
+                                                        type="number"
                                                         value={field.value || ""}
+                                                        inputProps={{ maxLength: 12 }}
                                                         sx={{ backgroundColor: "white" }}
                                                     />
                                                 )}
@@ -251,6 +290,7 @@ console.log(data)
                                                     <TextField
                                                         {...field}
                                                         size="small"
+                                                        inputProps={{ maxLength: 15 }}
                                                         value={field.value || ""}
                                                         sx={{ backgroundColor: "white" }}
                                                     />
@@ -272,11 +312,14 @@ console.log(data)
                                                     <Controller
                                                         name="nombre"
                                                         control={control}
+                                                        rules={{ required: "Ingrese Nombre" }}
+
                                                         render={({ field }) => (
                                                             <TextField
                                                                 {...field}
                                                                 size="small"
                                                                 fullWidth
+                                                                inputProps={{ maxLength: 60 }}
                                                                 value={field.value || ""}
                                                                 sx={{ backgroundColor: "white" }}
                                                             />
@@ -288,6 +331,8 @@ console.log(data)
 
                                                     <Box display="flex" gap={1} alignItems="center">
                                                         <Controller
+                                                            rules={{ required: "Ingrese Abreviado" }}
+
                                                             name="appabrev"
                                                             control={control}
                                                             render={({ field }) => (
@@ -295,6 +340,7 @@ console.log(data)
                                                                     {...field}
                                                                     size="small"
                                                                     fullWidth
+                                                                    inputProps={{ maxLength: 25 }}
                                                                     value={field.value || ""}
                                                                     sx={{ backgroundColor: "white" }}
                                                                 />
@@ -307,9 +353,10 @@ console.log(data)
                                                                 <FormControlLabel
                                                                     control={
                                                                         <Checkbox
+
                                                                             checked={field.value === "S"}
                                                                             onChange={(e) => field.onChange(e.target.checked ? "S" : "N")}
-                                                                            size="small"
+                                                                            size="medium"
                                                                         />
                                                                     }
                                                                     label="Activo?"
@@ -324,12 +371,14 @@ console.log(data)
                                             <Label className="text-sm text-[#142F62]">Extendido</Label>
 
                                             <Controller
-                                                name="nombre"
+                                                name="abonese"
                                                 control={control}
+                                                rules={{ required: "Ingrese Extendido" }}
                                                 render={({ field }) => (
                                                     <TextField
                                                         {...field}
                                                         size="small"
+                                                        inputProps={{ maxLength: 150 }}
                                                         fullWidth
                                                         value={field.value || ""}
                                                         sx={{ backgroundColor: "white" }}
@@ -346,56 +395,127 @@ console.log(data)
                     </Card>
 
                     <Grid container spacing={2}>
-                        <Grid size={{ xs: 12, md: 6 }}>
+                        <Grid size={{ xs: 12, md: 8 }}>
 
                             <Card className="mb-4">
                                 <CardHeader className="bg-muted py-2 text-[#142F62]" title="Selección" />
                                 <CardContent className="p-4">
                                     <Grid container spacing={2}>
-                                        <Grid size={{ xs: 12, md: 4 }}>
-                                            <FormControl component="fieldset">
-                                                <Label className="text-sm text-[#142F62]">Tipo</Label>
-                                                <Controller
-                                                    name="tipobenef"
-                                                    control={control}
-                                                    render={({ field }) => (
-                                                        <RadioGroup {...field}>
-                                                            <FormControlLabel value="P" control={<Radio size="small" checked={field.value === "P"} />} label="Público" />
-                                                            <FormControlLabel value="N" control={<Radio size="small" checked={field.value === "N"} />} label="Natural" />
-                                                            <FormControlLabel value="J" control={<Radio size="small" checked={field.value === "J"} />} label="Jurídico" />
-                                                            <FormControlLabel value="E" control={<Radio size="small" checked={field.value === "E"} />} label="Extranjero" />
-                                                        </RadioGroup>
-                                                    )}
-                                                />
-                                            </FormControl>
+                                        <Grid size={{ xs: 12, md: 3 }}>
+                                            <Grid container spacing={1}>
+                                                <Grid size={12}>
+
+                                                    <FormControl component="fieldset">
+                                                        <Label className="text-sm text-[#142F62]">Tipo</Label>
+                                                        <Controller
+                                                            rules={{ required: "Tipo benef" }}
+
+                                                            name="tipobenef"
+                                                            control={control}
+                                                            defaultValue="J"
+                                                            render={({ field }) => (
+                                                                <RadioGroup {...field}>
+                                                                    <FormControlLabel value="P" control={<Radio size="small" checked={field.value === "P"} />} label="Público" />
+                                                                    <FormControlLabel value="N" control={<Radio size="small" checked={field.value === "N"} />} label="Natural" />
+                                                                    <FormControlLabel value="J" control={<Radio size="small" checked={field.value === "J"} />} label="Jurídico" />
+                                                                    <FormControlLabel value="E" control={<Radio size="small" checked={field.value === "E"} />} label="Extranjero" />
+                                                                </RadioGroup>
+                                                            )}
+                                                        />
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid size={12}>
+
+                                                    <Label className="text-sm text-[#142F62]">Tipo de proveedor</Label>
+                                                    <ConditionalWrapper condition={lst_prov_loading} wrapper={SkeletonInput}>
+                                                        <Autocomplete
+                                                            fullWidth
+                                                            loading={lst_prov_loading}
+                                                            size="small"
+                                                            {...register("tipoprov")}
+                                                            options={Array.isArray(lst_prov) ? lst_prov : []}
+                                                            getOptionLabel={(option) => option.descvalor.toString()}
+                                                            renderInput={(params) => <TextField {...params} className="border border-input bg-background" />}
+                                                            value={
+                                                                Array.isArray(lst_prov)
+                                                                    ? lst_prov.find((option) => option.valor === watch("tipoprov")) || null
+                                                                    : null
+                                                            }
+                                                            onChange={(_, newValue) => {
+                                                                setValue("tipoprov", newValue?.valor || "");
+                                                            }}
+                                                        />
+                                                        {/* Tipo Proveedor */}
+                                                    </ConditionalWrapper>
+                                                </Grid>
+                                            </Grid>
                                         </Grid>
-                                        <Grid size={{ xs: 12, md: 8 }}>
+                                        <Grid size={{ xs: 12, md: 9 }}>
                                             <FormControl component="fieldset">
                                                 <Label className="text-sm text-[#142F62]">Clase</Label>
                                                 <Controller
                                                     name="clase"
+                                                    rules={{ required: "Ingrese Clase" }}
                                                     control={control}
                                                     render={({ field }) => (
                                                         <RadioGroup {...field} row>
                                                             <Grid container>
-                                                                <Grid size={6}>
+                                                                <Grid size={4}>
                                                                     <FormControlLabel value="F" control={<Radio size="small" checked={field.value === "F"} />} label="Funcionario" />
                                                                 </Grid>
-                                                                <Grid size={6}>
+                                                                <Grid size={4}>
                                                                     <FormControlLabel value="P" control={<Radio size="small" checked={field.value === "P"} />} label="Proveedor" />
                                                                 </Grid>
-                                                                <Grid size={6}>
+                                                                <Grid size={4}>
                                                                     <FormControlLabel value="S" control={<Radio size="small" checked={field.value === "S"} />} label="Socio Beneficiario" />
                                                                 </Grid>
-                                                                <Grid size={6}>
+                                                                <Grid size={4}>
                                                                     <FormControlLabel value="O" control={<Radio size="small" checked={field.value === "O"} />} label="Obrero" />
                                                                 </Grid>
-                                                                <Grid size={6}>
-                                                                    <FormControlLabel value="A" control={<Radio size="small" checked={field.value === "A"} />} label="Organismo adscrito" />
+                                                                <Grid size={4}>
+                                                                    <FormControlLabel value="A" control={<Radio size="small" checked={field.value === "A"} />} label="Organismo Adscrito" />
                                                                 </Grid>
-                                                                <Grid size={6}>
+                                                                <Grid size={4}>
                                                                     <FormControlLabel value="C" control={<Radio size="small" checked={field.value === "C"} />} label="Cuentadante" />
                                                                 </Grid>
+                                                                <Grid size={4}>
+                                                                    <FormControlLabel value="C" control={<Radio size="small" checked={field.value === "J"} />} label="Junta Directiva" />
+                                                                </Grid>
+                                                                <Grid size={4}>
+                                                                    <FormControlLabel value="C" control={<Radio size="small" checked={field.value === "B"} />} label="Banco" />
+                                                                </Grid>
+                                                                <Grid size={4}>
+                                                                    <FormControlLabel value="C" control={<Radio size="small" checked={field.value === "I"} />} label="Inspector" />
+                                                                </Grid>
+                                                                <Grid size={4}>
+                                                                    <FormControlLabel value="C" control={<Radio size="small" checked={field.value === "Y"} />} label="Proyectista" />
+                                                                </Grid>
+                                                                <Grid size={4}>
+                                                                    <FormControlLabel value="C" control={<Radio size="small" checked={field.value === "T"} />} label="Contratista" />
+                                                                </Grid>
+                                                                <Grid size={4}>
+                                                                    <FormControlLabel value="C" control={<Radio size="small" checked={field.value === "X"} />} label="Otro" />
+                                                                </Grid>
+                                                                {watch("clase") === "C" && (
+                                                                    <Grid size={12} mt={1}>
+                                                                        <Label className="text-sm text-[#142F62]">Número de cuentadante</Label>
+
+                                                                        <Controller
+                                                                            name="nroctadante"
+                                                                            control={control}
+                                                                            render={({ field }) => (
+                                                                                <TextField
+                                                                                    {...field}
+                                                                                    size="small"
+                                                                                    fullWidth
+                                                                                    inputProps={{ maxLength: 20 }}
+                                                                                    value={field.value || ""}
+                                                                                    sx={{ backgroundColor: "white" }}
+                                                                                />
+                                                                            )}
+                                                                        />
+                                                                    </Grid>
+                                                                )}
                                                             </Grid>
                                                         </RadioGroup>
                                                     )}
@@ -407,7 +527,7 @@ console.log(data)
                                 </CardContent>
                             </Card>
                         </Grid>
-                        <Grid size={{ xs: 12, md: 6 }}>
+                        <Grid size={{ xs: 12, md: 4 }}>
 
                             <Card className="mb-4">
                                 <CardHeader className="bg-muted py-2 text-[#142F62]" title="Selección" />
@@ -416,15 +536,15 @@ console.log(data)
                                         <Grid size={12}>
                                             <Grid container spacing={1}>
                                                 {/* RCN Section */}
-                                                <Grid size={{ xs: 12, sm: 4 }}>
-                                                    <Label className="text-sm text-[#142F62]">RCN</Label>
+                                                <Grid size={{ xs: 12, sm: 6 }}>
+                                                    <Label className="text-sm text-[#162F62]">RNC</Label>
 
                                                     <Box sx={{ mb: 1 }}>
                                                         <Controller
-                                                            name="rnc"
+                                                            name="numocei"
                                                             control={control}
                                                             render={({ field }) => (
-                                                                <TextField {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} />
+                                                                <TextField inputProps={{ maxLength: 20 }} {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} />
                                                             )}
                                                         />
                                                     </Box>
@@ -432,7 +552,20 @@ console.log(data)
                                                 </Grid>
 
                                                 {/* Vigencia de registro */}
-                                                <Grid size={{ xs: 12, sm: 4 }}>
+                                                <Grid size={{ xs: 12, sm: 6 }}>
+                                                    <Label className="text-sm text-[#162F62]">Fecha RNC</Label>
+
+                                                    <Box display="flex" alignItems="center" gap={1}>
+                                                        <Controller
+                                                            name="fecocei"
+                                                            control={control}
+                                                            render={({ field }) => (
+                                                                <TextField {...field} type="date" size="small" fullWidth sx={{ backgroundColor: "white" }} />
+                                                            )}
+                                                        />
+                                                    </Box>
+                                                </Grid>
+                                                <Grid size={{ xs: 12, sm: 6 }}>
                                                     <Label className="text-sm text-[#142F62]">Vigencia de registro</Label>
 
                                                     <Box display="flex" alignItems="center" gap={1}>
@@ -447,56 +580,29 @@ console.log(data)
                                                 </Grid>
 
                                                 {/* Auxiliar contable */}
-                                                <Grid size={{ xs: 12, sm: 4 }}>
+                                                <Grid size={{ xs: 12, sm: 6 }}>
                                                     <Label className="text-sm text-[#142F62]">Auxiliar contable</Label>
 
                                                     <Controller
                                                         name="auxiliarContable"
                                                         control={control}
                                                         render={({ field }) => (
-                                                            <TextField {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} />
+                                                            <TextField {...field} size="small" inputProps={{ maxLength: 14 }} fullWidth sx={{ backgroundColor: "white" }} />
                                                         )}
                                                     />
                                                 </Grid>
 
-                                                {/* Tipo Proveedor */}
-                                                <Grid size={{ xs: 12, sm: 4 }}>
-                                                    <Label className="text-sm text-[#142F62]">Tipo de proveedor</Label>
-                                                    <ConditionalWrapper condition={lst_prov_loading} wrapper={SkeletonInput}>
-                                                   
-                                                   <Autocomplete
-                                                       fullWidth
-                                                       loading={lst_prov_loading}
-               
-                                                       size="small"
-                                                       {...register("tipoprov", { required: "Tipo requerido" })}
-                                                       options={
-                                                           Array.isArray(lst_prov) ? lst_prov : []
-                                                       }
-                                                       getOptionLabel={(option) => option.descvalor.toString()}
-                                                       renderInput={(params) => <TextField {...params} className=" border border-input bg-background" />}
-                                                       value={
-                                                           Array.isArray(lst_prov)
-                                                               ? lst_prov.find((option) => option.valor === watch("tipoprov")) || null
-                                                               : null
-                                                       }
-                                                       onChange={(_, newValue) => {
-                                                        setValue("tipoprov", newValue?.valor || "");
-                                                                                                                                                     
-                                                       }}
-                                                   />
-                                               
-                                               </ConditionalWrapper>
-                                                </Grid>
+
                                                 {/* Relación otros */}
-                                                <Grid size={{ xs: 12, sm: 8 }}>
+                                                <Grid size={{ xs: 12, sm: 12 }} mt={1}>
 
                                                     <FormControl component="fieldset">
-                                                        <Label className="text-sm text-[#142F62]">Relacion otros</Label>
+                                                        <Label className="text-sm text-[#142F62]">Relación otros</Label>
 
                                                         <Controller
                                                             name="condicionbenef"
                                                             control={control}
+                                                            defaultValue="N"
                                                             render={({ field }) => (
                                                                 <RadioGroup {...field} row>
                                                                     <FormControlLabel
@@ -551,6 +657,7 @@ console.log(data)
                                                         multiline
                                                         rows={2}
                                                         size="small"
+                                                        inputProps={{ maxLength: 180 }}
                                                         fullWidth
                                                         sx={{ backgroundColor: "white" }}
                                                     />
@@ -558,55 +665,128 @@ console.log(data)
                                             />
 
                                         </Grid>
-                                        <Grid size={4}>
+                                        <Grid size={12}>
                                             <Label className="text-sm text-[#142F62]">Dir Postal</Label>
 
                                             <Controller
                                                 name="direcpostal"
                                                 control={control}
                                                 render={({ field }) => (
-                                                    <TextField {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} />
+                                                    <TextField inputProps={{ maxLength: 180 }} {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} />
                                                 )}
                                             />
                                         </Grid>
-                                        <Grid size={8}>
+                                        <Grid size={12}>
                                             <Label className="text-sm text-[#142F62]">Ubicación Física</Label>
 
                                             <Grid container spacing={1}>
                                                 <Grid size={4}>
                                                     <ConditionalWrapper condition={lst_ubic_geog_loading} wrapper={SkeletonInput}>
-                                                   
-                                                                                       <Autocomplete
-                                                                                           fullWidth
-                                                                                           loading={lst_ubic_geog_loading}
-                                                   
-                                                                                           size="small"
-                                                                                           {...register("codubicg", { required: "Tipo requerido" })}
-                                                                                           options={
-                                                                                               Array.isArray(lst_ubic_geog) ? lst_ubic_geog : []
-                                                                                           }
-                                                                                           getOptionLabel={(option) => option.codubicg.toString()}
-                                                                                           renderInput={(params) => <TextField {...params} className=" border border-input bg-background" />}
-                                                                                           value={
-                                                                                               Array.isArray(lst_ubic_geog)
-                                                                                                   ? lst_ubic_geog.find((option) => option.codubicg === watch("codubicg")) || null
-                                                                                                   : null
-                                                                                           }
-                                                                                           onChange={(_, newValue) => {
-                                                                                            setValue("codubicg", newValue?.codubicg || "");
-                                                                                                                                                                                         
-                                                                                           }}
-                                                                                       />
-                                                                                   
-                                                                                   </ConditionalWrapper>
+
+                                                        <Autocomplete
+                                                            fullWidth
+                                                            loading={lst_ubic_geog_loading}
+
+                                                            size="small"
+                                                            {...register("codubicg", { required: "Tipo requerido" })}
+                                                            options={
+                                                                Array.isArray(lst_ubic_geog) ? lst_ubic_geog : []
+                                                            }
+                                                            getOptionLabel={(option) => option.codubicg.toString()}
+                                                            renderInput={(params) => <TextField {...params} className=" border border-input bg-background" />}
+                                                            value={
+                                                                Array.isArray(lst_ubic_geog)
+                                                                    ? lst_ubic_geog.find((option) => option.codubicg === watch("codubicg")) || null
+                                                                    : null
+                                                            }
+                                                            onChange={(_, newValue) => {
+                                                                setValue("codubicg", newValue?.codubicg || "");
+
+                                                            }}
+                                                        />
+
+                                                    </ConditionalWrapper>
                                                 </Grid>
                                                 <Grid size={8}>
-                                              
-                                                            <TextField disabled fullWidth value={codubicac} size="small" sx={{ backgroundColor: "white" }} />
-                                                      
-                                                    
+
+                                                    <TextField inputProps={{ maxLength: 15 }} disabled fullWidth value={codubicac} size="small" sx={{ backgroundColor: "white" }} />
+
+
                                                 </Grid>
                                             </Grid>
+                                        </Grid>
+
+                                    </Grid>
+                                </Grid>
+
+                                {/* Right side */}
+                                <Grid size={{ xs: 12, md: 6 }}>
+                                    <Grid container spacing={1}>
+                                        <Grid size={4}>
+                                            <Label className="text-sm text-[#142F62]">Registro N°</Label>
+
+                                            <Controller
+                                                name="regestcont"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <TextField inputProps={{ maxLength: 14 }} {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} />
+                                                )}
+                                            />
+                                        </Grid>
+                                        <Grid size={8}>
+                                            <Label className="text-sm text-[#142F62]">Teléfonos</Label>
+
+                                            <Box sx={{ display: "flex", gap: 1 }}>
+                                                <Controller
+                                                    name="telef1"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <TextField inputProps={{ maxLength: 20 }} {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} />
+                                                    )}
+                                                />
+                                                <Controller
+                                                    name="telef2"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <TextField inputProps={{ maxLength: 20 }} {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} />
+                                                    )}
+                                                />
+                                            </Box>
+                                        </Grid>
+                                        <Grid size={4}>
+                                            <Label className="text-sm text-[#142F62]">Nro fax</Label>
+
+                                            <Controller
+                                                name="fax"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <TextField inputProps={{ maxLength: 20 }} {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} />
+                                                )}
+                                            />
+                                        </Grid>
+                                        <Grid size={4}>
+                                            <Label className="text-sm text-[#142F62]">Email</Label>
+
+                                            <Controller
+                                                name="email"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <TextField inputProps={{ maxLength: 60 }}
+                                                        {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} />
+                                                )}
+                                            />
+                                        </Grid>
+                                        <Grid size={4}>
+                                            <Label className="text-sm text-[#142F62]">Organismos adscrito</Label>
+
+                                            <Controller
+                                                name="orgadscritos"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <TextField {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} inputProps={{ maxLength: 10 }}
+                                                    />
+                                                )}
+                                            />
                                         </Grid>
                                         <Grid size={12}>
                                             <Label className="text-sm text-[#142F62]">Observación</Label>
@@ -621,78 +801,9 @@ console.log(data)
                                                         rows={2}
                                                         size="small"
                                                         fullWidth
+                                                        inputProps={{ maxLength: 60 }}
                                                         sx={{ backgroundColor: "white" }}
                                                     />
-                                                )}
-                                            />
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-
-                                {/* Right side */}
-                                <Grid size={{ xs: 12, md: 6 }}>
-                                    <Grid container spacing={1}>
-                                        <Grid size={4}>
-                                            <Label className="text-sm text-[#142F62]">Registró N°</Label>
-
-                                            <Controller
-                                                name="regestcont"
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <TextField {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} />
-                                                )}
-                                            />
-                                        </Grid>
-                                        <Grid size={8}>
-                                            <Label className="text-sm text-[#142F62]">Teléfonos</Label>
-
-                                            <Box sx={{ display: "flex", gap: 1 }}>
-                                                <Controller
-                                                    name="telef1"
-                                                    control={control}
-                                                    render={({ field }) => (
-                                                        <TextField {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} />
-                                                    )}
-                                                />
-                                                <Controller
-                                                    name="telef2"
-                                                    control={control}
-                                                    render={({ field }) => (
-                                                        <TextField {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} />
-                                                    )}
-                                                />
-                                            </Box>
-                                        </Grid>
-                                        <Grid size={4}>
-                                            <Label className="text-sm text-[#142F62]">Nro fax</Label>
-
-                                            <Controller
-                                                name="fax"
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <TextField {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} />
-                                                )}
-                                            />
-                                        </Grid>
-                                        <Grid size={4}>
-                                            <Label className="text-sm text-[#142F62]">Email</Label>
-
-                                            <Controller
-                                                name="email"
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <TextField {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} />
-                                                )}
-                                            />
-                                        </Grid>
-                                        <Grid size={4}>
-                                            <Label className="text-sm text-[#142F62]">Organismos adscrito</Label>
-
-                                            <Controller
-                                                name="orgadscritos"
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <TextField {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} />
                                                 )}
                                             />
                                         </Grid>

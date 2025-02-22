@@ -120,13 +120,9 @@ export default function DataSheet({
 
     useEffect(() => {
         if (data) {
-            setRows(data)
+            setRows(data);
         }
-    }, [data]
-    )
-
-    useEffect(() => {
-    }, [watch('cabsolsum.idsolsum')]);
+    }, [data]);
 
     useEffect(() => {
         if (rows && Object.keys(rows).length > 0) {
@@ -136,7 +132,11 @@ export default function DataSheet({
                 setValue('TotCambio', rows.TotCambio[0]);
             }
         }
-    }, [rows])
+    }, [rows, isFetching]);
+
+    useEffect(() => {
+        refetch();
+    }, [watch('cabsolsum.idsolsum')]);
 
     const idsolsum = watch("cabsolsum.idsolsum");
     const nrocambio = watch("cabcambio.nrocambio");
@@ -176,6 +176,9 @@ export default function DataSheet({
     const [open, setOpen] = useState(false)
 
     const { mutate: generateMutate, isPending: procesarLoading } = useProcesarCambio();
+
+    const totalcamb = Number(rows?.TotCambio[0]?.netocambio) + Number(rows?.TotCambio[0]?.imptocambio)
+    const totalProy = Number(rows?.TotCambio[0]?.netoproy) + Number(rows?.TotCambio[0]?.imptoproy)
 
 
     return (
@@ -395,19 +398,19 @@ export default function DataSheet({
                                         <div>
                                             <Label className="text-xs">Neto</Label>
                                             <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-                                                <Input value={formatCurrency(watch('TotCambio.netocambio'))} readOnly className="bg-muted text-right" />
+                                                <Input value={formatCurrency(rows?.TotCambio[0]?.netocambio ?? 0)} readOnly className="bg-muted text-right" />
                                             </ConditionalWrapper>
                                         </div>
                                         <div>
                                             <Label className="text-xs">Impuesto</Label>
                                             <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-                                                <Input value={formatCurrency(watch('TotCambio.imptocambio'))} readOnly className="bg-muted text-right" />
+                                                <Input value={formatCurrency(rows?.TotCambio[0]?.imptocambio ?? 0)} readOnly className="bg-muted text-right" />
                                             </ConditionalWrapper>
                                         </div>
                                         <div>
                                             <Label className="text-xs">Total</Label>
                                             <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-                                                <Input value={formatCurrency(watch('TotCambio.netocambio') + watch('TotCambio.imptocambio'))} readOnly className="bg-muted text-right" />
+                                                <Input value={formatCurrency(totalcamb)} readOnly className="bg-muted text-right" />
                                             </ConditionalWrapper>
                                         </div>
                                     </div>
@@ -420,19 +423,19 @@ export default function DataSheet({
                                         <div>
                                             <Label className="text-xs">Neto</Label>
                                             <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-                                                <Input value={formatCurrency(watch('TotCambio.netoproy'))} readOnly className="bg-muted text-right" />
+                                                <Input value={formatCurrency(rows?.TotCambio[0]?.netoproy ?? 0)} readOnly className="bg-muted text-right" />
                                             </ConditionalWrapper>
                                         </div>
                                         <div>
                                             <Label className="text-xs">Impuesto</Label>
                                             <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-                                                <Input value={formatCurrency(watch('TotCambio.imptoproy'))} readOnly className="bg-muted text-right" />
+                                                <Input value={formatCurrency(rows?.TotCambio[0]?.imptocambio ?? 0)} readOnly className="bg-muted text-right" />
                                             </ConditionalWrapper>
                                         </div>
                                         <div>
                                             <Label className="text-xs">Total</Label>
                                             <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-                                                <Input value={formatCurrency(watch('TotCambio.netoproy') + watch('TotCambio.imptoproy'))} readOnly className="bg-muted text-right" />
+                                                <Input value={formatCurrency(totalProy)} readOnly className="bg-muted text-right" />
                                             </ConditionalWrapper>
                                         </div>
                                     </div>
@@ -529,8 +532,8 @@ export default function DataSheet({
                     }?`}
             />
 
-            <EditSheet isNew={open} refetch={() => refetch()} isOpen={isOpen} onClose={() => { setIsOpen(false); setDataRow(null), setOpen(false) }} data={dataRow as Rengcambio} />
-            <SimpleBackdrop show={isFetching || isPending || procesarLoading} />
+            <EditSheet isNew={open} refetch={() => refetch()} isOpen={isOpen} onClose={() => { setIsOpen(false); setDataRow(null), setOpen(false); refetch() }} data={dataRow as Rengcambio} />
+            <SimpleBackdrop show={isPending || procesarLoading} />
         </div>
     );
 }

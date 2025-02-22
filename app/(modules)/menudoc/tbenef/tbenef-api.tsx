@@ -14,7 +14,7 @@ export const deleteBenef = async (id: number): Promise<Response> =>  {
 
 export const updateBenef = async (id: number, data: any): Promise<Response> =>  {
     try {
-        const res = await Api_Doc.put(`/beneficiarios_crud/${id}`, data);
+        const res = await Api_Doc.put(`/beneficiarios_crud/${id}`, {beneficiario: data});
         return res.data;
     } catch (error) {
         console.log(error);
@@ -22,9 +22,9 @@ export const updateBenef = async (id: number, data: any): Promise<Response> =>  
     }
 }
 
-export const createBenef = async (data: any): Promise<Response> =>  {
+export const createBenef = async (beneficiario: any): Promise<Response> =>  {
     try {
-        const res = await Api_Doc.post(`/beneficiarios_crud`, data);
+        const res = await Api_Doc.post(`/beneficiarios_crud`, beneficiario);
         return res.data;
     } catch (error) {
         console.log(error);

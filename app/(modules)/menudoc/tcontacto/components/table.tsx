@@ -3,11 +3,12 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useQueryData } from "@/server/fetch-data";
 import { BaseTable } from "@/components/table-material/genericTable";
 import { BaseTablePagination } from "@/components/table-material/baseTablePagination";
-import { columnsFilter, columnsHeaders, columnsOrder } from "./header-table";
+import { Acciones, columnsFilter, columnsHeaders, columnsOrder } from "./header-table";
 import ActionCardHeader from "@/components/card/actionCardHeader";
 import { Filter } from "@/components/button/FilterButton";
 import { Order } from "@/components/button/OrderButton";
 import { Tipodoclist } from "../../ttipodoc/ttipodc-types";
+import { useRouter } from "next/navigation";
 
 export function TipoContacto(tipo: string) {
     switch (tipo) {
@@ -32,6 +33,7 @@ export const TcontactoTable = () => {
     ]);
     const [filter, setFilter] = useState<Filter[]>([]);
     const [count, setCount] = useState(0);
+    const router = useRouter()
 
     /* ------------------ USEEFFECT PARA TRAER LA DATA DE LA BD ----------------- */
 
@@ -97,6 +99,16 @@ export const TcontactoTable = () => {
                             { content: row.apellido, align: "left" },
                             { content: row.cedula, align: "left" },
                             { content: row.nombre_benef, align: "left" },
+                            {
+                                content: (
+                                    <Acciones
+                                        row={row}
+                                        onOpen={(id) => router.push(`/menudoc/tbenef/${id}`)}
+                                    />
+                                ),
+                                action: () => null,
+                                disableTooltip: true,
+                            },
 
 
                         ],
@@ -115,6 +127,7 @@ export const TcontactoTable = () => {
                                 name: "Cargo",
                                 content: row.cargo,
                             },
+                         
                         ],
                     }}
                 ></BaseTable>

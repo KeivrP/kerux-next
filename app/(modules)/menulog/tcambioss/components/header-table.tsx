@@ -132,7 +132,7 @@ export const AccionesSheet = ({
           backgroundColor: theme.palette.background.default,
           borderRadius: "50%",
         }}
-        title="Abrir"
+        title="Eliminar Renglon"
       >
         <IconButton
           onClick={() => onDelete(row.idsolsum)}

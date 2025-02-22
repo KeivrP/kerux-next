@@ -17,6 +17,7 @@ import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { Tipodoclist } from "../ttipodc-types";
 import { useDeleteTipoDoc } from "../hook/useTipoDoc";
 import { BadgeAct } from "@/components/badge/badge-act";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
 export const TtipodocTable = () => {
   const [page, setPage] = useState(0);
@@ -25,6 +26,9 @@ export const TtipodocTable = () => {
   const [order, setOrder] = useState<Order[]>([
     { column: "N°", id: "tipodoc", operator: "DESC" },
   ]);
+  const pathname = usePathname();
+  const route = useRouter()
+
   const [filter, setFilter] = useState<Filter[]>([]);
   const [count, setCount] = useState(0);
 
@@ -86,13 +90,16 @@ export const TtipodocTable = () => {
   };
 
   const handleEdit = (id: string) => {
-    console.log(`Edit ${id}`);
+    if (id) {
+      route.push(`${pathname}/${id}`);
+    }
+
   };
   return (
     <>
       <ActionCardHeader
         add={() => {
-          console.log("anadir");
+          route.push(`${pathname}/-`);
         }}
         onApplyFilter={(filters) => setFilter(filters)}
         columnsFilter={columnsFilter}
@@ -151,9 +158,8 @@ export const TtipodocTable = () => {
         open={openDialog}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
-        text={`¿Estas seguro que deseas eliminar el Tipo de Documento ${
-          rows.find((row) => row.tipodoc == deleteRowId)?.tipodoc
-        }?`}
+        text={`¿Estas seguro que deseas eliminar el Tipo de Documento ${rows.find((row) => row.tipodoc == deleteRowId)?.tipodoc
+          }?`}
       />
       <SimpleBackdrop show={isPending} />
     </>

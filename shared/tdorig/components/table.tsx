@@ -14,7 +14,7 @@ import {BadgeTipodoc} from "@/components/badge/badge-estatus";
 import Hcdocorg from "@/shared/hcdocorg/Hcdocorg";
 import { ITDoRig } from "../tdorig-types";
 import { Acciones, columnsFilterMensajero, columnsHeadersMensajero, columnsOrderMensajero } from "./header-table";
-import { BadgeAct } from "@/components/badge/badge-act";
+import { BadgeAct, BadgeReverso } from "@/components/badge/badge-act";
 import RadioButtonCodUad from "@/components/radio/radioButtonUnd";
 
 interface TdorigTableProps {
@@ -113,7 +113,7 @@ export const TdorigTable = ({ codsis }: TdorigTableProps) => {
                             { content: <BadgeTipodoc tipo={row.stsdoc} />, align: "center" },
                             { content: row.refdoc, align: "center" },
                             { content: formatDate(row.fecdoc), align: "center" },
-                            { content: <BadgeAct status={row.indreverso} />, align: "center" },
+                            { content: <BadgeReverso status={row.indreverso} />, align: "center" },
                             { content: formatCurrency(row.mtodoc), align: "right" },
                             {
                                 content: <Acciones row={row} onOpen={() => openFile(row)} />,

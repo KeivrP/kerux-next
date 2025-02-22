@@ -15,7 +15,6 @@ export const entities = {
   moneda: '/sols_sums_crud/lst_codmoneda',
   beneficiarios_crud: 'beneficiarios_crud',
 
-
   // Lists
   log_coddependencia: "/sols_sums_crud/lst_coddependencia",
   list_renglones: "/listas/lst_rengss_cambio",
@@ -55,6 +54,8 @@ export const entities = {
   lst_porcimptos: 'listas/lst_porcimptos',
   lst_ubgeo: '/listas/lst_ubic_geog',
   lst_prov: '/listas/lst_tipo_prov',
+  lst_rutas: '/listas/lst_rutas',
+  lst_tiposdoc: '/listas/lst_tipos_documentos',
 
 
   // Other entities
