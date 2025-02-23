@@ -250,7 +250,7 @@ export default function DataSheet({
                 (formData.IndCatObras === "S" &&
                   tiporeng === "OB") ||
                   tiporeng === "AD"
-                  ? "Codigo de servicio reuqerdio requerida"
+                  ? "Código de servicio reuqerdio requerida"
                   : undefined,
             })}
             fullWidth

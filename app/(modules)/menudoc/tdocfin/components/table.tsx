@@ -178,7 +178,7 @@ export const TdocfinTable = () => {
 
                         collapsed: (row) => [
                             { name: "Num Benef", content: row.numidbenef },
-                            { name: "Ultimo Modulo", content: row.maximo_evento.codsisgen },
+                            { name: "Ultimo Módulo", content: row.maximo_evento.codsisgen },
                             { name: "Origen", content: row.origen },
                             { name: "Referencia", content: row.refdoc },
                             {

@@ -87,7 +87,7 @@ export default function DataSheet({
           <div className="grid grid-cols-1 gap-4 p-4">
             <div>
               <Typography variant="h3" color="primary">
-                Codigo
+                Código
               </Typography>
               <TextField
                 id="codundcmp"

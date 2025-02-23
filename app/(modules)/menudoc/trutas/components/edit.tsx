@@ -89,15 +89,15 @@ const EditTrutas: React.FC<EditTrutasProps> = ({
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="p-4">
             <Typography variant="h3" color="primary">
-              Codigo ruta
+              Código ruta
             </Typography>
             <TextField
               id="codruta"
               {...register("codruta", {
-                required: "Codigo ruta es requerido",
+                required: "Código ruta es requerido",
                 maxLength: {
                   value: 3,
-                  message: "Codigo ruta no puede tener más de 3 caracteres",
+                  message: "Código ruta no puede tener más de 3 caracteres",
                 },
               })}
               size="small"

@@ -90,7 +90,7 @@ export default function DataSheet({
               <TextField
                 id="codcolet"
                 {...register("codcolet", {
-                  required: "Codigo Requerido",
+                  required: "Código Requerido",
                   maxLength: {
                     value: 3,
                     message: "Nivel sum no puede ser mayor de 3 dígitos",

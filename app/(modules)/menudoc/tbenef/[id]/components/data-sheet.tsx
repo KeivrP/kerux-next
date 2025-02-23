@@ -7,7 +7,7 @@ import { useQueryData } from "@/server/fetch-data";
 import { ConditionalWrapper } from "@/utils/main";
 import { Card, CardContent, CardHeader, Typography, Grid2 as Grid, Box, TextField, FormControlLabel, Checkbox, FormControl, FormLabel, RadioGroup, Radio, Select, MenuItem, Autocomplete } from "@mui/material";
 import { CircleUser } from "lucide-react";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useCreateBenef, useUpdateBenef } from "../../hook/useBenef";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
@@ -134,7 +134,119 @@ export default function DataSheet({
     }, [watch("codubicg"), lst_ubic_geog]);
 
 
-    const [open, setOpen] = useState(false)
+    const [condicionA, setCondicionA] = useState(false);
+
+
+    useEffect(() => {
+        const clase = watch("clase");
+        if (["F", "O", "C", "X"].includes(clase)) {
+            setCondicionA(true);
+        } else if (["A", "P", "S", "J", "B"].includes(clase)) {
+            setCondicionA(false); // Asegúrate de resetear la otra condición
+        } else {
+            setCondicionA(false);
+        }
+    }, [watch("clase")]);
+
+    const route = useRouter()
+    const pathName = usePathname()
+
+    const [numOceiDisabled, setNumOceiDisabled] = useState(false);
+    const [fecOceiDisabled, setFecOceiDisabled] = useState(false);
+    const [codSucursalDisabled, setCodSucursalDisabled] = useState(false);
+    const [orgadscritosRequired, setOrgadscritosRequired] = useState(true);
+
+    const [claseFuncionarioDisabled, setClaseFuncionarioDisabled] = useState(false);
+    const [claseObreroDisabled, setClaseObreroDisabled] = useState(false);
+    const [claseProveedorDisabled, setClaseProveedorDisabled] = useState(false);
+    const [claseCuentadanteDisabled, setClaseCuentadanteDisabled] = useState(false);
+    const [claseOrgadscritoDisabled, setClaseOrgadscritoDisabled] = useState(false);
+    const [claseOtroDisabled, setClaseOtroDisabled] = useState(false);
+    const [claseSociobeneficiarioDisabled, setClaseSociobeneficiarioDisabled] = useState(false);
+    const [claseJuntaDirectivaDisabled, setClaseJuntaDirectivaDisabled] = useState(false);
+    const [claseBancoDisabled, setClaseBancoDisabled] = useState(false);
+    const [claseContratistaDisabled, setClaseContratistaDisabled] = useState(false);
+    const [claseProyectistaDisabled, setClaseProyectistaDisabled] = useState(false);
+    const [claseInspectorDisabled, setClaseInspectorDisabled] = useState(false);
+
+    useEffect(() => {
+        if (tipobenef === 'N') {
+            setNumOceiDisabled(false);
+            setFecOceiDisabled(false);
+            setCodSucursalDisabled(true);
+            setOrgadscritosRequired(false);
+
+            setClaseFuncionarioDisabled(false);
+            setClaseObreroDisabled(false);
+            setClaseProveedorDisabled(false);
+            setClaseCuentadanteDisabled(false);
+            setClaseOrgadscritoDisabled(true);
+            setClaseOtroDisabled(false);
+            setClaseSociobeneficiarioDisabled(false);
+            setClaseJuntaDirectivaDisabled(false);
+            setClaseBancoDisabled(true);
+            setClaseContratistaDisabled(true);
+            setClaseProyectistaDisabled(false);
+            setClaseInspectorDisabled(false);
+
+        } else if (tipobenef === 'J') {
+            setNumOceiDisabled(false);
+            setFecOceiDisabled(false);
+            setCodSucursalDisabled(false);
+            setOrgadscritosRequired(true);
+
+            setClaseFuncionarioDisabled(true);
+            setClaseObreroDisabled(true);
+            setClaseProveedorDisabled(false);
+            setClaseCuentadanteDisabled(true);
+            setClaseOrgadscritoDisabled(false);
+            setClaseOtroDisabled(false);
+            setClaseSociobeneficiarioDisabled(false);
+            setClaseJuntaDirectivaDisabled(false);
+            setClaseBancoDisabled(false);
+            setClaseContratistaDisabled(false);
+            setClaseProyectistaDisabled(false);
+            setClaseInspectorDisabled(false);
+
+        } else if (tipobenef === 'P') {
+            setNumOceiDisabled(true);
+            setFecOceiDisabled(true);
+            setCodSucursalDisabled(false);
+            setOrgadscritosRequired(true);
+
+            setClaseFuncionarioDisabled(true);
+            setClaseObreroDisabled(true);
+            setClaseProveedorDisabled(true);
+            setClaseCuentadanteDisabled(true);
+            setClaseContratistaDisabled(true);
+            setClaseProyectistaDisabled(true);
+            setClaseInspectorDisabled(true);
+            setClaseOrgadscritoDisabled(false);
+            setClaseOtroDisabled(false);
+            setClaseSociobeneficiarioDisabled(false);
+            setClaseJuntaDirectivaDisabled(false);
+            setClaseBancoDisabled(false);
+
+        } else if (tipobenef === 'E') {
+            setNumOceiDisabled(true);
+            setFecOceiDisabled(true);
+            setCodSucursalDisabled(true);
+            setOrgadscritosRequired(false);
+
+            setClaseFuncionarioDisabled(false);
+            setClaseObreroDisabled(false);
+            setClaseProveedorDisabled(false);
+            setClaseCuentadanteDisabled(false);
+            setClaseOrgadscritoDisabled(true);
+            setClaseOtroDisabled(false);
+            setClaseSociobeneficiarioDisabled(false);
+            setClaseJuntaDirectivaDisabled(false);
+            setClaseBancoDisabled(true);
+            setClaseContratistaDisabled(true);
+            setClaseProyectistaDisabled(false);
+            setClaseInspectorDisabled(false);
+        }
+    }, [tipobenef]);
 
 
     return (
@@ -145,7 +257,7 @@ export default function DataSheet({
                     <div style={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
 
                         <ButtonForms
-                            onClick={() => console.log("Aprobar")}
+                            onClick={() => route.push(`${pathName}/contacto`)}
                             sx={{ color: "alert", alignItems: "center" }}        >
                             <CircleUser size={18} />
                             <Typography variant="h3" marginLeft={1}>
@@ -172,7 +284,7 @@ export default function DataSheet({
                                     <Grid container spacing={1}>
                                         <Grid size={6}>
                                             <Label className="text-sm text-[#142F62]">Número</Label>
-                                            <ConditionalWrapper condition={false} wrapper={SkeletonInput}>
+                                            <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
                                                 <Controller
                                                     name="numbenef"
                                                     disabled
@@ -195,7 +307,7 @@ export default function DataSheet({
                                             <Box display="flex" gap={2}>
                                                 <Box flex={1}>
                                                     <Label className="text-sm text-[#142F62]">Identificación</Label>
-                                                    <ConditionalWrapper condition={false} wrapper={SkeletonInput}>
+                                                    <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
                                                         <Grid container spacing={1}>
                                                             <Grid size={3}>
                                                                 <Controller
@@ -224,7 +336,7 @@ export default function DataSheet({
                                                             <Grid size={9}>
                                                                 <Controller
                                                                     name="numid"
-                                                                    rules={{ required: "Numero de identificacion" }}
+                                                                    rules={{ required: "Numero de identificación" }}
 
                                                                     control={control}
                                                                     render={({ field }) => (
@@ -247,55 +359,62 @@ export default function DataSheet({
 
                                         <Grid size={6}>
                                             <Label className="text-sm text-[#142F62]">Cód sucursal</Label>
+                                            <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
 
-                                            <Controller
-                                                name="codsucursal"
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <TextField
-                                                        {...field}
-                                                        size="small"
-                                                        inputProps={{ maxLength: 2 }}
-                                                        value={field.value || ""}
-                                                        sx={{ backgroundColor: "white" }}
-                                                    />
-                                                )}
-                                            />
+                                                <Controller
+                                                    name="codsucursal"
+                                                    control={control}
+                                                    disabled={codSucursalDisabled}
+                                                    render={({ field }) => (
+                                                        <TextField
+                                                            {...field}
+                                                            size="small"
+                                                            inputProps={{ maxLength: 2 }}
+                                                            value={field.value || ""}
+                                                            sx={{ backgroundColor: "white" }}
+                                                        />
+                                                    )}
+                                                />
+                                            </ConditionalWrapper>
                                         </Grid>
                                         <Grid size={3}>
                                             <Label className="text-sm text-[#142F62]">N.I.T</Label>
+                                            <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
 
-                                            <Controller
-                                                name="nit"
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <TextField
-                                                        {...field}
-                                                        size="small"
-                                                        type="number"
-                                                        value={field.value || ""}
-                                                        inputProps={{ maxLength: 12 }}
-                                                        sx={{ backgroundColor: "white" }}
-                                                    />
-                                                )}
-                                            />
+                                                <Controller
+                                                    name="nit"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <TextField
+                                                            {...field}
+                                                            size="small"
+                                                            type="number"
+                                                            value={field.value || ""}
+                                                            inputProps={{ maxLength: 12 }}
+                                                            sx={{ backgroundColor: "white" }}
+                                                        />
+                                                    )}
+                                                />
+                                            </ConditionalWrapper>
                                         </Grid>
                                         <Grid size={3}>
                                             <Label className="text-sm text-[#142F62]">N.I.L</Label>
+                                            <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
 
-                                            <Controller
-                                                name="nil"
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <TextField
-                                                        {...field}
-                                                        size="small"
-                                                        inputProps={{ maxLength: 15 }}
-                                                        value={field.value || ""}
-                                                        sx={{ backgroundColor: "white" }}
-                                                    />
-                                                )}
-                                            />
+                                                <Controller
+                                                    name="nil"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <TextField
+                                                            {...field}
+                                                            size="small"
+                                                            inputProps={{ maxLength: 15 }}
+                                                            value={field.value || ""}
+                                                            sx={{ backgroundColor: "white" }}
+                                                        />
+                                                    )}
+                                                />
+                                            </ConditionalWrapper>
                                         </Grid>
                                     </Grid>
                                 </Grid>
@@ -308,83 +427,89 @@ export default function DataSheet({
                                             <Box display="flex" gap={2}>
                                                 <Box flex={1}>
                                                     <Label className="text-sm text-[#142F62]">Nombres Completo</Label>
+                                                    <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
 
-                                                    <Controller
-                                                        name="nombre"
-                                                        control={control}
-                                                        rules={{ required: "Ingrese Nombre" }}
-
-                                                        render={({ field }) => (
-                                                            <TextField
-                                                                {...field}
-                                                                size="small"
-                                                                fullWidth
-                                                                inputProps={{ maxLength: 60 }}
-                                                                value={field.value || ""}
-                                                                sx={{ backgroundColor: "white" }}
-                                                            />
-                                                        )}
-                                                    />
-                                                </Box>
-                                                <Box width="40%">
-                                                    <Label className="text-sm text-[#142F62]">Abreviado</Label>
-
-                                                    <Box display="flex" gap={1} alignItems="center">
                                                         <Controller
-                                                            rules={{ required: "Ingrese Abreviado" }}
-
-                                                            name="appabrev"
+                                                            name="nombre"
                                                             control={control}
+                                                            rules={{ required: "Ingrese Nombre" }}
+
                                                             render={({ field }) => (
                                                                 <TextField
                                                                     {...field}
                                                                     size="small"
                                                                     fullWidth
-                                                                    inputProps={{ maxLength: 25 }}
+                                                                    inputProps={{ maxLength: 60 }}
                                                                     value={field.value || ""}
                                                                     sx={{ backgroundColor: "white" }}
                                                                 />
                                                             )}
                                                         />
-                                                        <Controller
-                                                            name="indactivo"
-                                                            control={control}
-                                                            render={({ field }) => (
-                                                                <FormControlLabel
-                                                                    control={
-                                                                        <Checkbox
+                                                    </ConditionalWrapper>
+                                                </Box>
+                                                <Box width="40%">
+                                                    <Label className="text-sm text-[#142F62]">Abreviado</Label>
+                                                    <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
 
-                                                                            checked={field.value === "S"}
-                                                                            onChange={(e) => field.onChange(e.target.checked ? "S" : "N")}
-                                                                            size="medium"
-                                                                        />
-                                                                    }
-                                                                    label="Activo?"
-                                                                />
-                                                            )}
-                                                        />
-                                                    </Box>
+                                                        <Box display="flex" gap={1} alignItems="center">
+                                                            <Controller
+                                                                rules={{ required: "Ingrese Abreviado" }}
+
+                                                                name="appabrev"
+                                                                control={control}
+                                                                render={({ field }) => (
+                                                                    <TextField
+                                                                        {...field}
+                                                                        size="small"
+                                                                        fullWidth
+                                                                        inputProps={{ maxLength: 25 }}
+                                                                        value={field.value || ""}
+                                                                        sx={{ backgroundColor: "white" }}
+                                                                    />
+                                                                )}
+                                                            />
+                                                            <Controller
+                                                                name="indactivo"
+                                                                control={control}
+                                                                render={({ field }) => (
+                                                                    <FormControlLabel
+                                                                        control={
+                                                                            <Checkbox
+
+                                                                                checked={field.value === "S"}
+                                                                                onChange={(e) => field.onChange(e.target.checked ? "S" : "N")}
+                                                                                size="medium"
+                                                                            />
+                                                                        }
+                                                                        label="Activo?"
+                                                                    />
+                                                                )}
+                                                            />
+                                                        </Box>
+                                                    </ConditionalWrapper>
                                                 </Box>
                                             </Box>
                                         </Grid>
                                         <Grid size={12}>
                                             <Label className="text-sm text-[#142F62]">Extendido</Label>
+                                            <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
 
-                                            <Controller
-                                                name="abonese"
-                                                control={control}
-                                                rules={{ required: "Ingrese Extendido" }}
-                                                render={({ field }) => (
-                                                    <TextField
-                                                        {...field}
-                                                        size="small"
-                                                        inputProps={{ maxLength: 150 }}
-                                                        fullWidth
-                                                        value={field.value || ""}
-                                                        sx={{ backgroundColor: "white" }}
-                                                    />
-                                                )}
-                                            />
+                                                <Controller
+                                                    name="abonese"
+                                                    control={control}
+                                                    rules={{ required: "Ingrese Extendido" }}
+                                                    render={({ field }) => (
+                                                        <TextField
+                                                            {...field}
+                                                            size="small"
+                                                            inputProps={{ maxLength: 150 }}
+                                                            fullWidth
+                                                            value={field.value || ""}
+                                                            sx={{ backgroundColor: "white" }}
+                                                        />
+                                                    )}
+                                                />
+                                            </ConditionalWrapper>
                                         </Grid>
                                     </Grid>
                                 </Grid>
@@ -404,25 +529,27 @@ export default function DataSheet({
                                         <Grid size={{ xs: 12, md: 3 }}>
                                             <Grid container spacing={1}>
                                                 <Grid size={12}>
+                                                    <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
 
-                                                    <FormControl component="fieldset">
-                                                        <Label className="text-sm text-[#142F62]">Tipo</Label>
-                                                        <Controller
-                                                            rules={{ required: "Tipo benef" }}
+                                                        <FormControl component="fieldset">
+                                                            <Label className="text-sm text-[#142F62]">Tipo</Label>
+                                                            <Controller
+                                                                rules={{ required: "Tipo benef" }}
 
-                                                            name="tipobenef"
-                                                            control={control}
-                                                            defaultValue="J"
-                                                            render={({ field }) => (
-                                                                <RadioGroup {...field}>
-                                                                    <FormControlLabel value="P" control={<Radio size="small" checked={field.value === "P"} />} label="Público" />
-                                                                    <FormControlLabel value="N" control={<Radio size="small" checked={field.value === "N"} />} label="Natural" />
-                                                                    <FormControlLabel value="J" control={<Radio size="small" checked={field.value === "J"} />} label="Jurídico" />
-                                                                    <FormControlLabel value="E" control={<Radio size="small" checked={field.value === "E"} />} label="Extranjero" />
-                                                                </RadioGroup>
-                                                            )}
-                                                        />
-                                                    </FormControl>
+                                                                name="tipobenef"
+                                                                control={control}
+                                                                defaultValue="J"
+                                                                render={({ field }) => (
+                                                                    <RadioGroup {...field}>
+                                                                        <FormControlLabel value="P" control={<Radio size="small" checked={field.value === "P"} />} label="Público" />
+                                                                        <FormControlLabel value="N" control={<Radio size="small" checked={field.value === "N"} />} label="Natural" />
+                                                                        <FormControlLabel value="J" control={<Radio size="small" checked={field.value === "J"} />} label="Jurídico" />
+                                                                        <FormControlLabel value="E" control={<Radio size="small" checked={field.value === "E"} />} label="Extranjero" />
+                                                                    </RadioGroup>
+                                                                )}
+                                                            />
+                                                        </FormControl>
+                                                    </ConditionalWrapper>
                                                 </Grid>
                                                 <Grid size={12}>
 
@@ -453,73 +580,76 @@ export default function DataSheet({
                                         <Grid size={{ xs: 12, md: 9 }}>
                                             <FormControl component="fieldset">
                                                 <Label className="text-sm text-[#142F62]">Clase</Label>
-                                                <Controller
-                                                    name="clase"
-                                                    rules={{ required: "Ingrese Clase" }}
-                                                    control={control}
-                                                    render={({ field }) => (
-                                                        <RadioGroup {...field} row>
-                                                            <Grid container>
-                                                                <Grid size={4}>
-                                                                    <FormControlLabel value="F" control={<Radio size="small" checked={field.value === "F"} />} label="Funcionario" />
-                                                                </Grid>
-                                                                <Grid size={4}>
-                                                                    <FormControlLabel value="P" control={<Radio size="small" checked={field.value === "P"} />} label="Proveedor" />
-                                                                </Grid>
-                                                                <Grid size={4}>
-                                                                    <FormControlLabel value="S" control={<Radio size="small" checked={field.value === "S"} />} label="Socio Beneficiario" />
-                                                                </Grid>
-                                                                <Grid size={4}>
-                                                                    <FormControlLabel value="O" control={<Radio size="small" checked={field.value === "O"} />} label="Obrero" />
-                                                                </Grid>
-                                                                <Grid size={4}>
-                                                                    <FormControlLabel value="A" control={<Radio size="small" checked={field.value === "A"} />} label="Organismo Adscrito" />
-                                                                </Grid>
-                                                                <Grid size={4}>
-                                                                    <FormControlLabel value="C" control={<Radio size="small" checked={field.value === "C"} />} label="Cuentadante" />
-                                                                </Grid>
-                                                                <Grid size={4}>
-                                                                    <FormControlLabel value="C" control={<Radio size="small" checked={field.value === "J"} />} label="Junta Directiva" />
-                                                                </Grid>
-                                                                <Grid size={4}>
-                                                                    <FormControlLabel value="C" control={<Radio size="small" checked={field.value === "B"} />} label="Banco" />
-                                                                </Grid>
-                                                                <Grid size={4}>
-                                                                    <FormControlLabel value="C" control={<Radio size="small" checked={field.value === "I"} />} label="Inspector" />
-                                                                </Grid>
-                                                                <Grid size={4}>
-                                                                    <FormControlLabel value="C" control={<Radio size="small" checked={field.value === "Y"} />} label="Proyectista" />
-                                                                </Grid>
-                                                                <Grid size={4}>
-                                                                    <FormControlLabel value="C" control={<Radio size="small" checked={field.value === "T"} />} label="Contratista" />
-                                                                </Grid>
-                                                                <Grid size={4}>
-                                                                    <FormControlLabel value="C" control={<Radio size="small" checked={field.value === "X"} />} label="Otro" />
-                                                                </Grid>
-                                                                {watch("clase") === "C" && (
-                                                                    <Grid size={12} mt={1}>
-                                                                        <Label className="text-sm text-[#142F62]">Número de cuentadante</Label>
+                                                <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
 
-                                                                        <Controller
-                                                                            name="nroctadante"
-                                                                            control={control}
-                                                                            render={({ field }) => (
-                                                                                <TextField
-                                                                                    {...field}
-                                                                                    size="small"
-                                                                                    fullWidth
-                                                                                    inputProps={{ maxLength: 20 }}
-                                                                                    value={field.value || ""}
-                                                                                    sx={{ backgroundColor: "white" }}
-                                                                                />
-                                                                            )}
-                                                                        />
+                                                    <Controller
+                                                        name="clase"
+                                                        rules={{ required: "Ingrese Clase" }}
+                                                        control={control}
+                                                        render={({ field }) => (
+                                                            <RadioGroup {...field} row>
+                                                                <Grid container>
+                                                                    <Grid size={4}>
+                                                                        <FormControlLabel disabled={claseFuncionarioDisabled} value="F" control={<Radio size="small" checked={field.value === "F"} />} label="Funcionario" />
                                                                     </Grid>
-                                                                )}
-                                                            </Grid>
-                                                        </RadioGroup>
-                                                    )}
-                                                />
+                                                                    <Grid size={4}>
+                                                                        <FormControlLabel disabled={claseProveedorDisabled} value="P" control={<Radio size="small" checked={field.value === "P"} />} label="Proveedor" />
+                                                                    </Grid>
+                                                                    <Grid size={4}>
+                                                                        <FormControlLabel disabled={claseSociobeneficiarioDisabled} value="S" control={<Radio size="small" checked={field.value === "S"} />} label="Socio Beneficiario" />
+                                                                    </Grid>
+                                                                    <Grid size={4}>
+                                                                        <FormControlLabel disabled={claseObreroDisabled} value="O" control={<Radio size="small" checked={field.value === "O"} />} label="Obrero" />
+                                                                    </Grid>
+                                                                    <Grid size={4}>
+                                                                        <FormControlLabel disabled={claseOrgadscritoDisabled} value="A" control={<Radio size="small" checked={field.value === "A"} />} label="Organismo Adscrito" />
+                                                                    </Grid>
+                                                                    <Grid size={4}>
+                                                                        <FormControlLabel disabled={claseCuentadanteDisabled} value="C" control={<Radio size="small" checked={field.value === "C"} />} label="Cuentadante" />
+                                                                    </Grid>
+                                                                    <Grid size={4}>
+                                                                        <FormControlLabel disabled={claseJuntaDirectivaDisabled} value="C" control={<Radio size="small" checked={field.value === "J"} />} label="Junta Directiva" />
+                                                                    </Grid>
+                                                                    <Grid size={4}>
+                                                                        <FormControlLabel disabled={claseBancoDisabled} value="C" control={<Radio size="small" checked={field.value === "B"} />} label="Banco" />
+                                                                    </Grid>
+                                                                    <Grid size={4}>
+                                                                        <FormControlLabel disabled={claseInspectorDisabled} value="C" control={<Radio size="small" checked={field.value === "I"} />} label="Inspector" />
+                                                                    </Grid>
+                                                                    <Grid size={4}>
+                                                                        <FormControlLabel disabled={claseProyectistaDisabled} value="C" control={<Radio size="small" checked={field.value === "Y"} />} label="Proyectista" />
+                                                                    </Grid>
+                                                                    <Grid size={4}>
+                                                                        <FormControlLabel disabled={claseContratistaDisabled} value="C" control={<Radio size="small" checked={field.value === "T"} />} label="Contratista" />
+                                                                    </Grid>
+                                                                    <Grid size={4}>
+                                                                        <FormControlLabel disabled={claseOtroDisabled} value="C" control={<Radio size="small" checked={field.value === "X"} />} label="Otro" />
+                                                                    </Grid>
+                                                                    {watch("clase") === "C" && (
+                                                                        <Grid size={12} mt={1}>
+                                                                            <Label className="text-sm text-[#142F62]">Número de cuentadante</Label>
+
+                                                                            <Controller
+                                                                                name="nroctadante"
+                                                                                control={control}
+                                                                                render={({ field }) => (
+                                                                                    <TextField
+                                                                                        {...field}
+                                                                                        size="small"
+                                                                                        fullWidth
+                                                                                        inputProps={{ maxLength: 20 }}
+                                                                                        value={field.value || ""}
+                                                                                        sx={{ backgroundColor: "white" }}
+                                                                                    />
+                                                                                )}
+                                                                            />
+                                                                        </Grid>
+                                                                    )}
+                                                                </Grid>
+                                                            </RadioGroup>
+                                                        )}
+                                                    />
+                                                </ConditionalWrapper>
                                             </FormControl>
                                         </Grid>
                                     </Grid>
@@ -538,58 +668,67 @@ export default function DataSheet({
                                                 {/* RCN Section */}
                                                 <Grid size={{ xs: 12, sm: 6 }}>
                                                     <Label className="text-sm text-[#162F62]">RNC</Label>
+                                                    <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
 
-                                                    <Box sx={{ mb: 1 }}>
-                                                        <Controller
-                                                            name="numocei"
-                                                            control={control}
-                                                            render={({ field }) => (
-                                                                <TextField inputProps={{ maxLength: 20 }} {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} />
-                                                            )}
-                                                        />
-                                                    </Box>
-
+                                                        <Box sx={{ mb: 1 }}>
+                                                            <Controller
+                                                                name="numocei"
+                                                                disabled={numOceiDisabled}
+                                                                control={control}
+                                                                render={({ field }) => (
+                                                                    <TextField inputProps={{ maxLength: 20 }} {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} />
+                                                                )}
+                                                            />
+                                                        </Box>
+                                                    </ConditionalWrapper>
                                                 </Grid>
 
                                                 {/* Vigencia de registro */}
                                                 <Grid size={{ xs: 12, sm: 6 }}>
                                                     <Label className="text-sm text-[#162F62]">Fecha RNC</Label>
+                                                    <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
 
-                                                    <Box display="flex" alignItems="center" gap={1}>
-                                                        <Controller
-                                                            name="fecocei"
-                                                            control={control}
-                                                            render={({ field }) => (
-                                                                <TextField {...field} type="date" size="small" fullWidth sx={{ backgroundColor: "white" }} />
-                                                            )}
-                                                        />
-                                                    </Box>
+                                                        <Box display="flex" alignItems="center" gap={1}>
+                                                            <Controller
+                                                                disabled={fecOceiDisabled}
+                                                                name="fecocei"
+                                                                control={control}
+                                                                render={({ field }) => (
+                                                                    <TextField {...field} type="date" size="small" fullWidth sx={{ backgroundColor: "white" }} />
+                                                                )}
+                                                            />
+                                                        </Box>
+                                                    </ConditionalWrapper>
                                                 </Grid>
                                                 <Grid size={{ xs: 12, sm: 6 }}>
                                                     <Label className="text-sm text-[#142F62]">Vigencia de registro</Label>
+                                                    <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
 
-                                                    <Box display="flex" alignItems="center" gap={1}>
-                                                        <Controller
-                                                            name="vigenciaRegistro"
-                                                            control={control}
-                                                            render={({ field }) => (
-                                                                <TextField {...field} type="date" size="small" fullWidth sx={{ backgroundColor: "white" }} />
-                                                            )}
-                                                        />
-                                                    </Box>
+                                                        <Box display="flex" alignItems="center" gap={1}>
+                                                            <Controller
+                                                                name="vigenciaRegistro"
+                                                                control={control}
+                                                                render={({ field }) => (
+                                                                    <TextField {...field} type="date" size="small" fullWidth sx={{ backgroundColor: "white" }} />
+                                                                )}
+                                                            />
+                                                        </Box>
+                                                    </ConditionalWrapper>
                                                 </Grid>
 
                                                 {/* Auxiliar contable */}
                                                 <Grid size={{ xs: 12, sm: 6 }}>
                                                     <Label className="text-sm text-[#142F62]">Auxiliar contable</Label>
+                                                    <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
 
-                                                    <Controller
-                                                        name="auxiliarContable"
-                                                        control={control}
-                                                        render={({ field }) => (
-                                                            <TextField {...field} size="small" inputProps={{ maxLength: 14 }} fullWidth sx={{ backgroundColor: "white" }} />
-                                                        )}
-                                                    />
+                                                        <Controller
+                                                            name="auxiliarContable"
+                                                            control={control}
+                                                            render={({ field }) => (
+                                                                <TextField {...field} size="small" inputProps={{ maxLength: 14 }} fullWidth sx={{ backgroundColor: "white" }} />
+                                                            )}
+                                                        />
+                                                    </ConditionalWrapper>
                                                 </Grid>
 
 
@@ -598,34 +737,39 @@ export default function DataSheet({
 
                                                     <FormControl component="fieldset">
                                                         <Label className="text-sm text-[#142F62]">Relación otros</Label>
+                                                        <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
 
-                                                        <Controller
-                                                            name="condicionbenef"
-                                                            control={control}
-                                                            defaultValue="N"
-                                                            render={({ field }) => (
-                                                                <RadioGroup {...field} row>
-                                                                    <FormControlLabel
-                                                                        value="J"
-                                                                        control={<Radio size="small" />}
-                                                                        checked={field.value === "J"}
-                                                                        label={<Typography variant="body2">Jubilado</Typography>}
-                                                                    />
-                                                                    <FormControlLabel
-                                                                        value="P"
-                                                                        checked={field.value === "P"}
-                                                                        control={<Radio size="small" />}
-                                                                        label={<Typography variant="body2">Pensionado</Typography>}
-                                                                    />
-                                                                    <FormControlLabel
-                                                                        value="N"
-                                                                        checked={field.value === "N"}
-                                                                        control={<Radio size="small" />}
-                                                                        label={<Typography variant="body2">Ninguno</Typography>}
-                                                                    />
-                                                                </RadioGroup>
-                                                            )}
-                                                        />
+                                                            <Controller
+                                                                name="condicionbenef"
+                                                                control={control}
+                                                                defaultValue="N"
+                                                                render={({ field }) => (
+                                                                    <RadioGroup {...field} row>
+                                                                        <FormControlLabel
+                                                                            value="J"
+                                                                            disabled={!condicionA}
+                                                                            control={<Radio size="small" />}
+                                                                            checked={field.value === "J"}
+                                                                            label={<Typography variant="body2">Jubilado</Typography>}
+                                                                        />
+                                                                        <FormControlLabel
+                                                                            value="P"
+                                                                            disabled={!condicionA}
+                                                                            checked={field.value === "P"}
+                                                                            control={<Radio size="small" />}
+                                                                            label={<Typography variant="body2">Pensionado</Typography>}
+                                                                        />
+                                                                        <FormControlLabel
+                                                                            value="N"
+                                                                            disabled={!condicionA}
+                                                                            checked={field.value === "N"}
+                                                                            control={<Radio size="small" />}
+                                                                            label={<Typography variant="body2">Ninguno</Typography>}
+                                                                        />
+                                                                    </RadioGroup>
+                                                                )}
+                                                            />
+                                                        </ConditionalWrapper>
                                                     </FormControl>
                                                 </Grid>
                                             </Grid>
@@ -647,26 +791,28 @@ export default function DataSheet({
                                     <Grid container spacing={1}>
                                         <Grid size={12}>
                                             <Label className="text-sm text-[#142F62]">Ubicación</Label>
+                                            <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
 
-                                            <Controller
-                                                name="direcfisica"
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <TextField
-                                                        {...field}
-                                                        multiline
-                                                        rows={2}
-                                                        size="small"
-                                                        inputProps={{ maxLength: 180 }}
-                                                        fullWidth
-                                                        sx={{ backgroundColor: "white" }}
-                                                    />
-                                                )}
-                                            />
-
+                                                <Controller
+                                                    name="direcfisica"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <TextField
+                                                            {...field}
+                                                            multiline
+                                                            rows={2}
+                                                            size="small"
+                                                            inputProps={{ maxLength: 180 }}
+                                                            fullWidth
+                                                            sx={{ backgroundColor: "white" }}
+                                                        />
+                                                    )}
+                                                />
+                                            </ConditionalWrapper>
                                         </Grid>
                                         <Grid size={12}>
                                             <Label className="text-sm text-[#142F62]">Dir Postal</Label>
+                                            <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
 
                                             <Controller
                                                 name="direcpostal"
@@ -675,6 +821,7 @@ export default function DataSheet({
                                                     <TextField inputProps={{ maxLength: 180 }} {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} />
                                                 )}
                                             />
+                                            </ConditionalWrapper>
                                         </Grid>
                                         <Grid size={12}>
                                             <Label className="text-sm text-[#142F62]">Ubicación Física</Label>
@@ -724,6 +871,7 @@ export default function DataSheet({
                                     <Grid container spacing={1}>
                                         <Grid size={4}>
                                             <Label className="text-sm text-[#142F62]">Registro N°</Label>
+                                            <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
 
                                             <Controller
                                                 name="regestcont"
@@ -732,9 +880,11 @@ export default function DataSheet({
                                                     <TextField inputProps={{ maxLength: 14 }} {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} />
                                                 )}
                                             />
+                                            </ConditionalWrapper>
                                         </Grid>
                                         <Grid size={8}>
                                             <Label className="text-sm text-[#142F62]">Teléfonos</Label>
+                                            <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
 
                                             <Box sx={{ display: "flex", gap: 1 }}>
                                                 <Controller
@@ -752,9 +902,11 @@ export default function DataSheet({
                                                     )}
                                                 />
                                             </Box>
+                                            </ConditionalWrapper>
                                         </Grid>
                                         <Grid size={4}>
                                             <Label className="text-sm text-[#142F62]">Nro fax</Label>
+                                            <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
 
                                             <Controller
                                                 name="fax"
@@ -763,9 +915,11 @@ export default function DataSheet({
                                                     <TextField inputProps={{ maxLength: 20 }} {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} />
                                                 )}
                                             />
+                                            </ConditionalWrapper>
                                         </Grid>
                                         <Grid size={4}>
                                             <Label className="text-sm text-[#142F62]">Email</Label>
+                                            <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
 
                                             <Controller
                                                 name="email"
@@ -775,21 +929,25 @@ export default function DataSheet({
                                                         {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} />
                                                 )}
                                             />
+                                            </ConditionalWrapper>
                                         </Grid>
                                         <Grid size={4}>
                                             <Label className="text-sm text-[#142F62]">Organismos adscrito</Label>
+                                            <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
 
                                             <Controller
                                                 name="orgadscritos"
-                                                control={control}
+                                                disabled={watch("clase") !== "A" || orgadscritosRequired} control={control}
                                                 render={({ field }) => (
                                                     <TextField {...field} size="small" fullWidth sx={{ backgroundColor: "white" }} inputProps={{ maxLength: 10 }}
                                                     />
                                                 )}
                                             />
+                                            </ConditionalWrapper>
                                         </Grid>
                                         <Grid size={12}>
                                             <Label className="text-sm text-[#142F62]">Observación</Label>
+                                            <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
 
                                             <Controller
                                                 name="observ"
@@ -806,6 +964,7 @@ export default function DataSheet({
                                                     />
                                                 )}
                                             />
+                                            </ConditionalWrapper>
                                         </Grid>
                                     </Grid>
                                 </Grid>

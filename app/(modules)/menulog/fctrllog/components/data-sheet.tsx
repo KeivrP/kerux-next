@@ -94,7 +94,7 @@ function FctrllogFile() {
 
             <Grid container spacing={2} padding={2}>
                 <Card className="">
-                    <CardHeader className="bg-muted py-2 text-[#142F62]" title="Parametros de control" />
+                    <CardHeader className="bg-muted py-2 text-[#142F62]" title="Parámetros de control" />
                     <CardContent className="p-4">
                         <Grid container spacing={2} padding={2}>
 
@@ -139,7 +139,7 @@ function FctrllogFile() {
                                                 name="indcatobras"
                                             />
                                         }
-                                        label="Validar que los items de obras esten catalogados"
+                                        label="Validar que los ítems de obras estén catalogados"
                                     />
                                 </ConditionalWrapper>
                             </Grid>
@@ -153,7 +153,7 @@ function FctrllogFile() {
                                                 name="indaprcompmixtas"
                                             />
                                         }
-                                        label="Confirmar compras mixtas por el modulo de Almacen"
+                                        label="Confirmar compras mixtas por el módulo de Almacén"
                                     />
                                 </ConditionalWrapper>
                             </Grid>
@@ -168,7 +168,7 @@ function FctrllogFile() {
                                                 name="indvalalmdest"
                                             />
                                         }
-                                        label="Validar almacen destino"
+                                        label="Validar almacén destino"
                                     />
 
                                 </ConditionalWrapper>
@@ -278,8 +278,8 @@ function FctrllogFile() {
                                         }}
                                     >
                                         <Typography variant="body1" color="textPrimary">
-                                            <b>Activado:</b> Indica si Logistica esta Integrado con el
-                                            modulo de Contrataciones Publicas
+                                            <b>Activado:</b> Indica si Logística esta Integrado con el
+                                            módulo de Contrataciones Públicas
                                         </Typography>
                                     </Box>
                                 </Grid>
@@ -321,8 +321,8 @@ function FctrllogFile() {
                                         }}
                                     >
                                         <Typography variant="body1" color="textPrimary">
-                                            <b>Activado:</b> Indica si Logistica esta integrado con el
-                                            modulo de Planificacion Anual de Compras.
+                                            <b>Activado:</b> Indica si Logística esta integrado con el
+                                            módulo de Planificación Anual de Compras.
                                         </Typography>
                                     </Box>
                                 </Grid>

@@ -8,7 +8,7 @@ import Toogle from "@/components/ui/toogle";
 import { useUpdateNivsum } from "../hook/useNivsum";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 
-interface dataSheetProps {
+interface DataSheetProps {
   isOpen: boolean;
   onClose: (value: boolean) => void;
   row: ITnivsum | null;
@@ -18,7 +18,7 @@ export default function DataSheet({
   isOpen,
   onClose,
   row,
-}: dataSheetProps): JSX.Element {
+}: DataSheetProps): JSX.Element {
   const { mutate, isPending, isSuccess } = useUpdateNivsum();
 
   const {
@@ -37,9 +37,9 @@ export default function DataSheet({
   useEffect(() => {
     if (isOpen) {
       reset({
-        nivelsum: row?.nivelsum || "",
-        indgeneral: row?.indgeneral || "N",
-        descnivel: row?.descnivel || "",
+        nivelsum: row?.nivelsum ?? "",
+        indgeneral: row?.indgeneral ?? "N",
+        descnivel: row?.descnivel ?? "",
       });
     }
   }, [isOpen, row]);
@@ -60,13 +60,18 @@ export default function DataSheet({
         width="xs"
         title={
           row
-            ? "Editar Nivel de Autorizacion"
-            : "Crear nuevo Nivel de Autorizacion"
+            ? "Editar Nivel de Autorización"
+            : "Crear nuevo Nivel de Autorización"
         }
         dialogOpen={isOpen}
         handleClose={() => onClose(false)}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 2, paddingRight: '1rem' }}>
+              <ButtonForms type="submit" variant="contained" color="primary" size="large" sx={{ width: 100 }}>
+                Guardar
+              </ButtonForms>
+            </div>
           <div className="grid grid-cols-1 gap-4 p-4">
             <div>
               <Typography variant="h3" color="primary">
@@ -123,13 +128,7 @@ export default function DataSheet({
               />
             </div>
           </div>
-          <ButtonForms
-            type="submit"
-            title="Guardar"
-            className="bg-blue-950 text-white ml-4 hover:bg-blue-800 transition duration-200"
-          >
-            Guardar
-          </ButtonForms>
+
         </form>
       </ModalDialog>
       <SimpleBackdrop show={isPending} />

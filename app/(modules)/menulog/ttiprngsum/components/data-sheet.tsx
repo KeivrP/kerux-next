@@ -62,13 +62,18 @@ export default function DataSheet({
         width="xs"
         title={
           row
-            ? "Editar Tipo de Renglon Suministro"
-            : "Crear nuevo Tipo de Renglon Suministro"
+            ? "Editar Tipo de Renglón Suministro"
+            : "Crear nuevo Tipo de Renglón Suministro"
         }
         dialogOpen={isOpen}
         handleClose={() => onClose(false)}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 2, paddingRight: '1rem' }}>
+              <ButtonForms type="submit" variant="contained" color="primary" size="large" sx={{ width: 100 }}>
+                Guardar
+              </ButtonForms>
+            </div>
           <div className="grid grid-cols-1 gap-4 p-4">
             <div>
               <Typography variant="h3" color="primary">
@@ -112,7 +117,7 @@ export default function DataSheet({
             </div>
             <div className="col-span-2">
               <Typography variant="h3" color="primary">
-                Limite UT
+                Límite UT
               </Typography>
               <TextField
                 id="limitundtrib"
@@ -132,13 +137,7 @@ export default function DataSheet({
               />
             </div>
           </div>
-          <ButtonForms
-            type="submit"
-            title="Guardar"
-            className="bg-blue-950 text-white ml-4 hover:bg-blue-800 transition duration-200"
-          >
-            Guardar
-          </ButtonForms>
+         
         </form>
       </ModalDialog>
       <SimpleBackdrop show={isPending} />

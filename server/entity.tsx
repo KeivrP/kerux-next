@@ -14,6 +14,7 @@ export const entities = {
   hdoc: 'docs_logs_crud',
   moneda: '/sols_sums_crud/lst_codmoneda',
   beneficiarios_crud: 'beneficiarios_crud',
+  contactos_crud: 'contactos_crud',
 
   // Lists
   log_coddependencia: "/sols_sums_crud/lst_coddependencia",

@@ -1,6 +1,6 @@
 "use client";
 import { useParams } from "next/navigation";
-import { Card, CardContent, CardHeader, Container, useTheme } from "@mui/material";
+import {  Container } from "@mui/material";
 import Breadcrumbs from "@/components/breadcrumbs/breadcumbs";
 import { ITipoSheet } from "../ttipodc-types";
 import { FormProvider, useForm } from "react-hook-form";
@@ -32,9 +32,6 @@ export default function FtipodocPage() {
 
   const { mutate: create, isPending: isCreating } = useCreateTipoDoc();
   const { mutate: update, isPending: isUpdating } = useUpdateTipoDoc();
-
-
-
 
   const methods = useForm<ITipoSheet>({
     defaultValues: {

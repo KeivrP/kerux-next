@@ -8,20 +8,20 @@ import { DeleteIcon, OpenIcon } from "@/components/icons/table-icon";
 
 
 export const columnsFilter: Filter[] = [
-    { id: "codundcmp", type: "desc", column: "Codigo", value: "" },
+    { id: "codundcmp", type: "desc", column: "Código", value: "" },
     { id: "nombundcmp", type: "desc", column: "Nombre", value: "" },
     { id: "indmanejaserv", type: "check", column: "Servicio", value: "" },
 
 ];
 export const columnsOrder: Order[] = [
-    { id: "codundcmp", column: "Codigo" },
+    { id: "codundcmp", column: "Código" },
     { id: "nombundcmp", column: "Nombre" },
     { id: "indmanejaserv", column: "Servicio" },
 
 ];
 
 export const columnsHeaders: HeadersName[] = [
-    { label: "Codigo", icon: null, align: "center", minWidth: 100 },
+    { label: "Código", icon: null, align: "center", minWidth: 100 },
     {
       label: "Nombre",
       icon: null,
