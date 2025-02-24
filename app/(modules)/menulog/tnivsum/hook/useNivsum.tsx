@@ -30,7 +30,7 @@ export const useUpdateNivsum = () => {
 
 export const useUpdateCcostoNivsum = () => {
     return useMutation({
-        mutationFn: ({ id, ccosto, dataCcostoNiv }: { id: string, ccosto: string, dataCcostoNiv: { ccosto: string } }) => updateCcostoNivsum(id, ccosto, dataCcostoNiv),
+        mutationFn: ({ id, ccosto, dataCcostoNiv }: { id: string, ccosto: string, dataCcostoNiv: { ccosto: string, nivelsum: string } }) => updateCcostoNivsum(id, ccosto, dataCcostoNiv),
         onSuccess: (res) => {
             showNotification(res);
         },

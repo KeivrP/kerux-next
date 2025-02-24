@@ -117,7 +117,7 @@ export const TdocfinTable = () => {
                 add={handleReassignAll}
                 actions={{ color: "secondary", disabled: selectedRows.length === 0 }}
                 title={<div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <CornerUpLeft size={16} /> Reasignar
+                    <CornerUpLeft size={16} /> Devolver
                 </div>}
                 onApplyFilter={(filters) => setFilter(filters)}
                 columnsFilter={columnsFilter}

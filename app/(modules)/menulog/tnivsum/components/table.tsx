@@ -98,10 +98,12 @@ export const Tnivsum = () => {
     }
     setOpenDialog(false);
   };
-
   const handleEdit = (id: string) => {
-    setIsEdit(true);
-    setRowToEdit(rows.find((row) => row.nivelsum === id) || null);
+    const row = rows.find((row) => row.nivelsum === id);
+    if (row?.indgeneral !== "S") {
+      setRowToEdit(row as ITnivsum);
+      setIsEdit(true);
+    }
   };
 
   return (
@@ -177,9 +179,8 @@ export const Tnivsum = () => {
         open={openDialog}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
-        text={`¿Estas seguro quedeseas eliminar el nivel de autorización ${
-          rows.find((row) => row.nivelsum == deleteRowId)?.nivelsum
-        }?`}
+        text={`¿Estas seguro quedeseas eliminar el nivel de autorización ${rows.find((row) => row.nivelsum == deleteRowId)?.nivelsum
+          }?`}
       />
       <SimpleBackdrop show={isPending} />
     </>
