@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 
 
 
-interface dataSheetProps {
+interface DataSheetProps {
     isOpen: boolean;
     onClose: (value: boolean) => void;
     row: IFnivsum | null;
@@ -29,7 +29,7 @@ export default function DataSheet({
     refetch,
     isLoadingS,
     nivelsum
-}: dataSheetProps): JSX.Element {
+}: DataSheetProps): JSX.Element {
     const [ccosto, setCcosto] = useState('')
     const { mutate, isPending, isSuccess } = useUpdateCcostoNivsum();
 
@@ -48,7 +48,7 @@ export default function DataSheet({
 
 
     const onSubmit = () => {
-        mutate({ id: nivelsum, ccosto: row?.ccosto ?? '', dataCcostoNiv: { ccosto } });
+        mutate({ id: nivelsum, ccosto: row?.ccosto ?? '', dataCcostoNiv: { ccosto, nivelsum } });
     };
 
     useEffect(() => {
