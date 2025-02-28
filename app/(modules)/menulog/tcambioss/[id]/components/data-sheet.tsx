@@ -203,7 +203,7 @@ export default function DataSheet({
                     <div className="grid grid-cols-12 gap-4">
                         {/* First Row */}
                         <div className="col-span-6 md:col-span-2">
-                            <Label className="text-sm text-[#142F62]">Id. sum.</Label>
+                            <Label className="text-sm text-[#142F62]">ID Solicitud</Label>
                             {id > 0 ? (
                                 <Input value={id} readOnly className="bg-muted" />
                             ) : (
@@ -295,7 +295,7 @@ export default function DataSheet({
                             </ConditionalWrapper>
                         </div>
                         <div className="col-span-4 md:col-span-2">
-                            <Label className="text-sm text-[#142F62]">Acc. int.</Label>
+                            <Label className="text-sm text-[#142F62]">Acción interna</Label>
                             <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
                                 <Input {...register('cabsolsum.codaccint')} readOnly className="bg-muted" />
                             </ConditionalWrapper>
@@ -323,7 +323,7 @@ export default function DataSheet({
                             </RadioGroup>
                         </div>
                         <div className="col-span-12 md:col-span-2">
-                            <Label className="text-sm text-[#142F62]">Id. reserva:</Label>
+                            <Label className="text-sm text-[#142F62]"> ID Reserva:</Label>
                             <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
                                 <Input {...register('cabsolsum.iddocres')} readOnly className="bg-muted" />
                             </ConditionalWrapper>
@@ -344,7 +344,7 @@ export default function DataSheet({
                             <BadgeModule codmenu={watch('cabsolsum.origensol')} />
                         </div>
                         <div className="col-span-6 md:col-span-1 flex align-center justify-center flex-col">
-                            <Label className="text-sm text-[#142F62]">Status</Label>
+                            <Label className="text-sm text-[#142F62]">Estatus</Label>
                             <BadgeTipodoc tipo={watch('cabsolsum.stssol')} />
                         </div>
 
@@ -380,13 +380,14 @@ export default function DataSheet({
                                     <Input type="date" {...register('cabcambio.feccambio')} className="bg-muted" />
                                 </ConditionalWrapper>
                             </div>
-                            <div className="col-span-2">
-                                <Label className="text-sm text-[#142F62]">Estatus del Cambio</Label>
+                            <div className="col-span-2 flex flex-col">
+                                <Label className="text-sm text-[#142F62] mb-1">Estatus del Cambio</Label>
                                 <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-                                    <BadgeTipodoc tipo={watch('cabcambio.stscamb')} />
+                                    <div className="flex items-center">
+                                        <BadgeTipodoc tipo={watch('cabcambio.stscamb')} />
+                                    </div>
                                 </ConditionalWrapper>
                             </div>
-                            {/* ... */}
                         </div>
 
                         {/* Amounts Grid */}

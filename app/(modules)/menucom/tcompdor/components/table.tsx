@@ -83,9 +83,7 @@ export const Tcompdor = () => {
     const rowToDelete = rows.find((row) => row.codundcmp === deleteRowId);
     if (rowToDelete) {
       mutate(deleteRowId);
-    } else {
-      console.log(`Row with id ${deleteRowId} not found`);
-    }
+    } else 
     setOpenDialog(false);
   };
 

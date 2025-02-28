@@ -15,6 +15,7 @@ import { useReturnsDocFin } from "../hook/useReturnDocfin";
 import Checkbox from "@/components/checkbox/checkbox";
 import { CornerUpLeft } from "lucide-react";
 import { BadgeTipodoc } from "@/components/badge/badge-estatus";
+import { BadgeStsDoc } from "@/components/badge/badge-log";
 
 export const TdocfinTable = () => {
     const [page, setPage] = useState(0);
@@ -156,7 +157,7 @@ export const TdocfinTable = () => {
                             { content: row.iddoc, align: "left", handleCollapse: true },
                             { content: row.descdoc, align: "left" },
                             { content: row.tipodoc, align: "center" },
-                            { content: <BadgeTipodoc tipo={row.stsdoc} />, align: "center" },
+                            { content: <BadgeStsDoc tipo={row.stsdoc} />, align: "center" },
                             { content: row.ano, align: "center" },
                             { content: formatDate(row.fecdoc), align: "center" },
 
@@ -177,7 +178,8 @@ export const TdocfinTable = () => {
                         ],
 
                         collapsed: (row) => [
-                            { name: "Num Benef", content: row.numidbenef },
+                            { name: "Beneficiario", content: row.nombre },
+                            { name: "RIF/Cedula", content: row.numidbenef },
                             { name: "Ultimo Módulo", content: row.maximo_evento.codsisgen },
                             { name: "Origen", content: row.origen },
                             { name: "Referencia", content: row.refdoc },

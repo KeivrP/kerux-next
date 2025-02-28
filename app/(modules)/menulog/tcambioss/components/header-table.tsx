@@ -6,14 +6,14 @@ import { IconButton, Tooltip, useTheme } from "@mui/material";
 import LongMenu, { DeleteIcon, OpenIcon } from "@/components/icons/table-icon";
 
 export const columnsFilter: Filter[] = [
-  { id: "idsolsum", type: "number", column: "ID Solsum", value: "" },
+  { id: "idsolsum", type: "number", column: "ID Solicitud", value: "" },
   { id: "nrocambio", type: "number", column: "Nro Cambio", value: "" },
   { id: "desccambio", type: "desc", column: "Descripción", value: "" },
   { id: "feccambio", type: "date", column: "Fecha de Cambio", value: "" },
   { id: "stscamb", type: "desc", column: "Estatus", value: "" },
 ];
 export const columnsOrder: Order[] = [
-  { id: "idsolsum", column: "ID Solsum" },
+  { id: "idsolsum", column: "ID Solicitud" },
   { id: "nrocambio", column: "nrocambio" },
   { id: "desccambio", column: "Descripción" },
   { id: "feccambio", column: "Fecha de Cambio" },
@@ -21,7 +21,7 @@ export const columnsOrder: Order[] = [
 ];
 
 export const columnsHeaders: HeadersName[] = [
-  { label: "ID Solsum", align: "center", minWidth: 140 },
+  { label: "ID Solicitud", align: "center", minWidth: 140 },
   {
     label: "Cambio",
 

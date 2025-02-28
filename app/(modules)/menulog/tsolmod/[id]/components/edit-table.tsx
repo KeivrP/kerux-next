@@ -174,7 +174,6 @@ export default function DataSheet({
       create({ numsolsum: formData.cabssmod.numsolsum, ...data })
     } else {
       mutate({ id: formData.cabssmod.numsolsum, data, nro: row.nroreng });
-      console.log(data)
     }
   };
 

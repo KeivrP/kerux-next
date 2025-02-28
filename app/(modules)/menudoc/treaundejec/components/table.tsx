@@ -124,7 +124,7 @@ export const TreaundejecTable = () => {
                 add={handleReassignAll}
                 actions={{ color: "primary", disabled: selectedRows.length === 0 || unidadEjecutora.value === "" }}
                 title={<div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <CornerUpLeft size={16} /> Reasignar    
+                    <CornerUpLeft size={16} /> Reasignar
                 </div>}
                 onApplyFilter={(filters) => setFilter(filters)}
                 columnsFilter={columnsFilter}
@@ -135,7 +135,7 @@ export const TreaundejecTable = () => {
             >
                 <AutocompleteAsync
                     text="value"
-                    sx={{width: '35%'}}
+                    sx={{ width: '35%' }}
                     loading={lst_loading}
                     options={options}
                     defaultValue={unidadEjecutora.label}
@@ -184,9 +184,10 @@ export const TreaundejecTable = () => {
 
                         ],
 
-                        collapsed: (row) => [
+                        collapsed: (row: Documentoslist) => [
                             { name: "Descripción", content: row.descdoc },
-                            { name: "Num Benef", content: row.numidbenef },
+                            { name: "Beneficiario", content: row.nombre },
+                            { name: "RIF/Cedula", content: row.numidbenef },
                             {
                                 name: "Descripción Tipo de documento",
                                 content: row.desctipodoc,

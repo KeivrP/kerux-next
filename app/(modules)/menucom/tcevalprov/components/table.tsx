@@ -89,9 +89,7 @@ export const TundsTable = () => {
     const rowToDelete = rows.find((row) => row.codcritevalprov === deleteRowId);
     if (rowToDelete) {
       mutate(deleteRowId);
-    } else {
-      console.log(`Row with id ${deleteRowId} not found`);
-    }
+    } 
     setOpenDialog(false);
   };
 

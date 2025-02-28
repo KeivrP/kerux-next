@@ -80,7 +80,7 @@ const DataSheet = ({ id }: DataSheetProps) => {
       <Tabs tabs={tabs} >
        
       <ButtonForms
-          onClick={() => console.log({ id: formData?.cabsolsum?.idsolsum })}
+          onClick={() => {}}
           sx={{ color: "alert" }}
         >
           <SaveIcon size={18} />

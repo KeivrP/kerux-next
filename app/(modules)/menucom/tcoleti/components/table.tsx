@@ -94,9 +94,7 @@ export const Tcoleti = () => {
     const rowToDelete = rows.find((row) => row.codcolet === deleteRowId);
     if (rowToDelete) {
       mutate(deleteRowId);
-    } else {
-      console.log(`Row with id ${deleteRowId} not found`);
-    }
+    } 
     setOpenDialog(false);
   };
 

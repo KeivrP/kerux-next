@@ -124,8 +124,8 @@ export default function DataSheet({
                 {...register("limitundtrib", {
                   required: "Nivel sum es requerido",
                   maxLength: {
-                    value: 3,
-                    message: "Nivel sum no puede ser mayor de 3 dígitos",
+                    value: 6,
+                    message: "El Límite de la UT no debe exceder de 6 dígitos",
                   },
                 })}
                 size="small"

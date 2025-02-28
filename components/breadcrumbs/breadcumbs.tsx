@@ -53,8 +53,6 @@ const Breadcrumbs: React.FC = () => {
 
   const [data, setData] = useState<FindMenuItemResult | null>(null);
 
-  console.log(pathnameSplitV2);
-
   // Memoize the menu item finding to avoid unnecessary recalculations
   const menuItem = useMemo(
     () => findMenuItem(menu as Menu[], pathnameSplit),
@@ -116,7 +114,7 @@ const Breadcrumbs: React.FC = () => {
             </button>
           </div>
         </li>
-        <li aria-current="page">
+        {pathnames[2] &&  <li aria-current="page">
           <div className="flex items-center">
             <svg
               className="mx-1 w-5 h-5"
@@ -138,7 +136,8 @@ const Breadcrumbs: React.FC = () => {
             </button>
 
           </div>
-        </li>
+        </li> }
+        {pathnames[3] && 
         <li aria-current="page">
           <div className="flex items-center">
             <svg
@@ -159,7 +158,7 @@ const Breadcrumbs: React.FC = () => {
             </span>
 
           </div>
-        </li>
+        </li> }
       </ol>
     </nav>
   );

@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import {
+  fsolsumDelete,
   fsolsumRng,
   fsolsumUpdate,
   tsolsumAnular,
@@ -78,3 +79,15 @@ export const useUpdateRenglon = () => {
     },
   });
 };
+
+export const useDeleteRenglon = () => {
+  return useMutation({
+    mutationFn: ({ id, nro }: { id: number; nro: number }) => fsolsumDelete(id, nro),
+    onSuccess: (res) => {
+      showNotification(res);
+    },
+    onError: (error) => {
+      console.error("Error updating nivsum:", error);
+    },
+  });
+}

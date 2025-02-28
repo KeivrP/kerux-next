@@ -82,11 +82,22 @@ const EditTrutas: React.FC<EditTrutasProps> = ({
     <div>
       <ModalDialog
         width="xs"
-        title={row ? "Editar ruta" : "Crear nueva ruta"}
+        title={row ? "EDITAR RUTA" : " CREAR RUTA"}
         dialogOpen={isOpen}
         handleClose={() => onClose(false)}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: 20 }}>
+            <ButtonForms
+              type="submit"
+              variant="contained"
+              color="primary"
+              size="large"
+              sx={{ width: 100 }}
+            >
+              Guardar
+            </ButtonForms>
+            </div>
           <div className="p-4">
             <Typography variant="h3" color="primary">
               Código ruta
@@ -97,7 +108,7 @@ const EditTrutas: React.FC<EditTrutasProps> = ({
                 required: "Código ruta es requerido",
                 maxLength: {
                   value: 3,
-                  message: "Código ruta no puede tener más de 3 caracteres",
+                  message: "Código ruta no puede t ener más de 3 caracteres",
                 },
               })}
               size="small"
@@ -126,13 +137,7 @@ const EditTrutas: React.FC<EditTrutasProps> = ({
               helperText={errors.descruta?.message}
             />
           </div>
-          <ButtonForms
-            type="submit"
-            title="Guardar"
-            className="bg-blue-950 text-white ml-4 hover:bg-blue-800 transition duration-200"
-          >
-            Guardar
-          </ButtonForms>
+
         </form>
       </ModalDialog>
     </div>

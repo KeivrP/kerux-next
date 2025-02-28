@@ -6,7 +6,6 @@ export const useDeleteContacto = () => {
   return useMutation({
     mutationFn: ({ id }: { id: number }) => deleteContacto(id),
     onSuccess: (res) => {
-      console.log(res)
       showNotification(res);
     },
     onError: (error) => {
@@ -19,7 +18,6 @@ export const useUpdateContacto = () => {
   return useMutation({
     mutationFn: ({ id, data }: { id: number; data: any }) => updateContacto(id, data),
     onSuccess: (res) => {
-      console.log(res)
       showNotification(res);
     },
     onError: (error) => {
@@ -32,7 +30,6 @@ export const useCreateContacto = () => {
   return useMutation({
     mutationFn: (data: any) => createContacto(data),
     onSuccess: (res) => {
-      console.log(res)
       showNotification(res);
     },
     onError: (error) => {

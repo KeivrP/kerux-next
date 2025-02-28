@@ -36,7 +36,6 @@ const EditSheet = ({ isOpen, onClose, data, refetch, isNew = false }: HistoriaDo
 
     useEffect(() => {
         if (!Array.isArray(lst_renglones)) {
-            console.log('lst_renglones is not an array:', lst_renglones);
             setarrayLst([]);
 
         } else {

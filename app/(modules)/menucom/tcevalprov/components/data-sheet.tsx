@@ -81,6 +81,17 @@ export default function DataSheet({
         handleClose={() => onClose(false)}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: 20 }}>
+            <ButtonForms
+              type="submit"
+              variant="contained"
+              color="primary"
+              size="large"
+              sx={{ width: 100 }}
+            >
+              Guardar
+            </ButtonForms>
+            </div>
           <div className="grid grid-cols-1 gap-4 p-4">
             <div>
               <Typography variant="h3" color="primary">
@@ -122,16 +133,11 @@ export default function DataSheet({
               />
             </div>
           </div>
-          <ButtonForms
-            type="submit"
-            title="Guardar"
-            className="bg-blue-950 text-white ml-4 hover:bg-blue-800 transition duration-200"
-          >
-            Guardar
-          </ButtonForms>
+
         </form>
       </ModalDialog>
       <SimpleBackdrop show={isPending} />
     </>
   );
 }
+ 

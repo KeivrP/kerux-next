@@ -50,8 +50,6 @@ const Frengcom = ({
   }, [data]);
 
 
-  console.log(data);
-
   return (
     <ModalDialog
       dialogOpen={open}
