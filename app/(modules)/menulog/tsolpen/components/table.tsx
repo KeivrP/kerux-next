@@ -66,7 +66,6 @@ export const TsolpenTable = () => {
   };
 
   const openGenerate = (id: number) => {
-    console.log(id);
   };
 
   return (

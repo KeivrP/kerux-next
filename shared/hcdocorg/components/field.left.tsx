@@ -6,7 +6,7 @@ import { SkeletonInput } from "@/components/skeleton/detail";
 import { FormContextProps } from "../hcdocorg-utils";
 import { Input } from "@/components/ui/input";
 import Grid from "@mui/material/Grid2";
-import { BadgeAct } from "@/components/badge/badge-act";
+import { BadgeAct, BadgeReverso } from "@/components/badge/badge-act";
 import { parseDate } from "@internationalized/date";
 
 interface FieldLeftProps extends FormContextProps {
@@ -118,7 +118,7 @@ function FieldLeft({ formData, isLoading = false }: FieldLeftProps) {
         </Typography>
         <Box display="flex" justifyContent="center">
           <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-            <BadgeAct
+            <BadgeReverso
               status={
                 Detalle.indreverso === "S" || Detalle.indreverso === "N"
                   ? Detalle.indreverso

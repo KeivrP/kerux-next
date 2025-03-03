@@ -7,16 +7,16 @@ import { DeleteIcon, OpenIcon } from "@/components/icons/table-icon";
 import { Criterioslist } from "../tcevalprov-type";
 
 export const columnsFilter: Filter[] = [
-  { id: "codcritevalprov", type: "desc", column: "Codigo", value: "" },
+  { id: "codcritevalprov", type: "desc", column: "Código", value: "" },
   { id: "desccrievalprov", type: "desc", column: "Descripción", value: "" },
 ];
 export const columnsOrder: Order[] = [
-  { id: "codcritevalprov", column: "Codigo"},
+  { id: "codcritevalprov", column: "Código"},
   { id: "desccrievalprov", column: "Descripción" },
 ];
 
 export const columnsHeaders: HeadersName[] = [
-  { label: "Codigo", icon: null, align: "left", minWidth: 100 },
+  { label: "Código", icon: null, align: "left", minWidth: 100 },
   {
     label: "Descripción",
     icon: null,

@@ -53,7 +53,21 @@ const ModalDialog: React.FC<BaseDialogProps> = ({
 
       {...otherProps}
     >
-      <DialogTitle onClose={handleClose}>{title || "Nameless"}</DialogTitle>
+      <DialogTitle onClose={handleClose}>{title ?? "Nameless"}</DialogTitle>
+      {confirm &&
+            (formId ? (
+              <Button type="submit" form={formId} color="secondary">
+                <Typography textTransform="uppercase">
+                  {confirmText ?? "Save"}
+                </Typography>
+              </Button>
+            ) : (
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 2, marginBottom: -20, padding: '1rem' }}>
+              <ButtonForms onClick={confirm} variant="contained" color="primary" size="large" sx={{ width: 100 }}>
+                Guardar
+              </ButtonForms>
+            </div>
+            ))}
       <DialogContent>{children}</DialogContent>
       {alternativeFooter ? (
         alternativeFooter
@@ -66,21 +80,7 @@ const ModalDialog: React.FC<BaseDialogProps> = ({
               </Typography>
             </Button>
           )}
-          {confirm &&
-            (formId ? (
-              <Button type="submit" form={formId} color="secondary">
-                <Typography textTransform="uppercase">
-                  {confirmText || "Save"}
-                </Typography>
-              </Button>
-            ) : (
-              <ButtonForms
-                onClick={confirm}
-                sx={{ bgcolor: theme.palette.primary.main, color: "white" }}
-              >
-                Guardar
-              </ButtonForms>
-            ))}
+         
         </DialogActions>
       )}
     </Dialog>

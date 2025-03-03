@@ -71,8 +71,6 @@ export const FrutasTable: React.FC<FrutasTableProps> = ({
     const rowToDelete = rows.find((row) => row.paso === deleteRowId);
     if (rowToDelete) {
       mutate(rowToDelete);
-    } else {
-      console.log(`Row with id ${deleteRowId} not found`);
     }
     setOpenDialog(false);
   };
@@ -80,7 +78,6 @@ export const FrutasTable: React.FC<FrutasTableProps> = ({
   const handleEdit = (paso: number) => {
     setDrawerOpen(true);
     setRowSelected(rows.find((row) => row.paso === paso) || null);
-    console.log(`Edit ${paso}`);
   };
 
   const handleCreate = () => {

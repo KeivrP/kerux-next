@@ -11,7 +11,6 @@ interface DateSheetProps extends FormContextProps {
 }
 
 const DateSheet = ({ formData, isLoading, setFormData }: DateSheetProps) => {
-  console.log("formData", formData.cabsolcompra);
   return (
     <Grid container spacing={2}>
       {/* ---------------------------- INICIO DE DIVISOR --------------------------- */}

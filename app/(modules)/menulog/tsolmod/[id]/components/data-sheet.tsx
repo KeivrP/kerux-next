@@ -29,8 +29,6 @@ const DataSheet = ({ id }: DataSheetProps) => {
     type: `${id}`,
   });
 
-  console.log(data);
-
 
   const { mutate: generateMutate, isPending: isGenerating, isSuccess: isSuccesgen } = useGenerateTsolmod();
   const { mutate: updateMutate, isPending: isUpdating, isSuccess: isSuccesup } = useUpdateTsolmod();

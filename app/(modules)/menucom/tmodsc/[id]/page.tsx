@@ -35,7 +35,7 @@ export default function TrutasPage() {
         <Breadcrumbs />
         <div className="p-6 flex flex-col gap-4">
           <div>
-            <TextDivider>Codigo de la Ruta</TextDivider>
+            <TextDivider>Código de la Ruta</TextDivider>
           </div>
           <InputSheet isLoading={isLoading} rows={rows?.cabsolcompra!} />
           <div>

@@ -13,7 +13,8 @@ export const entities = {
   tcmabios_show: '/cambios_crud/show',
   hdoc: 'docs_logs_crud',
   moneda: '/sols_sums_crud/lst_codmoneda',
-
+  beneficiarios_crud: 'beneficiarios_crud',
+  contactos_crud: 'contactos_crud',
 
   // Lists
   log_coddependencia: "/sols_sums_crud/lst_coddependencia",
@@ -52,6 +53,10 @@ export const entities = {
   controlog: '/sols_sums_crud/lst_controlog',
   lst_sscambios: '/listas/lst_sscambio_gen',
   lst_porcimptos: 'listas/lst_porcimptos',
+  lst_ubgeo: '/listas/lst_ubic_geog',
+  lst_prov: '/listas/lst_tipo_prov',
+  lst_rutas: '/listas/lst_rutas',
+  lst_tiposdoc: '/listas/lst_tipos_documentos',
 
 
   // Other entities
@@ -92,5 +97,6 @@ export const entities = {
   tipos_doc_com: '/tipos_doc_com',
   tipos_doc: '/tipos_doc',
   sols_sums: '/sols_sums/?',
+  
 };
 

@@ -29,6 +29,8 @@ export default function DataSheet({
 }: DataSheetProps): JSX.Element {
   const { mutate, isPending, isSuccess } = useUpdateRenglon()
 
+  const rows = formData.detsolsum.length
+
   const {
     register,
     handleSubmit,
@@ -64,8 +66,6 @@ export default function DataSheet({
   const coditem = watch("coditem");
   const codnombre = watch("codnombre");
   const unidbasica = watch('unidbasica')
-
-  console.log(row)
 
   useEffect(() => {
     if (isOpen) {
@@ -250,7 +250,7 @@ export default function DataSheet({
                 (formData.IndCatObras === "S" &&
                   tiporeng === "OB") ||
                   tiporeng === "AD"
-                  ? "Codigo de servicio reuqerdio requerida"
+                  ? "Código de servicio reuqerdio requerida"
                   : undefined,
             })}
             fullWidth
@@ -351,7 +351,7 @@ export default function DataSheet({
       <ModalDialog
         width="md"
         title={
-          row.nroreng !== 0
+          row.nroreng < rows
             ? `Editar Renglón ${row.nroreng}`
             : "Crear nuevo Renglón"
         }
@@ -500,25 +500,27 @@ export default function DataSheet({
 
             <Grid size={2.5}>
               <Typography variant="h3" color="primary" >
-                Cantidad
+              Cantidad
               </Typography>
               <TextField
-                id="cantsol"
-                {...register("cantsol", {
-                  required: "Cantidad requerida",
- 
-                })}
-                size="small"
-                inputMode="decimal"
-                fullWidth
-                margin="normal"
-                error={!!errors.cantsol}
-                helperText={errors.cantsol?.message}
-                InputProps={{
-                  inputProps: {
-                  step: "0.01",
-                  },
-                }}
+              id="cantsol"
+              {...register("cantsol", {
+                required: "Cantidad requerida",
+                setValueAs: (value) => parseFloat(value).toFixed(2)
+              })}
+              size="small"
+              variant="outlined"
+              type="number"
+              fullWidth
+              inputMode="decimal"
+              margin="normal"
+              error={!!errors.cantsol}
+              helperText={errors.cantsol?.message}
+              inputProps={{
+                inputProps: {
+                step: "0,01",
+                },
+              }}
               />
             </Grid>
 

@@ -6,26 +6,26 @@ import { IconButton, Tooltip, useTheme } from "@mui/material";
 import { DeleteIcon, OpenIcon } from "@/components/icons/table-icon";
 
 export const columnsFilter: Filter[] = [
-    { id: "codundcmp", type: "desc", column: "Codigo", value: "" },
+    { id: "codundcmp", type: "desc", column: "Código", value: "" },
     { id: "nomcomprador", type: "desc", column: "Nombre", value: "" },
     { id: "COMPRADORES.codundcmp", type: "desc", column: "Unidad", value: "" },
-    { id: "nivelusuario", type: "desc", column: "Nivel Ejecucion", value: "" },
+    { id: "nivelusuario", type: "desc", column: "Nivel Ejecución", value: "" },
     { id: "codusuariosup", type: "desc", column: "Supervisor", value: "" },
   
 
 ];
 export const columnsOrder: Order[] = [
-    { id: "codundcmp", column: "Codigo" },
+    { id: "codundcmp", column: "Código" },
     { id: "nomcomprador", column: "Nombre" },
     { id: "COMPRADORES.codundcmp", column: "Unidad" },
-    { id: "nivelusuario", column: "Nivel Ejecucion" },
+    { id: "nivelusuario", column: "Nivel Ejecución" },
     { id: "codusuariosup", column: "Supervisor" },
 
 ];
 
 
 export const columnsHeaders: HeadersName[] = [
-    { label: "Codigo", icon: null, align: "left", minWidth: 100 },
+    { label: "Código", icon: null, align: "left", minWidth: 100 },
     {
       label: "Nombre",
       icon: null,
@@ -33,7 +33,7 @@ export const columnsHeaders: HeadersName[] = [
       minWidth: 140,
     },
     { label: "Unidad", icon: null, minWidth: 180, align: 'left' },
-    { label: "Nivel de Ejecucion", icon: null, minWidth: 180, align: 'center' },
+    { label: "Nivel de Ejecución", icon: null, minWidth: 180, align: 'center' },
     { label: "Supervisor", icon: null, minWidth: 180, align: 'left' },
     {
       label: "Acciones",

@@ -26,7 +26,7 @@ export const columnsOrder: Order[] = [
 export const columnsHeaders: HeadersName[] = [
   { label: "Num. Beneficiario", icon: null, align: "center", minWidth: 140 },
   {
-    label: "Identificacion",
+    label: "Identificación",
     icon: null,
     align: "center",
     minWidth: 140,

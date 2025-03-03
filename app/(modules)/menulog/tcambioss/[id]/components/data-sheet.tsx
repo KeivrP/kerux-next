@@ -17,10 +17,10 @@ import { ITcambiosRoot, Rengcambio } from "../../tcambioss-types";
 import EditSheet from "./edit-sheet";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { ConfirmDialog } from "@/components/modal/confirmDialog";
-import { useDeleteRenglon } from "../../hook/useTcambios";
+import { useDeleteRenglon, useProcesarCambio } from "../../hook/useTcambios";
 import ButtonForms from "@/components/button/buttonForms";
-import Frengcom from "../../../tsolpen/[id]/components/frengcomp";
-import NewSheet from "./new-sheet";
+import { CircleSlash } from "lucide-react";
+
 
 interface DataSheetProps {
     id: number;
@@ -120,13 +120,9 @@ export default function DataSheet({
 
     useEffect(() => {
         if (data) {
-            setRows(data)
+            setRows(data);
         }
-    }, [data]
-    )
-
-    useEffect(() => {
-    }, [watch('cabsolsum.idsolsum')]);
+    }, [data]);
 
     useEffect(() => {
         if (rows && Object.keys(rows).length > 0) {
@@ -136,9 +132,15 @@ export default function DataSheet({
                 setValue('TotCambio', rows.TotCambio[0]);
             }
         }
-    }, [rows])
+    }, [rows, isFetching]);
+
+    useEffect(() => {
+        refetch();
+    }, [watch('cabsolsum.idsolsum')]);
 
     const idsolsum = watch("cabsolsum.idsolsum");
+    const nrocambio = watch("cabcambio.nrocambio");
+
 
     const [dataRow, setDataRow] = useState<Rengcambio | null>(null);
     const { mutate, isPending } = useDeleteRenglon()
@@ -173,12 +175,26 @@ export default function DataSheet({
 
     const [open, setOpen] = useState(false)
 
+    const { mutate: generateMutate, isPending: procesarLoading } = useProcesarCambio();
 
+    const totalcamb = (rows?.TotCambio && rows.TotCambio[0]) ? Number(rows.TotCambio[0].netocambio) + Number(rows.TotCambio[0].imptocambio) : 0;
+    const totalProy = (rows?.TotCambio && rows.TotCambio[0]) ? Number(rows.TotCambio[0].netoproy) + Number(rows.TotCambio[0].imptoproy) : 0;
 
     return (
 
         <div>
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
 
+                <ButtonForms
+                    onClick={() => generateMutate({ idsolsum: String(watch('cabsolsum.idsolsum')), nrocambio: String(watch('cabcambio.nrocambio')) })}
+                    sx={{ color: "alert", alignItems: "center" }}
+                >
+                    <CircleSlash size={18} />
+                    <Typography variant="h3" marginLeft={1}>
+                        Procesar
+                    </Typography>
+                </ButtonForms>
+            </div>
             {/* Supply Request Section */}
             <Card className="mb-4">
                 <CardHeader className="bg-muted py-2 text-[#142F62]" title="Solicitud de suministro" />
@@ -186,7 +202,7 @@ export default function DataSheet({
                     <div className="grid grid-cols-12 gap-4">
                         {/* First Row */}
                         <div className="col-span-6 md:col-span-2">
-                            <Label className="text-sm text-[#142F62]">Id. sum.</Label>
+                            <Label className="text-sm text-[#142F62]">ID Solicitud</Label>
                             {id > 0 ? (
                                 <Input value={id} readOnly className="bg-muted" />
                             ) : (
@@ -278,7 +294,7 @@ export default function DataSheet({
                             </ConditionalWrapper>
                         </div>
                         <div className="col-span-4 md:col-span-2">
-                            <Label className="text-sm text-[#142F62]">Acc. int.</Label>
+                            <Label className="text-sm text-[#142F62]">Acción interna</Label>
                             <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
                                 <Input {...register('cabsolsum.codaccint')} readOnly className="bg-muted" />
                             </ConditionalWrapper>
@@ -306,7 +322,7 @@ export default function DataSheet({
                             </RadioGroup>
                         </div>
                         <div className="col-span-12 md:col-span-2">
-                            <Label className="text-sm text-[#142F62]">Id. reserva:</Label>
+                            <Label className="text-sm text-[#142F62]"> ID Reserva:</Label>
                             <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
                                 <Input {...register('cabsolsum.iddocres')} readOnly className="bg-muted" />
                             </ConditionalWrapper>
@@ -327,7 +343,7 @@ export default function DataSheet({
                             <BadgeModule codmenu={watch('cabsolsum.origensol')} />
                         </div>
                         <div className="col-span-6 md:col-span-1 flex align-center justify-center flex-col">
-                            <Label className="text-sm text-[#142F62]">Status</Label>
+                            <Label className="text-sm text-[#142F62]">Estatus</Label>
                             <BadgeTipodoc tipo={watch('cabsolsum.stssol')} />
                         </div>
 
@@ -363,37 +379,38 @@ export default function DataSheet({
                                     <Input type="date" {...register('cabcambio.feccambio')} className="bg-muted" />
                                 </ConditionalWrapper>
                             </div>
-                            <div className="col-span-2">
-                                <Label className="text-sm text-[#142F62]">Estatus del Cambio</Label>
+                            <div className="col-span-2 flex flex-col">
+                                <Label className="text-sm text-[#142F62] mb-1">Estatus del Cambio</Label>
                                 <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-                                    <BadgeTipodoc tipo={watch('cabcambio.stscamb')} />
+                                    <div className="flex items-center">
+                                        <BadgeTipodoc tipo={watch('cabcambio.stscamb')} />
+                                    </div>
                                 </ConditionalWrapper>
                             </div>
-                            {/* ... */}
                         </div>
 
                         {/* Amounts Grid */}
                         <div className="grid grid-cols-2 gap-4">
-                            <Card>
+                        <Card>
                                 <CardHeader className="py-2 text-sm text-[#142F62]" title="Montos de este cambio" />
                                 <CardContent className="p-4">
                                     <div className="grid grid-cols-3 gap-2">
                                         <div>
                                             <Label className="text-xs">Neto</Label>
                                             <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-                                                <Input value={formatCurrency(watch('TotCambio.netocambio'))} readOnly className="bg-muted text-right" />
+                                                <Input value={formatCurrency(rows?.TotCambio?.[0]?.netocambio ?? 0)} readOnly className="bg-muted text-right" />
                                             </ConditionalWrapper>
                                         </div>
                                         <div>
                                             <Label className="text-xs">Impuesto</Label>
                                             <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-                                                <Input value={formatCurrency(watch('TotCambio.imptocambio'))} readOnly className="bg-muted text-right" />
+                                                <Input value={formatCurrency(rows?.TotCambio?.[0]?.imptocambio ?? 0)} readOnly className="bg-muted text-right" />
                                             </ConditionalWrapper>
                                         </div>
                                         <div>
                                             <Label className="text-xs">Total</Label>
                                             <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-                                                <Input value={formatCurrency(watch('TotCambio.netocambio') + watch('TotCambio.imptocambio'))} readOnly className="bg-muted text-right" />
+                                                <Input value={formatCurrency(totalcamb)} readOnly className="bg-muted text-right" />
                                             </ConditionalWrapper>
                                         </div>
                                     </div>
@@ -406,19 +423,19 @@ export default function DataSheet({
                                         <div>
                                             <Label className="text-xs">Neto</Label>
                                             <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-                                                <Input value={formatCurrency(watch('TotCambio.netoproy'))} readOnly className="bg-muted text-right" />
+                                                <Input value={formatCurrency(rows?.TotCambio?.[0]?.netoproy ?? 0)} readOnly className="bg-muted text-right" />
                                             </ConditionalWrapper>
                                         </div>
                                         <div>
                                             <Label className="text-xs">Impuesto</Label>
                                             <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-                                                <Input value={formatCurrency(watch('TotCambio.imptoproy'))} readOnly className="bg-muted text-right" />
+                                                <Input value={formatCurrency(rows?.TotCambio?.[0]?.imptoproy ?? 0)} readOnly className="bg-muted text-right" />
                                             </ConditionalWrapper>
                                         </div>
                                         <div>
                                             <Label className="text-xs">Total</Label>
                                             <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-                                                <Input value={formatCurrency(watch('TotCambio.netoproy') + watch('TotCambio.imptoproy'))} readOnly className="bg-muted text-right" />
+                                                <Input value={formatCurrency(totalProy)} readOnly className="bg-muted text-right" />
                                             </ConditionalWrapper>
                                         </div>
                                     </div>
@@ -436,13 +453,16 @@ export default function DataSheet({
                     title="Renglones de la solicitud de suministro"
                     action={
                         <Button
-                        onClick={() => setOpen(true)}
-                        variant="contained"
-                        color={"primary"}
-                        sx={{ textTransform: "none" }}
-                      >
-                        <Typography variant="h3">{ "+ AÑADIR"}</Typography>
-                      </Button>
+                            onClick={() => {
+                                setOpen(true);
+                                handleOpen(rows?.rengcambio?.[0] ?? { idsolsum, nrocambio } as Rengcambio);
+                            }}
+                            variant="contained"
+                            color={"primary"}
+                            sx={{ textTransform: "none" }}
+                        >
+                            <Typography variant="h3">{"+ AÑADIR"}</Typography>
+                        </Button>
                     }
                 />
                 <CardContent className="p-4">
@@ -511,13 +531,11 @@ export default function DataSheet({
                 open={openDialog}
                 onConfirm={handleConfirmDelete}
                 onCancel={handleCancelDelete}
-                text={`¿Estas seguro que deseas eliminar el cambio ${rows?.rengcambio.find((row) => row.idsolsum == deleteRowId)?.idsolsum
-                    }?`}
+                text={`¿Estas seguro que deseas eliminar el cambio ${rows?.rengcambio?.find((row) => row.idsolsum == deleteRowId)?.idsolsum ?? ''}?`}
             />
 
-            <EditSheet refetch={() => refetch()} isOpen={isOpen} onClose={() => { setIsOpen(false); setDataRow(null) }} data={dataRow as Rengcambio} />
-            <SimpleBackdrop show={isFetching} />
-            <NewSheet idsolsum={idsolsum} nrocambio={(rows?.rengcambio?.length || 0) + 1} onClose={() => { setOpen(false); setDataRow(null) } } refetch={() => refetch()} isOpen={open}  />
+            <EditSheet isNew={open} refetch={() => refetch()} isOpen={isOpen} onClose={() => { setIsOpen(false); setDataRow(null), setOpen(false); refetch() }} data={dataRow as Rengcambio} />
+            <SimpleBackdrop show={isPending || procesarLoading} />
         </div>
     );
 }

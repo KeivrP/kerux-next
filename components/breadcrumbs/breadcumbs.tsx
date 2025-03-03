@@ -44,6 +44,8 @@ const Breadcrumbs: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
   const pathnameSplit = pathname.split("/").slice(0, 3).join("/");
+  const pathnameSplitV2 = pathname.split("/").slice(0, 4).join("/");
+
   const pathnames = pathname.split("/").filter((x) => x);
   const { data: menu, isLoading } = useSubMenu(
     pathnames[0].toLocaleUpperCase()
@@ -112,6 +114,30 @@ const Breadcrumbs: React.FC = () => {
             </button>
           </div>
         </li>
+        {pathnames[2] &&  <li aria-current="page">
+          <div className="flex items-center">
+            <svg
+              className="mx-1 w-5 h-5"
+              viewBox="0 0 5 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M4.12561 1.13672L0.999943 18.8633"
+                stroke="#E5E7EB"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+              />
+            </svg>
+            <button
+              onClick={() => router.push(pathnameSplitV2)}
+              className="ml-1 text-base font-medium text-[#142F62] md:ml-2 whitespace-nowrap"
+            >              {pathnames[2]}
+            </button>
+
+          </div>
+        </li> }
+        {pathnames[3] && 
         <li aria-current="page">
           <div className="flex items-center">
             <svg
@@ -128,10 +154,11 @@ const Breadcrumbs: React.FC = () => {
               />
             </svg>
             <span className="ml-1 text-base font-medium text-[#142F62] md:ml-2 whitespace-nowrap">
-              {pathnames[2]}
+                {pathnames[3] && pathnames[3].charAt(0).toUpperCase() + pathnames[3].slice(1)}
             </span>
+
           </div>
-        </li>
+        </li> }
       </ol>
     </nav>
   );

@@ -2,7 +2,6 @@ import { Api_Comp } from "@/server/API";
 import { ColetillasInterface } from "./tcoleti-types";
 
 export const createTcoleti = async (data: ColetillasInterface) => {
-    console.log(data)
     try {
       const res = await Api_Comp.post("/coletillas", {
         coletilla: data,

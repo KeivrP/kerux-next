@@ -5,7 +5,7 @@ import { asignarComprador, devolverSolrec } from "../tsolrec-api";
 
 export const useDevolver = () => {
   return useMutation({
-    mutationFn: (id: number) => devolverSolrec(id),
+    mutationFn: ({ id, mensaje }: { id: number, mensaje: string }) => devolverSolrec(id, mensaje),
     onSuccess: (res) => {
       showNotification(res);
     },

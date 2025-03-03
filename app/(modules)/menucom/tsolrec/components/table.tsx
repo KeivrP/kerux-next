@@ -81,10 +81,10 @@ export const Tsolrec = () => {
     setOpenDialog(false);
   };
 
-  const handleConfirmDevolver = () => {
+  const handleConfirmDevolver = (data: string) => {
     const rowToDelete = rows.find((row) => row.nrosc === deleteRowId);
     if (rowToDelete) {
-      mutate(deleteRowId);
+      mutate({id: deleteRowId, mensaje: data});
     } else {
       console.log(`Row with id ${deleteRowId} not found`);
     }

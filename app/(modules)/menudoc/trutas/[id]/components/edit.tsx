@@ -140,11 +140,22 @@ const EditFrutas: React.FC<EditTrutasProps> = ({
       <ModalDialog
    
         width="sm"
-        title={row ? "Editar ruta" : "Crear nueva ruta"}
+        title={row ? "EDITAR PASOS RUTA" : " CREAR PASOS RUTA"}
         dialogOpen={isOpen}
         handleClose={() => onClose(false)}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: 20 }}>
+            <ButtonForms
+              type="submit"
+              variant="contained"
+              color="primary"
+              size="large"
+              sx={{ width: 100 }}
+            >
+              Guardar
+            </ButtonForms>
+            </div>
           <Grid container spacing={2} padding={4}>
             <Grid size={6}>
               <Typography variant="h3" color="primary">
@@ -260,14 +271,7 @@ const EditFrutas: React.FC<EditTrutasProps> = ({
                 )}
               />
             </Grid>
-            <Grid size={12}>
-              <ButtonForms
-                type="submit"
-                sx={{ bgcolor: theme.palette.primary.main, color: "white" }}
-              >
-                Guardar
-              </ButtonForms>
-            </Grid>
+        
           </Grid>
         </form>
       </ModalDialog>

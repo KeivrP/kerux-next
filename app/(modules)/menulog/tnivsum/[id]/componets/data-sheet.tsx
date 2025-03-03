@@ -7,10 +7,11 @@ import { OptionType } from "@/types/main";
 import _ from "lodash";
 import { useUpdateCcostoNivsum } from "../../hook/useNivsum";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
+import { Label } from "@/components/ui/label";
 
 
 
-interface dataSheetProps {
+interface DataSheetProps {
     isOpen: boolean;
     onClose: (value: boolean) => void;
     row: IFnivsum | null;
@@ -28,7 +29,7 @@ export default function DataSheet({
     refetch,
     isLoadingS,
     nivelsum
-}: dataSheetProps): JSX.Element {
+}: DataSheetProps): JSX.Element {
     const [ccosto, setCcosto] = useState('')
     const { mutate, isPending, isSuccess } = useUpdateCcostoNivsum();
 
@@ -47,7 +48,7 @@ export default function DataSheet({
 
 
     const onSubmit = () => {
-        mutate({ id: nivelsum, ccosto: row?.ccosto ?? '', dataCcostoNiv: { ccosto } });
+        mutate({ id: nivelsum, ccosto: row?.ccosto ?? '', dataCcostoNiv: { ccosto, nivelsum } });
     };
 
     useEffect(() => {
@@ -64,15 +65,18 @@ export default function DataSheet({
                 width="xs"
                 title={
                     row
-                        ? "Editar Nivel de Autorizacion"
-                        : "Crear nuevo Nivel de Autorizacion"
+                        ? "Editar Centro de Costo"
+                        : "Crear nuevo Centro de Costo"
                 }
                 dialogOpen={isOpen}
                 confirm={onSubmit}
                 handleClose={() => onClose(false)}
             >
-                <Grid2 container padding={2} spacing={2}>
+                
+                <Grid2 container paddingX={2} spacing={2}>
                     <Grid2 size={12}>
+                    <Label className="text-sm text-[#142F62]">Centro de costo</Label>
+
                         <AutocompleteAsync
                             text="label"
                             loading={isLoadingS}

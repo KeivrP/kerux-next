@@ -12,6 +12,7 @@ import { Order } from "@/components/button/OrderButton";
 import { ConfirmDialog } from "@/components/modal/confirmDialog";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { BadgeAct } from "@/components/badge/badge-act";
+import { usePathname, useRouter } from "next/navigation";
 
 export const TbenefTable = () => {
 
@@ -23,6 +24,9 @@ export const TbenefTable = () => {
   ]);
   const [filter, setFilter] = useState<Filter[]>([]);
   const [count, setCount] = useState(0);
+
+  const router = useRouter()
+  const pathname = usePathname();
 
   /* ------------------ USEEFFECT PARA TRAER LA DATA DE LA BD ----------------- */
 
@@ -84,13 +88,21 @@ export const TbenefTable = () => {
   }
 
   const handleEdit = (idsolsum: number) => {
-    console.log(`Edit ${idsolsum}`);
+    if (idsolsum) {
+      router.push(`${pathname}/${idsolsum}`);
+    }
+  };
+
+  const handleOpen = () => {
+
+    router.push(`${pathname}/${"-"}`);
+
   };
 
   return (
     <>
       <ActionCardHeader
-        add={() => { console.log('anadir') }}
+        add={handleOpen}
         onApplyFilter={(filters) => setFilter(filters)}
         columnsFilter={columnsFilter}
         onApplyOrder={(orders) => setOrder(orders)}

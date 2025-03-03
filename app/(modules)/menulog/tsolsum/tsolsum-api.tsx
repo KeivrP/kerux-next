@@ -62,3 +62,15 @@ export const fsolsumRng = async (id: number, nro: number, data: Detsolsum) => {
     throw error;
   }
 };
+
+export const fsolsumDelete = async (id: number, nro: number) => {
+  try {
+    const res = await Api_Log.delete(
+      `/sols_sums_crud/delete_rng?idsolsum=${id}&nroreng=${nro}`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}

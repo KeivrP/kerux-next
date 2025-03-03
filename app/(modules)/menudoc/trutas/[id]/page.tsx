@@ -37,7 +37,7 @@ export default function TrutasPage() {
         <Breadcrumbs />
         <div className="p-6 flex flex-col gap-4">
           <div>
-            <TextDivider>Codigo de la Ruta</TextDivider>
+            <TextDivider>Código de la Ruta</TextDivider>
           </div>
             <div className="flex flex-row gap-4">
             <div className="flex-5">
@@ -45,7 +45,7 @@ export default function TrutasPage() {
               variant="h3"
               sx={{ marginBottom: 1, color: theme.palette.primary.main }}
               >
-              Codigo
+              Código
               </Typography>
               <Input defaultValue={`${ruta.codruta}`} disabled />
             </div>

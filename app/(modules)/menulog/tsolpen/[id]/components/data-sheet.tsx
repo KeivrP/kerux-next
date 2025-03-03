@@ -1,13 +1,12 @@
 import React from "react";
 import { Typography } from "@mui/material";
-import { CircleSlash, CircleX, SaveIcon } from "lucide-react";
+import { PackagePlus } from "lucide-react";
 import { useFormContextFsolsum } from "@/provider/fsolsum-provider";
 import { useQueryData } from "@/server/fetch-data";
 import Tabs from "@/components/ui/tabs";
 import DataInput from "./data-input";
 import { FsolsumTable } from "./table";
 import ButtonForms from "@/components/button/buttonForms";
-import SimpleBackdrop from "@/components/backdrop/backdrop";
 
 interface DataSheetProps {
   id: string;
@@ -36,14 +35,6 @@ const DataSheet = ({ id }: DataSheetProps) => {
     }
   }, [solsumData, setFormData]);
 
-  // Determinar si hay cambios para habilitar el botón de guardar
-  const hasChanges = React.useMemo(() => {
-    return JSON.stringify(formData?.cabsolsum) !== JSON.stringify(solsumData?.cabsolsum);
-  }, [formData?.cabsolsum, solsumData?.cabsolsum]);
-
-  const handleSave = () => {
-    const id = formData?.cabsolsum?.idsolsum || null;
-  };
 
   const tabs = React.useMemo(() => [
     {
@@ -78,11 +69,20 @@ const DataSheet = ({ id }: DataSheetProps) => {
   return (
     <div>
       <Tabs tabs={tabs} >
-        <></>
-        </Tabs>
-  
 
-       
+        <ButtonForms
+          onClick={() => { }}
+          sx={{ color: "alert" }}
+        >
+          <PackagePlus color="green" size={18} />
+          <Typography variant="h3" marginLeft={1}>
+            Crear Modelo
+          </Typography>
+        </ButtonForms>
+      </Tabs>
+
+
+
 
 
     </div>

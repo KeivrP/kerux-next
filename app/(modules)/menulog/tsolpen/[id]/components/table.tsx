@@ -17,10 +17,10 @@ import BadgeModule from "@/components/badge/badge-mod";
 import { formatCurrency, formatDate } from "@/utils/main";
 import { Typography } from "@mui/material";
 import { Input } from "@/components/ui/input";
-import DataSheet from "./edit-table";
 import { calcularTotales } from "../utils";
 import { BadgeSolSum } from "@/components/badge/badge-log";
 import Frengcom from "./frengcomp";
+import Frngalm from "./frngalm";
 
 interface DataInputProps extends FormContextProps {
   isLoading: boolean;
@@ -37,17 +37,20 @@ export const FsolsumTable: React.FC<DataInputProps> = ({
   const [rowSelected, setRowSelected] =
     useState<Detsolsum>(initialRenglon);
 
-  const handleCreate = () => {
-    const data = { ...initialRenglon, nroreng: formData.detsolsum.length + 1 }
-    setRowSelected(data);
-    setDrawerOpen(true);
-  };
 
-  const handleDelete = () => { };
 
   const handleEdit = (row: Detsolsum) => {
-    setRowSelected(row);
-    setDrawerOpen(true);
+    if (row.destino === "COMP") {
+      setRowSelected(row);
+      setDrawerOpen(true);
+    } else if (row.destino === "ALM" || row.destino === "ALMA") {
+      setOpen(true)
+      setRowSelected(row);
+    }
+
+    else {
+
+    }
   };
 
   const { total, totalIVA, subtotal } = calcularTotales(formData);
@@ -81,21 +84,21 @@ export const FsolsumTable: React.FC<DataInputProps> = ({
               { content: row.dsp_DescNombNorm, align: "left" },
               { content: row.tiporeng !== "MT" ? row.codserv : row.coditem, align: "center" },
               { content: row.descreng, align: "left" },
+
+              { content: row.unidbasica, align: "center" },
+              { content: formatCurrency(row.cantsol), align: "center" },
+              { content: formatCurrency(row?.precio), align: "center" },
+              { content: row.porcimptos, align: "center" },
+              { content: formatCurrency(row.dsp_MtoTotReng), align: "center" },
               {
                 content: <BadgeModule codmenu={row.destino} />,
                 align: "center",
               },
               { content: <BadgeSolSum tipo={row.stsrngsol} />, align: "center" },
-              { content: row.unidbasica, align: "center" },
-              { content: row.cantsol, align: "center" },
-              { content: formatCurrency(row?.precio), align: "center" },
-              { content: row.porcimptos, align: "center" },
-              { content: formatCurrency(row.dsp_MtoTotReng), align: "center" },
               {
                 content: (
                   <Acciones
                     row={row}
-                    onDelete={handleDelete}
                     onEdit={handleEdit}
                   />
                 ),
@@ -150,29 +153,11 @@ export const FsolsumTable: React.FC<DataInputProps> = ({
           </Grid>
         </BaseTable>
       </div>
-      {/*  <ConfirmDialog
-      mode={"delete"}
-      open={openDialog}
-      onConfirm={handleConfirmDelete}
-      onCancel={handleCancelDelete}
-      text={`¿Estas seguro que deseas eliminar la ruta ${
-        rows.find((row) => row.codruta)?.codruta
-      }?`}
-      /> */}
-      <DataSheet
-        formData={formData}
-        /*       isPending={handleLoading}
-         */
-        row={rowSelected}
-        isOpen={isDrawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        refetch={() => {
-          refetch();
-        }}
-      />
+
       <SimpleBackdrop show={false} />
 
-      <Frengcom open={open} handleClose={() => { setOpen(false) }} row={1} idsolsum={6282} nrorng={1} />
+      <Frengcom open={isDrawerOpen} handleClose={() => { setDrawerOpen(false) }} idsolsum={formData.cabsolsum.idsolsum} nrorng={rowSelected.nroreng} />
+      <Frngalm open={open} handleClose={() => { setOpen(false) }} idsolsum={formData.cabsolsum.idsolsum} nrorng={rowSelected.nroreng} />
 
     </>
   );

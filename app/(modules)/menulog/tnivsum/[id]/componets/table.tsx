@@ -81,16 +81,13 @@ export default function Table({ rows, isLoadind, refetch, nivelsum }: FnivsumTab
     });
 
     const handleDelete = (id: string) => {
-        console.log(id)
     }
     const handleEdit = (id: string) => {
-        console.log(id, 'nievlesum')
         const row = rows.find((item) => item.nivelsum === id)
 
         setIsEditRow(row ?? null)
         setFile(true)
 
-        console.log(row, isOpenFile)
     }
 
 

@@ -25,7 +25,7 @@ export const Acciones = ({
   onEdit,
 }: {
   row: Detsolsum;
-  onDelete: (id: number) => void;
+  onDelete: (id: number, nro: number) => void;
   onEdit: (id: Detsolsum) => void;
 }) => {
   const theme = useTheme();
@@ -64,7 +64,7 @@ export const Acciones = ({
           title="Eliminar"
         >
           <IconButton
-            onClick={() => onDelete(row.nroreng)}
+            onClick={() => onDelete(row.idsolsum, row.nroreng)}
             color="primary"
             size="small"
           >

@@ -98,8 +98,6 @@ export const TrutasTable = () => {
     const rowToDelete = rows.find((row) => row.codruta === deleteRowId);
     if (rowToDelete) {
       mutate(deleteRowId);
-    } else {
-      console.log(`Row with id ${deleteRowId} not found`);
     }
     setOpenDialog(false);
   };
@@ -107,7 +105,6 @@ export const TrutasTable = () => {
   const handleEdit = (codruta: string) => {
     setDrawerOpen(true);
     setRowSelected(rows.find((row) => row.codruta === codruta) || null);
-    console.log(`Edit ${codruta}`);
   };
 
   const handleCreate = () => {

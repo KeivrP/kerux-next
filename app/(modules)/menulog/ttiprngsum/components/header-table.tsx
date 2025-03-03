@@ -8,12 +8,12 @@ import { Tiporngsumlist } from "../ttiprngsum-types";
 export const columnsFilter: Filter[] = [
     { id: "tiporengsumin", type: "desc", column: "Tipo", value: "" },
     { id: "desctiporeng", type: "desc", column: "Descripción", value: "" },
-    { id: "limitundtrib", type: "number", column: "Limite", value: "" },
+    { id: "limitundtrib", type: "number", column: "Límite", value: "" },
 ];
 export const columnsOrder: Order[] = [
     { id: "tiporengsumin", column: "Tipo" },
     { id: "desctiporeng", column: "Descripción" },
-    { id: "limitundtrib", column: "Limite" },
+    { id: "limitundtrib", column: "Límite" },
 
 ];
 
@@ -26,7 +26,7 @@ export const columnsHeaders: HeadersName[] = [
     align: "left",
     minWidth: 175,
   },
-  { label: "Limite UT", icon: null, align: "center", minWidth: 100 },
+  { label: "Límite UT", icon: null, align: "center", minWidth: 100 },
  
   { label: "Acciones", icon: null, align: "center", width: 100 },
 ];

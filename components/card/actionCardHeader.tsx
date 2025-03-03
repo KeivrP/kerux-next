@@ -3,7 +3,6 @@ import FilterButton, { Filter } from "../button/FilterButton";
 import OrderButton, { Order } from "../button/OrderButton";
 import { Button, ButtonProps, Typography } from "@mui/material";
 import React from "react";
-/* import { SearchInput } from "../searchInput"; */
 
 interface ActionCardHeaderProps {
   children?: React.ReactNode;
@@ -58,7 +57,7 @@ const ActionCardHeader = ({
               <Button
                 onClick={() => add && add()}
                 variant="contained"
-                color={actions?.color || "primary"}
+                color={actions?.color ?? "primary"}
                 disabled={actions?.disabled}
                 sx={{ textTransform: "none" }}
               >
