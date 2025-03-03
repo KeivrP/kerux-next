@@ -103,7 +103,7 @@ export const TcontactoTable = () => {
                                 content: (
                                     <Acciones
                                         row={row}
-                                        onOpen={(id) => router.push(`/menudoc/tbenef/${id}`)}
+                                        onOpen={(id) => router.push(`/menudoc/tcontacto/${id}`)}
                                     />
                                 ),
                                 action: () => null,

@@ -93,22 +93,24 @@ const DataSheet = ({ id }: DataSheetProps) => {
       <Tabs tabs={tabs}>
         {formData?.cabsolsum.stssol !== "ANU" && (
           <ButtonForms
-            onClick={() => anularMutate({ id: formData?.cabsolsum?.idsolsum })}
+            onClick={() => hasChanges ? '' : anularMutate({ id: formData?.cabsolsum?.idsolsum })}
             sx={{ color: "alert" }}
+            style={{ backgroundColor: "transparent", color: hasChanges ? "gray" : "inherit" }}
           >
-            <CircleX size={18} color="#Ba1a1a" />
-            <Typography variant="h3" marginLeft={1} color="alert">
+            <CircleX size={18} color={hasChanges ? "gray" : "#Ba1a1a"} />
+            <Typography variant="h3" marginLeft={1} color={hasChanges ? "gray" : "alert"}>
               Anular
             </Typography>
           </ButtonForms>
         )}
 
         <ButtonForms
-          onClick={() => generateMutate({ id: formData?.cabsolsum?.idsolsum })}
+          onClick={() => hasChanges ? '' :  generateMutate({ id: formData?.cabsolsum?.idsolsum })}
           sx={{ color: "alert" }}
+          style={{ backgroundColor: "transparent", color: hasChanges ? "gray" : "inherit" }}
         >
-          <CircleSlash size={18} />
-          <Typography variant="h3" marginLeft={1}>
+          <CircleSlash size={18} color={hasChanges ? "gray" : "inherit"} />
+          <Typography variant="h3" marginLeft={1} color={hasChanges ? "gray" : "inherit"}>
             Generar
           </Typography>
         </ButtonForms>

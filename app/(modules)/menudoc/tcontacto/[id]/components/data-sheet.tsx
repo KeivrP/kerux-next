@@ -9,10 +9,10 @@ import { Card, CardContent, CardHeader, Typography, Grid2 as Grid, Box, TextFiel
 import { CircleUser } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useCreateBenef, useUpdateBenef } from "../../hook/useBenef";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { set } from "zod";
 import { usePathname, useRouter } from "next/navigation";
+import { useCreateBenef, useUpdateBenef } from "../../../tbenef/hook/useBenef";
 
 interface BeneficiaryData {
     nombre: string

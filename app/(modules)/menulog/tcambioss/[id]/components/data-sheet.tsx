@@ -177,9 +177,8 @@ export default function DataSheet({
 
     const { mutate: generateMutate, isPending: procesarLoading } = useProcesarCambio();
 
-    const totalcamb = Number(rows?.TotCambio[0]?.netocambio) + Number(rows?.TotCambio[0]?.imptocambio)
-    const totalProy = Number(rows?.TotCambio[0]?.netoproy) + Number(rows?.TotCambio[0]?.imptoproy)
-
+    const totalcamb = (rows?.TotCambio && rows.TotCambio[0]) ? Number(rows.TotCambio[0].netocambio) + Number(rows.TotCambio[0].imptocambio) : 0;
+    const totalProy = (rows?.TotCambio && rows.TotCambio[0]) ? Number(rows.TotCambio[0].netoproy) + Number(rows.TotCambio[0].imptoproy) : 0;
 
     return (
 
@@ -392,20 +391,20 @@ export default function DataSheet({
 
                         {/* Amounts Grid */}
                         <div className="grid grid-cols-2 gap-4">
-                            <Card>
+                        <Card>
                                 <CardHeader className="py-2 text-sm text-[#142F62]" title="Montos de este cambio" />
                                 <CardContent className="p-4">
                                     <div className="grid grid-cols-3 gap-2">
                                         <div>
                                             <Label className="text-xs">Neto</Label>
                                             <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-                                                <Input value={formatCurrency(rows?.TotCambio[0]?.netocambio ?? 0)} readOnly className="bg-muted text-right" />
+                                                <Input value={formatCurrency(rows?.TotCambio?.[0]?.netocambio ?? 0)} readOnly className="bg-muted text-right" />
                                             </ConditionalWrapper>
                                         </div>
                                         <div>
                                             <Label className="text-xs">Impuesto</Label>
                                             <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-                                                <Input value={formatCurrency(rows?.TotCambio[0]?.imptocambio ?? 0)} readOnly className="bg-muted text-right" />
+                                                <Input value={formatCurrency(rows?.TotCambio?.[0]?.imptocambio ?? 0)} readOnly className="bg-muted text-right" />
                                             </ConditionalWrapper>
                                         </div>
                                         <div>
@@ -424,13 +423,13 @@ export default function DataSheet({
                                         <div>
                                             <Label className="text-xs">Neto</Label>
                                             <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-                                                <Input value={formatCurrency(rows?.TotCambio[0]?.netoproy ?? 0)} readOnly className="bg-muted text-right" />
+                                                <Input value={formatCurrency(rows?.TotCambio?.[0]?.netoproy ?? 0)} readOnly className="bg-muted text-right" />
                                             </ConditionalWrapper>
                                         </div>
                                         <div>
                                             <Label className="text-xs">Impuesto</Label>
                                             <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
-                                                <Input value={formatCurrency(rows?.TotCambio[0]?.imptocambio ?? 0)} readOnly className="bg-muted text-right" />
+                                                <Input value={formatCurrency(rows?.TotCambio?.[0]?.imptoproy ?? 0)} readOnly className="bg-muted text-right" />
                                             </ConditionalWrapper>
                                         </div>
                                         <div>
@@ -454,7 +453,10 @@ export default function DataSheet({
                     title="Renglones de la solicitud de suministro"
                     action={
                         <Button
-                            onClick={() => { setOpen(true); handleOpen(rows?.rengcambio[0] ? rows?.rengcambio[0] : { idsolsum, nrocambio } as Rengcambio) }}
+                            onClick={() => {
+                                setOpen(true);
+                                handleOpen(rows?.rengcambio?.[0] ?? { idsolsum, nrocambio } as Rengcambio);
+                            }}
                             variant="contained"
                             color={"primary"}
                             sx={{ textTransform: "none" }}
@@ -529,8 +531,7 @@ export default function DataSheet({
                 open={openDialog}
                 onConfirm={handleConfirmDelete}
                 onCancel={handleCancelDelete}
-                text={`¿Estas seguro que deseas eliminar el cambio ${rows?.rengcambio.find((row) => row.idsolsum == deleteRowId)?.idsolsum
-                    }?`}
+                text={`¿Estas seguro que deseas eliminar el cambio ${rows?.rengcambio?.find((row) => row.idsolsum == deleteRowId)?.idsolsum ?? ''}?`}
             />
 
             <EditSheet isNew={open} refetch={() => refetch()} isOpen={isOpen} onClose={() => { setIsOpen(false); setDataRow(null), setOpen(false); refetch() }} data={dataRow as Rengcambio} />

@@ -90,7 +90,7 @@ const EditSheet = ({ isOpen, onClose, data, refetch, isNew = false }: HistoriaDo
             setValue('precioorig', data.precioorig);
             setValue('codserv', data.codserv);
             setValue('cantsolorig', data.cantsolorig);
-            setValue('nroreng', data.nroreng.toString());
+            setValue('nroreng', data.nroreng ? data.nroreng.toString() : '');
 
         } else {
             reset();

@@ -118,7 +118,7 @@ export const FsolsumTable: React.FC<DataInputProps> = ({
               { content: row.descreng, align: "left" },
 
               { content: row.unidbasica, align: "center" },
-              { content: row.cantsol, align: "center" },
+              { content: formatCurrency(row.cantsol), align: "center" },
               { content: formatCurrency(row?.precio), align: "center" },
               { content: row.porcimptos, align: "center" },
               { content: formatCurrency(row.dsp_MtoTotReng), align: "center" },
