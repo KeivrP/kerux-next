@@ -68,3 +68,30 @@ export const ProcesarCambio = async (idsolsum: string, nrocambio: string): Promi
         throw error;
     }
 }
+
+
+export const GuardarCambio = async (data: any): Promise<Response> => {
+    try {
+        const res = await Api_Log.post(`/cambios_crud`, {
+            cambioss: data
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+export const UpdateCambioGener = async (idsolsum: string, nrocambio: string,  data: any): Promise<Response> => {
+    try {
+        const res = await Api_Log.put(`/cambios_crud`, {
+            idsolsum,
+            nrocambio,
+            cambioss: data
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}

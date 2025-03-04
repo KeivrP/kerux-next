@@ -10,7 +10,8 @@ import { useEffect, useState } from "react";
 import { SectOne } from "./frngalm/sectOne";
 import { SectTwo } from "./frngalm/sectTwo";
 import { SectThree } from "./frngalm/sectThree";
-import { Frngalm, initialFrngalm } from "../../tsolpen-types";
+import type { Frngalm } from "../../tsolpen-types";
+import { initialFrngalm } from "../../tsolpen-types";
 
 interface FrngAlmProps {
     open: boolean;
@@ -62,7 +63,7 @@ const Frngalm = ({
                 spacing={2}
             >
                 <Card className="">
-                    <CardHeader className="bg-muted py-2 text-[#142F62]" title="Cotizaciones" />
+                    <CardHeader className="bg-muted py-2 text-[#142F62]" title="" />
                     <CardContent className="p-4">
                         <Grid size={12}>
                             <Grid
@@ -71,7 +72,7 @@ const Frngalm = ({
                                 justifyContent="space-evenly"
                                 alignItems="center"
                             >
-                                <SectOne loading={isLoading} detSolSum={row.detSolsum}/>
+                                <SectOne loading={isLoading} row={row}/>
                                 <Grid
                                     container
                                     direction="row"
@@ -79,10 +80,10 @@ const Frngalm = ({
                                     alignItems="center"
                                 >
                                     <Grid size={4}>
-                                        <SectTwo loading={isLoading} />
+                                        <SectTwo loading={isLoading} row={row} />
                                     </Grid>
                                     <Grid size={6.5}>
-                                        <SectThree loading={isLoading} />
+                                        <SectThree loading={isLoading}  row={row}/>
                                     </Grid>
                                 </Grid>
                             </Grid>

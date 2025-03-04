@@ -7,6 +7,8 @@ import Tabs from "@/components/ui/tabs";
 import DataInput from "./data-input";
 import { FsolsumTable } from "./table";
 import ButtonForms from "@/components/button/buttonForms";
+import { useGenerarModel } from "../../hooks/useTsolpen";
+import SimpleBackdrop from "@/components/backdrop/backdrop";
 
 interface DataSheetProps {
   id: string;
@@ -65,13 +67,19 @@ const DataSheet = ({ id }: DataSheetProps) => {
     },
   ], [id, isLoading, formData, setFormData, initialData]);
 
+  const { mutate, isPending } = useGenerarModel()
+
+  const openGenerate = () => {
+    mutate({ id: formData.cabsolsum.idsolsum.toString() })
+  };
+
 
   return (
     <div>
       <Tabs tabs={tabs} >
 
         <ButtonForms
-          onClick={() => { }}
+          onClick={openGenerate}
           sx={{ color: "alert" }}
         >
           <PackagePlus color="green" size={18} />
@@ -85,6 +93,7 @@ const DataSheet = ({ id }: DataSheetProps) => {
 
 
 
+      <SimpleBackdrop show={isPending} />
     </div>
   );
 };

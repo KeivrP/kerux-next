@@ -4,7 +4,7 @@ import { Cabssmod, Detssmod } from "./tsolmod-types";
 export const tsolmodGenerat = async (id: number) => {
   try {
     const res = await Api_Log.post(
-      `sols_sums_mods_crud/boton_genera_solicitud?idsolsum=${id}`
+      `sols_sums_mods_crud/boton_genera_solicitud?id=${id}`
     );
     return res.data;
   } catch (error) {

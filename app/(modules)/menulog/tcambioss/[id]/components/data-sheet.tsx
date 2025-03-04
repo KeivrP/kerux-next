@@ -17,9 +17,9 @@ import { ITcambiosRoot, Rengcambio } from "../../tcambioss-types";
 import EditSheet from "./edit-sheet";
 import SimpleBackdrop from "@/components/backdrop/backdrop";
 import { ConfirmDialog } from "@/components/modal/confirmDialog";
-import { useDeleteRenglon, useProcesarCambio } from "../../hook/useTcambios";
+import { ActualizarSolicitud, CrearSolicitud, useDeleteRenglon, useProcesarCambio } from "../../hook/useTcambios";
 import ButtonForms from "@/components/button/buttonForms";
-import { CircleSlash } from "lucide-react";
+import { CircleSlash, SaveIcon } from "lucide-react";
 
 
 interface DataSheetProps {
@@ -34,7 +34,6 @@ export default function DataSheet({
 }: DataSheetProps): JSX.Element {
     const [rows, setRows] = useState<ITcambiosRoot>()
     const [isOpen, setIsOpen] = useState(false)
-
     const {
         register,
         formState: { errors },
@@ -50,7 +49,7 @@ export default function DataSheet({
                 descsolsum: '',
                 fecsol: '',
                 fecrecsol: '',
-                stssol: '',
+                stssol: 'PEN',
                 fecreqsol: '',
                 usuing: '',
                 fecing: '',
@@ -79,10 +78,10 @@ export default function DataSheet({
             cabcambio: {
                 idsolsum: 0,
                 nrocambio: 0,
-                feccambio: '',
+                feccambio: dayjs().format('YYYY-MM-DD'),
                 desccambio: '',
                 iddocaum: null,
-                stscamb: '',
+                stscamb: 'PEN',
                 codmoneda: null,
                 mtonetocambio: '',
                 mtoimptocambio: '',
@@ -143,12 +142,18 @@ export default function DataSheet({
 
 
     const [dataRow, setDataRow] = useState<Rengcambio | null>(null);
-    const { mutate, isPending } = useDeleteRenglon()
+    const { mutate, isPending, isSuccess } = useDeleteRenglon()
 
 
     const [openDialog, setOpenDialog] = useState(false);
 
     const [deleteRowId, setDeleteRowId] = useState(0);
+
+    useEffect(() => {
+        if (isSuccess) {
+            refetch();
+        }
+    }, [isSuccess, refetch]);
 
 
     const handleOpen = (data: Rengcambio) => {
@@ -172,13 +177,51 @@ export default function DataSheet({
         mutate({ idsolsum: String(daterow?.idsolsum), nrocambio: String(daterow?.nrocambio), nroreng: String(daterow?.nroreng) })
         setOpenDialog(false)
     }
+    const hasChanges = watch('cabcambio.nrocambio') === 0 || JSON.stringify(watch('cabcambio')) !== JSON.stringify(rows?.cabcambio);
 
     const [open, setOpen] = useState(false)
 
     const { mutate: generateMutate, isPending: procesarLoading } = useProcesarCambio();
+    const { mutate: crearSS, isPending: IspendCre, isSuccess: isSuccessCreate } = CrearSolicitud()
+    const { mutate: ActualisarSs, isPending: isPendingAct } = ActualizarSolicitud()
 
     const totalcamb = (rows?.TotCambio && rows.TotCambio[0]) ? Number(rows.TotCambio[0].netocambio) + Number(rows.TotCambio[0].imptocambio) : 0;
     const totalProy = (rows?.TotCambio && rows.TotCambio[0]) ? Number(rows.TotCambio[0].netoproy) + Number(rows.TotCambio[0].imptoproy) : 0;
+
+    useEffect(() => {
+        if (id === 0) {
+            const today = dayjs().format('YYYY-MM-DD');
+            console.log(today)
+            setValue('cabcambio.stscamb', "PEN");
+            setValue('cabcambio.feccambio', today);
+        }
+    }, [id])
+
+    const handleSave = () => {
+        const nrocambio = watch('cabcambio.nrocambio');
+        const data = {
+            idsolsum: watch("cabcambio.idsolsum"),
+            nrocambio: watch("cabcambio.nrocambio"),
+            feccambio: watch("cabcambio.feccambio") || dayjs().format('YYYY-MM-DD'),
+            desccambio: watch("cabcambio.desccambio") || "",
+            iddocaum: watch("cabcambio.iddocaum") || null,
+            stscamb: watch("cabcambio.stscamb") || "PEN",
+            mtonetocambio: watch("cabcambio.mtonetocambio") || 0,
+            mtoimptocambio: watch("cabcambio.mtoimptocambio") || 0,
+            mtototalcambio: watch('cabcambio.mtototalcambio') || 0,
+            usuing: watch("cabcambio.usuing") || ""
+        };
+        console.log(data)
+        if (nrocambio === 0) {
+            crearSS({ data });
+        } else {
+            ActualisarSs({
+                idsolsum: watch('cabcambio.idsolsum').toString(),
+                nrocambio: watch('cabcambio.nrocambio').toString(),
+                data
+            });
+        }
+    };
 
     return (
 
@@ -188,12 +231,26 @@ export default function DataSheet({
                 <ButtonForms
                     onClick={() => generateMutate({ idsolsum: String(watch('cabsolsum.idsolsum')), nrocambio: String(watch('cabcambio.nrocambio')) })}
                     sx={{ color: "alert", alignItems: "center" }}
+                    disabled={hasChanges}
                 >
                     <CircleSlash size={18} />
                     <Typography variant="h3" marginLeft={1}>
                         Procesar
                     </Typography>
                 </ButtonForms>
+
+                {hasChanges && (
+                    <ButtonForms
+                        onClick={handleSave}
+                        disabled={!hasChanges}
+                        color="primary"
+                    >
+                        <SaveIcon size={18} />
+                        <Typography variant="h3" marginLeft={1}>
+                            Guardar
+                        </Typography>
+                    </ButtonForms>
+                )}
             </div>
             {/* Supply Request Section */}
             <Card className="mb-4">
@@ -232,14 +289,14 @@ export default function DataSheet({
                                             setValue('cabsolsum.descsolsum', newValue ? newValue.descsolsum : '');
                                             setValue('cabsolsum.fecsol', newValue ? newValue.fecsol : '');
                                             setValue('cabsolsum.fecrecsol', newValue ? newValue.fecrecsol : '');
-                                            setValue('cabsolsum.stssol', newValue ? newValue.stssol : '');
+                                            setValue('cabsolsum.stssol', newValue ? newValue.stssol : 'PEN');
                                             setValue('cabsolsum.fecreqsol', newValue ? newValue.fecreqsol : '');
                                             setValue('cabsolsum.usuing', newValue ? newValue.usuing : '');
                                             setValue('cabsolsum.fecing', newValue ? newValue.fecing : '');
                                             setValue('cabsolsum.origensol', newValue ? newValue.origensol : '');
                                             setValue('cabsolsum.codaccint', newValue ? newValue.codaccint : '');
                                             setValue('cabsolsum.ano', newValue ? newValue.ano : 0);
-                                            setValue('cabsolsum.fecstssol', newValue ? newValue.fecstssol : '');
+                                            setValue('cabsolsum.fecstssol', newValue ? newValue.fecstssol : dayjs().format('YYYY-MM-DD'));
                                             setValue('cabsolsum.indcomdir', newValue ? newValue.indcomdir : '');
                                             setValue('cabsolsum.fecapresol', newValue ? newValue.fecapresol : null);
                                             setValue('cabsolsum.mensajes', newValue ? newValue.mensajes : null);
@@ -257,6 +314,19 @@ export default function DataSheet({
                                             setValue('cabsolsum.mtoimpto', newValue ? newValue.mtoimpto : '');
                                             setValue('cabsolsum.iddocexterno', newValue ? newValue.iddocexterno : null);
                                             setValue('cabsolsum.indcompctto', newValue ? newValue.indcompctto : '');
+
+                                            setValue('cabcambio.idsolsum', newValue ? newValue.idsolsum : 0);
+                                            setValue('cabcambio.nrocambio', newValue ? newValue.nrocambio : 0);
+                                            setValue('cabcambio.feccambio', newValue ? newValue.feccambio : '');
+                                            setValue('cabcambio.desccambio', newValue ? newValue.desccambio : '');
+                                            setValue('cabcambio.iddocaum', newValue ? newValue.iddocaum : null);
+                                            setValue('cabcambio.stscamb', newValue ? newValue.stscamb : 'PEN');
+                                            setValue('cabcambio.codmoneda', newValue ? newValue.codmoneda : null);
+                                            setValue('cabcambio.mtonetocambio', newValue ? newValue.mtonetocambio : '');
+                                            setValue('cabcambio.mtoimptocambio', newValue ? newValue.mtoimptocambio : '');
+                                            setValue('cabcambio.mtototalcambio', newValue ? newValue.mtototalcambio : '');
+                                            setValue('cabcambio.usuing', newValue ? newValue.usuing : '');
+                                            setValue('cabcambio.descstscamb', newValue ? newValue.descstscamb : '');
                                         }}
                                     />
                                     {!!errors.cabsolsum?.idsolsum && (
@@ -391,7 +461,7 @@ export default function DataSheet({
 
                         {/* Amounts Grid */}
                         <div className="grid grid-cols-2 gap-4">
-                        <Card>
+                            <Card>
                                 <CardHeader className="py-2 text-sm text-[#142F62]" title="Montos de este cambio" />
                                 <CardContent className="p-4">
                                     <div className="grid grid-cols-3 gap-2">
@@ -453,6 +523,8 @@ export default function DataSheet({
                     title="Renglones de la solicitud de suministro"
                     action={
                         <Button
+                            disabled={hasChanges}
+
                             onClick={() => {
                                 setOpen(true);
                                 handleOpen(rows?.rengcambio?.[0] ?? { idsolsum, nrocambio } as Rengcambio);
@@ -483,7 +555,7 @@ export default function DataSheet({
                                     { content: row.coditem || row.codserv, align: "center" },
                                     { content: row.descreng, align: "left" },
                                     { content: row.unidbasica, align: "center" },
-                                    { content: row.cantsolorig, align: "center" },
+                                    { content: formatCurrency(row.cantsolorig), align: "center" },
                                     { content: formatCurrency(row.precioorig), align: "center" },
                                     { content: formatCurrency(row.preciocambio), align: "center" },
                                     { content: row.porcimptocamb, align: "center" },
@@ -535,7 +607,7 @@ export default function DataSheet({
             />
 
             <EditSheet isNew={open} refetch={() => refetch()} isOpen={isOpen} onClose={() => { setIsOpen(false); setDataRow(null), setOpen(false); refetch() }} data={dataRow as Rengcambio} />
-            <SimpleBackdrop show={isPending || procesarLoading} />
+            <SimpleBackdrop show={isPending || procesarLoading || isPendingAct || IspendCre} />
         </div>
     );
 }

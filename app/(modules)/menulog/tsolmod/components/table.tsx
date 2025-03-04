@@ -179,15 +179,16 @@ export const TsolmodTable = () => {
         open={openDialog}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
-        text={`¿Estas seguro que deseas eliminar el numero de renglon ${rows.find((row) => row.numsolsum === deleteRowId)?.numsolsum
+        text={`¿Estas seguro que deseas eliminar el numero de renglón ${rows.find((row) => row.numsolsum === deleteRowId)?.numsolsum
           }?`}
       />
       <ConfirmDialog
         mode="confirm"
+        title="Generar Solicitud"
         open={openConfirm}
         onConfirm={handleConfirmConfirm}
         onCancel={handleCancelConfirm}
-        text={`¿Estas seguro que deseas generar el numero de renglon ${rows.find((row) => row.numsolsum === confirmRowId)?.numsolsum
+        text={`¿Estas seguro que deseas generar el numero de renglón ${rows.find((row) => row.numsolsum === confirmRowId)?.numsolsum
           }?`}
       />
       <SimpleBackdrop show={isDeleting || isGenerando} />

@@ -9,9 +9,10 @@ import { useMemo } from "react";
 
 interface ICabtipodocFormProps {
     isLoading: boolean;
+    IsNew: boolean
 }
 
-export const CabtipodocForm = ({ isLoading }: ICabtipodocFormProps) => {
+export const CabtipodocForm = ({ isLoading, IsNew }: ICabtipodocFormProps) => {
     const { register, watch, setValue, control } = useFormContext<ITipoSheet>();
 
 
@@ -51,34 +52,29 @@ export const CabtipodocForm = ({ isLoading }: ICabtipodocFormProps) => {
                         <Label className="text-sm text-[#142F62]">Tipo de Documento</Label>
                         <Grid container spacing={1}>
                             <Grid size={4}>
-                                <ConditionalWrapper condition={isLoading_doc} wrapper={SkeletonInput}>
-                                    <Autocomplete
-                                        fullWidth
-                                        loading={isLoading_doc}
-                                        size="small"
-                                        {...register("cabtipodoc.tipodoc", { required: "Tipo requerido" })}
-                                        options={
-                                            Array.isArray(lst_documentos) ? lst_documentos : []
-                                        }
-                                        getOptionLabel={(option) => option.tipodoc.toString()}
-                                        renderInput={(params) => <TextField {...params} className=" border border-input bg-background" />}
-                                        value={
-                                            Array.isArray(lst_documentos)
-                                                ? lst_documentos.find((option) => option.tipodoc === watch("cabtipodoc.tipodoc")) || null
-                                                : null
-                                        }
-                                        onChange={(_, newValue) => {
-                                            setValue("cabtipodoc.tipodoc", newValue?.tipodoc || "");
-                                            setValue("cabtipodoc.desctipodoc", newValue?.desctipodoc || "");
+                                <Controller
+                                    name="cabtipodoc.tipodoc"
+                                    control={control}
+                                    rules={{ required: "Tipo requerido", maxLength: { value: 5, message: "Máximo 5 caracteres" } }}
+                                    render={({ field, fieldState: { error } }) => (
+                                        <TextField
+                                            disabled={!IsNew}
+                                            {...field}
+                                            fullWidth
+                                            size="small"
+                                            error={!!error}
+                                            helperText={error ? error.message : null}
+                                            className="border border-input bg-background"
+                                            inputProps={{ style: { textTransform: "uppercase" } }}
 
-                                        }}
-                                    />
-                                </ConditionalWrapper>
+                                        />
+                                    )}
+                                />
                             </Grid>
                             <Grid size={8}>
                                 <ConditionalWrapper condition={isLoading_doc} wrapper={SkeletonInput}>
                                     <TextField {...register("cabtipodoc.desctipodoc")}
-                                        disabled fullWidth size="small" sx={{ backgroundColor: "white" }} />
+                                        fullWidth size="small" sx={{ backgroundColor: "white" }} />
                                 </ConditionalWrapper>
                             </Grid>
                         </Grid>
@@ -195,10 +191,10 @@ export const CabtipodocForm = ({ isLoading }: ICabtipodocFormProps) => {
 
                         </>
                     )}
-                            <Grid size={12}>
-                                <Label className="text-sm text-[#142F62]">Descripción interna</Label>
-                                <TextField {...register("cabtipodoc.descprocint")} fullWidth size="small" />
-                            </Grid>
+                    <Grid size={12}>
+                        <Label className="text-sm text-[#142F62]">Descripción interna</Label>
+                        <TextField {...register("cabtipodoc.descprocint")} fullWidth size="small" />
+                    </Grid>
                 </Grid>
             </CardContent>
         </Card>

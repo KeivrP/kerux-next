@@ -41,7 +41,7 @@ export default function FtipodocPage() {
         indrefdoc: "",
         codruta: "",
         tipodocref: "",
-        indactivo: "",
+        indactivo: 'S',
         descprocint: null
       },
       pasosruta: []
@@ -86,7 +86,7 @@ export default function FtipodocPage() {
               </ButtonForms>
             </div>
 
-            <CabtipodocForm isLoading={isLoading} />
+            <CabtipodocForm isLoading={isLoading} IsNew={id === "-"} />
             <PasosRutaForm />
 
           </form>

@@ -1,7 +1,8 @@
 import { showNotification } from "@/components/toast/toast";
-import { CreateCambio, DeleteCambio, deleteTcambio, ProcesarCambio, UpdateCambio } from "../tcambios-api";
+import { CreateCambio, DeleteCambio, deleteTcambio, GuardarCambio, ProcesarCambio, UpdateCambio, UpdateCambioGener } from "../tcambios-api";
 import { useMutation } from "@tanstack/react-query";
 import { error } from "console";
+import { useRouter } from "next/navigation";
 
 export const useDeleteTcambio = () => {
 
@@ -64,3 +65,37 @@ export const useProcesarCambio = () => {
     }
   });
 }
+
+export const CrearSolicitud = () => {
+  const router = useRouter();
+  return useMutation({
+    mutationFn: ({ data }: { data: any }) => GuardarCambio(data),
+    onSuccess(res, variables) {
+      const match = res?.message.match(/(\d+)/);
+      const numero = match ? match[1] : null;
+      const id = variables.data.idsolsum;
+      const encodedIds = `<span class="math-inline">\{id\}\-</span>{numero}`;
+
+      if (numero) {
+        router.push(`/menulog/tcambioss/${encodedIds}`);
+        showNotification(res);
+      }
+    },
+    onError: (error) => {
+      console.error('Error uploading documents:', error);
+    }
+  });
+};
+
+export const ActualizarSolicitud = () => {
+  return useMutation({
+    mutationFn: ({ idsolsum, nrocambio, data }: { idsolsum: string, nrocambio: string, data: any }) => UpdateCambioGener(idsolsum, nrocambio, data),
+    onSuccess(res) {
+      const respuesta = { alert: res?.alert, message: res?.message, mode: res?.mode };
+      showNotification(respuesta);
+    },
+    onError: (error) => {
+      console.error('Error uploading documents:', error);
+    }
+  });
+};

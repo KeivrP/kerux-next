@@ -5,10 +5,9 @@ import { ConditionalWrapper } from "@/utils/main";
 import { SkeletonInput } from "@/components/skeleton/detail";
 
 
-export const SectThree = ({ loading }: Loading) => {
+export const SectThree = ({ loading, row }: Loading) => {
   const theme = useTheme();
-  const itemMovAlm = {}
-  const detSolSum = []
+
   return (
     <>
       <Grid size={12}>
@@ -63,7 +62,7 @@ export const SectThree = ({ loading }: Loading) => {
                 marginTop: "0.65rem",
               }}
             >
-              {detSolSum[0]?.cantsol.slice(0, -2)}
+              {row.detSolsum?.cantsol.slice(0, -2)}
             </Typography>
           </ConditionalWrapper>
           <Typography color="primary.dark" variant="helper">
@@ -103,7 +102,7 @@ export const SectThree = ({ loading }: Loading) => {
                 marginTop: "0.65rem",
               }}
             >
-              {itemMovAlm?.cantsugerida.slice(0, -2)}
+              {row.itemMovAlm?.cantsugerida.slice(0, -2)}
             </Typography>
           </ConditionalWrapper>
           <Typography color="primary.dark" variant="helper">
@@ -143,7 +142,7 @@ export const SectThree = ({ loading }: Loading) => {
                 marginTop: "0.65rem",
               }}
             >
-              {itemMovAlm?.cantaprobada.slice(0, -2)}
+              {row.itemMovAlm?.cantaprobada.slice(0, -2)}
             </Typography>
           </ConditionalWrapper>
           <Typography color="primary.dark" variant="helper">
@@ -183,7 +182,7 @@ export const SectThree = ({ loading }: Loading) => {
                 marginTop: "0.65rem",
               }}
             >
-              {itemMovAlm?.cantdespacho.slice(0, -2)}
+              {row.itemMovAlm?.cantdespacho.slice(0, -2)}
             </Typography>
           </ConditionalWrapper>
           <Typography color="primary.dark" variant="helper">

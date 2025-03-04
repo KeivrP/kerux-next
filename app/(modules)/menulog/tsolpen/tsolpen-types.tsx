@@ -1,5 +1,5 @@
 export interface Frngalm {
-    detSolsum: DetSolsum[];
+    detSolsum: DetSolsum;
     itemMovAlm: ItemMovAlm;
   }
   
@@ -21,15 +21,22 @@ export interface Frngalm {
     dsp_DescMov: string;
   }
   
-export const initialFrngalm: Frngalm = {
-    detSolsum: [],
+  export const initialFrngalm: Frngalm = {
+    detSolsum: {
+      idsolsum: 0,
+      nroreng: 0,
+      cantsol: '',
+      coditem: '',
+      descreng: ''
+    },
     itemMovAlm: {
-        codalmacen: 0,
-        codmov: '',
-        cantsugerida: '',
-        cantaprobada: '',
-        cantdespacho: '',
-        dsp_DescAlmacen: '',
-        dsp_DescMov: ''
+      codalmacen: 0,
+      codmov: '',
+      cantsugerida: '',
+      cantaprobada: '',
+      cantdespacho: '',
+      dsp_DescAlmacen: '',
+      dsp_DescMov: ''
     }
-};
+  };
+  

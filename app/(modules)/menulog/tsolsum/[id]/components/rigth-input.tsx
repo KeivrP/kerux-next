@@ -32,7 +32,7 @@ const RightInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
     entity: "controlog",
   });
   const today = new Date();
-  today.setDate(today.getDate() - 1);
+  today.setDate(today.getDate());
 
   useEffect(() => {
     if (
@@ -115,19 +115,22 @@ const RightInput = ({ isLoading, formData, setFormData }: DataInputProps) => {
             max={
               formData.cabsolsum.fecrecsol && today.toISOString().split("T")[0]
             }
-            onChange={(e) =>
+            onChange={(e) => {
+              const selectedDate = e.target.value || "";
+              const selectedYear = selectedDate ? new Date(selectedDate).getFullYear() : 0;
               setFormData((prevFormData) => ({
-                ...prevFormData,
-                cabsolsum: {
-                  ...prevFormData.cabsolsum,
-                  fecsol: e.target.value || "",
-                },
-              }))
-            }
+          ...prevFormData,
+          cabsolsum: {
+            ...prevFormData.cabsolsum,
+            fecsol: selectedDate,
+            ano: selectedYear,
+          },
+              }));
+            }}
             value={
               formData.cabsolsum.fecsol
-                ? parseDate(formData.cabsolsum.fecsol).toString()
-                : ""
+          ? parseDate(formData.cabsolsum.fecsol).toString()
+          : ""
             }
           />
         </ConditionalWrapper>

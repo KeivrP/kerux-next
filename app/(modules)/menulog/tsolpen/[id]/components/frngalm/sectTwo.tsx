@@ -2,9 +2,17 @@ import { Grid2 as Grid, TextField, Typography } from "@mui/material";
 import { Loading } from "./sectOne";
 import { ConditionalWrapper } from "@/utils/main";
 import { SkeletonInput } from "@/components/skeleton/detail";
+import { useEffect, useState } from "react";
+import { ItemMovAlm } from "../../../tsolpen-types";
 
-export const SectTwo = ({ loading }: Loading) => {
-  const itemMovAlm = { codalmacen: '', dsp_DescAlmacen: '', codmov: "", dsp_DescMov: ""}
+export const SectTwo = ({ loading, row }: Loading) => {
+  const [itemMovAlm, setItemMovAlm] = useState<ItemMovAlm>()
+  useEffect(() => {
+    if (row) {
+      setItemMovAlm(row.itemMovAlm)
+    }
+  }, [row])
+
   return (
     <>
       {/* --------------------------------- ALMACÉN -------------------------------- */}

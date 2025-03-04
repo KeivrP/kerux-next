@@ -14,6 +14,8 @@ import { BadgeTipodoc } from "@/components/badge/badge-estatus";
 import { BaseTablePagination } from "@/components/table-material/baseTablePagination";
 import HistoriaDocumento from "@/shared/hcdlog/data-sheet";
 import { usePathname, useRouter } from "next/navigation";
+import { useGenerarModel } from "../hooks/useTsolpen";
+import SimpleBackdrop from "@/components/backdrop/backdrop";
 
 
 export const TsolpenTable = () => {
@@ -65,7 +67,10 @@ export const TsolpenTable = () => {
     }
   };
 
+  const { mutate, isPending } = useGenerarModel()
+
   const openGenerate = (id: number) => {
+    mutate({ id: id.toString() })
   };
 
   return (
@@ -125,6 +130,7 @@ export const TsolpenTable = () => {
           handleChangeRowsPerPage={handleChangeRowsPerPage}
         ></BaseTablePagination>
       </div>
+      <SimpleBackdrop show={isPending} />
     </>
   );
 };

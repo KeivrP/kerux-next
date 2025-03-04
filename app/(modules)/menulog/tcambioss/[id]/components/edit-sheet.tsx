@@ -25,13 +25,18 @@ const EditSheet = ({ isOpen, onClose, data, refetch, isNew = false }: HistoriaDo
         dependency: [],
     });
 
+    const id = data?.idsolsum ?? ''
+    const cambio = data?.nrocambio ?? ''
+
+
     const [arrayLst, setarrayLst] = useState<any[]>([])
 
-    const { data: lst_renglones, isLoading: lst_renglonesLoading } = useQueryData({
+
+    const { data: lst_renglones, isLoading } = useQueryData({
         entity: "list_renglones",
-        enabled: isNew ? false : data?.idsolsum != 0 && data?.nrocambio != 0,
-        params: { idsolsum: data?.idsolsum, nrocambio: data?.nrocambio },
-        dependency: [data?.idsolsum, data?.nrocambio],
+        enabled: isNew ? true : !!id && !!cambio,
+        params: { idsolsum: id, nrocambio: cambio},
+        dependency: [id, cambio],
     });
 
     useEffect(() => {
@@ -102,8 +107,8 @@ const EditSheet = ({ isOpen, onClose, data, refetch, isNew = false }: HistoriaDo
 
         if(isNew){
             const rengcambioss = {
-                idsolum: data?.idsolsum,
-                nrocambio: data?.nrocambio,
+                idsolsum: id,
+                nrocambio: cambio,
                 nroreng: formData.nroreng,
                 tiporeng: formData.tiporeng,
                 codigo: formData.codigo,
@@ -111,10 +116,12 @@ const EditSheet = ({ isOpen, onClose, data, refetch, isNew = false }: HistoriaDo
                 codserv: formData.codserv,
                 descreng: formData.descreng,
                 unidbasica: formData.unidbasica,
-                cantsol: formData.cantsol,
+                cantsolorig: Number(formData.cantsol),
+                cantsolcamb: Number(formData.cantsolcamb),
                 destino: formData.destino,
                 stsrngsol: formData.stsrngsol,
-                preciocambio: formData.preciocambio,
+                preciocambio: Number(formData.preciocambio),
+                precioorig: Number(formData.preciocambio),
                 porcimptocamb: formData.porcimptocamb,
                 desccatg: formData.desccatg
             };
@@ -153,7 +160,7 @@ const EditSheet = ({ isOpen, onClose, data, refetch, isNew = false }: HistoriaDo
 
             <ModalDialog
                 width="md"
-                title={`Renglon - ${data?.nroreng}`}
+                title={`Renglon - ${data?.nroreng ?? 1}`}
                 dialogOpen={isOpen}
                 handleClose={onClose}
             >
@@ -170,7 +177,7 @@ const EditSheet = ({ isOpen, onClose, data, refetch, isNew = false }: HistoriaDo
                                 <Typography variant="h3" color="primary" mb={2}>
                                     Cambio Agregar
                                 </Typography>
-                                <ConditionalWrapper condition={lst_porcimptos} wrapper={SkeletonInput}>
+                                <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
                                     <Controller
                                         name="nroreng"
                                         control={control}

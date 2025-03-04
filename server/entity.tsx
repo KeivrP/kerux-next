@@ -71,7 +71,7 @@ export const entities = {
   boton_reasig_comp: "cotizaciones/boton_reasig_comprador",
   gen_cotizaciones: "/sol_compras/boton_generar_cotizaciones",
   rengs_sums: "/rengs_sums/show",
-  sit_reng_sol_compra_alm: "rengs_sols_compras/sit_reng_sol_compra_alm",
+  sit_reng_sol_compra_alm: "rengs_sums/sit_reng_alm",
   coletilla: "/coletillas",
   dets_reng_cotiz_show: "/dets_reng_cotiz/show_rng",
   dets_reng_cotiz: "/dets_reng_cotiz",
