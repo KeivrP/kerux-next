@@ -97,7 +97,7 @@ export const Acciones = ({
           backgroundColor: theme.palette.background.default,
           borderRadius: "50%",
         }}
-        title="Abrir"
+        title="Crear Modelo"
       >
         <IconButton
           onClick={() => onCreate(row.idsolsum)}

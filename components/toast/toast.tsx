@@ -64,13 +64,12 @@ export function showNotification(response: Response) {
     document.body.appendChild(alertContainer);
 
     // Add event listener to close the alert on button click
-    document
-      .getElementById("closeAlertButton")
-      ?.addEventListener("click", () => {
+    alertContainer.addEventListener("click", (event) => {
+      if ((event.target as HTMLElement).id === "closeAlertButton") {
         alertContainer.remove();
-      });
+      }
+    });
 
-    document.body.appendChild(alertContainer);
   } else if (response.alert === "S") {
     // Crear el toast
     const toastContainer = document.createElement("div");

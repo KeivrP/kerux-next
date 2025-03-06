@@ -109,7 +109,7 @@ const DataSheet = ({ id }: DataSheetProps) => {
           sx={{ color: "alert" }}
           style={{ backgroundColor: "transparent", color: hasChanges ? "gray" : "inherit" }}
         >
-          <CircleSlash size={18} color={hasChanges ? "gray" : "inherit"} />
+          <CircleSlash size={18} color={hasChanges ? "gray" : "#142f62"} />
           <Typography variant="h3" marginLeft={1} color={hasChanges ? "gray" : "inherit"}>
             Generar
           </Typography>

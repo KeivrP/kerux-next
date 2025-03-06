@@ -69,7 +69,7 @@ const FrngcomInput = ({ isLoading, idsolsum, dsp_fecsol, dsp_desccorta, solCompr
         <ConditionalWrapperTable condition={isLoading} wrapper={SkeletonInput}>
           <Input
             type="date"
-            value={solCompra?.fecrec ? dayjs(solCompra.fecrec).format('YYYY-MM-DD') : ''}
+            value={solCompra?.fecrec ? dayjs(solCompra.fecrec).add(1, 'day').format('YYYY-MM-DD') : ''}
             disabled
           />
         </ConditionalWrapperTable>

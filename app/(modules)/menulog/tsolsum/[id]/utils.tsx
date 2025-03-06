@@ -10,10 +10,13 @@ export function calcularTotales(formData: Root) {
     detsolsum.forEach((item) => {
       const { destino, dsp_MtoTotReng, mtototrng, porcimptos } = item;
 
-      const montoTotalReng = parseFloat(mtototrng);
+
+
       const porcentajeImpuesto = parseFloat(porcimptos);
 
-      if (isNaN(montoTotalReng) || isNaN(porcentajeImpuesto)) {
+      console.log(porcentajeImpuesto, porcimptos, "lll", mtototrng, dsp_MtoTotReng)
+
+      if (isNaN(dsp_MtoTotReng) || isNaN(porcentajeImpuesto)) {
         console.error("Error: mtototrng o porcimptos no son números válidos.");
         return; 
       }
@@ -24,18 +27,24 @@ export function calcularTotales(formData: Root) {
         cabsolsum.indcompctto === "N" &&
         (destino === "COMP" || destino === "CTTO")
       ) {
+        
         subtotal += dsp_MtoTotReng; // Sumar solo si es COMP o CTTO
-        totalIVA += (montoTotalReng * porcentajeImpuesto) / 100;
+        totalIVA += (dsp_MtoTotReng * porcentajeImpuesto) / 100;
+        console.log(totalIVA, "1", dsp_MtoTotReng, porcentajeImpuesto)
       } else if (cabsolsum.indcomdir === "S" && cabsolsum.indcompctto === "N") {
         subtotal += dsp_MtoTotReng; // Sumar todos los items si es compra directa
-        totalIVA += (montoTotalReng * porcentajeImpuesto) / 100;
+        totalIVA += (dsp_MtoTotReng * porcentajeImpuesto) / 100;
+        console.log(totalIVA, "2")
+
       } else if (
         cabsolsum.indcomdir === "S" &&
         cabsolsum.indcompctto === "S" &&
         destino === "CTTO"
       ) {
         subtotal += dsp_MtoTotReng; // Sumar solo si es CTTO
-        totalIVA += (montoTotalReng * porcentajeImpuesto) / 100;
+        totalIVA += (dsp_MtoTotReng * porcentajeImpuesto) / 100;
+        console.log(totalIVA, "3")
+
       }
     });
   }

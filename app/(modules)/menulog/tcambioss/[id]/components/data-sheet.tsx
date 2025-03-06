@@ -107,7 +107,7 @@ export default function DataSheet({
             idsolsum: id === 0 ? watch('cabsolsum.idsolsum') : id,
             nrocambio: cambio === 0 ? 1 : cambio
         },
-        enabled: (watch('cabsolsum.idsolsum') || id) !== 0,
+        enabled: id !== 0,
 
     });
 
@@ -223,18 +223,21 @@ export default function DataSheet({
         }
     };
 
+    const origen = watch('cabsolsum.origensol')
+
     return (
 
         <div>
             <div style={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
 
                 <ButtonForms
-                    onClick={() => generateMutate({ idsolsum: String(watch('cabsolsum.idsolsum')), nrocambio: String(watch('cabcambio.nrocambio')) })}
-                    sx={{ color: "alert", alignItems: "center" }}
-                    disabled={hasChanges}
+                    onClick={() => hasChanges ? '' :  generateMutate({ idsolsum: String(watch('cabsolsum.idsolsum')), nrocambio: String(watch('cabcambio.nrocambio')) })}
+                    sx={{ color: "alert" }}
+                    style={{ backgroundColor: "transparent", color: hasChanges ? "gray" : "inherit" }}
+                 
                 >
-                    <CircleSlash size={18} />
-                    <Typography variant="h3" marginLeft={1}>
+                    <CircleSlash size={18} color={hasChanges ? "gray" : "#142f62"} />
+                    <Typography variant="h3" marginLeft={1} color={hasChanges ? "gray" : "inherit"}>
                         Procesar
                     </Typography>
                 </ButtonForms>
@@ -410,7 +413,9 @@ export default function DataSheet({
                         </div>
                         <div className="col-span-12 md:col-span-1 flex align-center justify-center flex-col">
                             <Label className="text-sm text-[#142F62]">Origen</Label>
-                            <BadgeModule codmenu={watch('cabsolsum.origensol')} />
+                            <ConditionalWrapper condition={origen === "" || origen === undefined} wrapper={SkeletonInput}>
+                                <BadgeModule codmenu={origen} />
+                            </ConditionalWrapper>
                         </div>
                         <div className="col-span-6 md:col-span-1 flex align-center justify-center flex-col">
                             <Label className="text-sm text-[#142F62]">Estatus</Label>
@@ -453,7 +458,7 @@ export default function DataSheet({
                                 <Label className="text-sm text-[#142F62] mb-1">Estatus del Cambio</Label>
                                 <ConditionalWrapper condition={isLoading} wrapper={SkeletonInput}>
                                     <div className="flex items-center">
-                                        <BadgeTipodoc tipo={watch('cabcambio.stscamb')} />
+                                        <BadgeTipodoc tipo={watch('cabcambio.stscamb') ?? "PEN"} />
                                     </div>
                                 </ConditionalWrapper>
                             </div>

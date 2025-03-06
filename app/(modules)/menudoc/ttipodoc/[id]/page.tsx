@@ -1,6 +1,6 @@
 "use client";
-import { useParams } from "next/navigation";
-import {  Container } from "@mui/material";
+import { useParams, useRouter } from "next/navigation";
+import { Container } from "@mui/material";
 import Breadcrumbs from "@/components/breadcrumbs/breadcumbs";
 import { ITipoSheet } from "../ttipodc-types";
 import { FormProvider, useForm } from "react-hook-form";
@@ -15,6 +15,7 @@ import SimpleBackdrop from "@/components/backdrop/backdrop";
 
 export default function FtipodocPage() {
   const params = useParams();
+  const route = useRouter()
   const { id } = params;
 
   if (!id) {
@@ -30,8 +31,10 @@ export default function FtipodocPage() {
     dependency: [id],
   });
 
-  const { mutate: create, isPending: isCreating } = useCreateTipoDoc();
+  const { mutate: create, isPending: isCreating, isSuccess } = useCreateTipoDoc();
   const { mutate: update, isPending: isUpdating } = useUpdateTipoDoc();
+
+
 
   const methods = useForm<ITipoSheet>({
     defaultValues: {
@@ -47,6 +50,15 @@ export default function FtipodocPage() {
       pasosruta: []
     }
   });
+
+  const tipo = methods.watch('cabtipodoc.tipodoc')
+
+  useEffect(() => {
+    if (isSuccess) {
+      route.replace(`/menudoc/ttipodoc/${tipo}`)
+    }
+
+  }, [isSuccess])
 
   useEffect(() => {
     if (data) {

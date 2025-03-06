@@ -116,12 +116,12 @@ const EditSheet = ({ isOpen, onClose, data, refetch, isNew = false }: HistoriaDo
                 codserv: formData.codserv,
                 descreng: formData.descreng,
                 unidbasica: formData.unidbasica,
-                cantsolorig: Number(formData.cantsol),
+                cantsolorig: Number(formData.cantsolorig),
                 cantsolcamb: Number(formData.cantsolcamb),
                 destino: formData.destino,
                 stsrngsol: formData.stsrngsol,
                 preciocambio: Number(formData.preciocambio),
-                precioorig: Number(formData.preciocambio),
+                precioorig: Number(formData.precioorig),
                 porcimptocamb: formData.porcimptocamb,
                 desccatg: formData.desccatg
             };
@@ -200,6 +200,8 @@ const EditSheet = ({ isOpen, onClose, data, refetch, isNew = false }: HistoriaDo
                                                     setValue('unidbasica', newValue.unidbasica);
                                                     setValue('cantsol', newValue.cantsol);
                                                     setValue('destino', newValue.destino);
+                                                    setValue('cantsolorig', newValue.cantsol)
+                                                    setValue('porcimptoorig', newValue.porcimptoorig)
                                                     setValue('stsrngsol', newValue.stsrngsol);
                                                     setValue('preciocambio', newValue.preciocambio);
                                                     setValue('porcimptocamb', newValue.porcimptocamb);

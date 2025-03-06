@@ -141,7 +141,12 @@ export const CabtipodocForm = ({ isLoading, IsNew }: ICabtipodocFormProps) => {
                                     control={
                                         <Checkbox
                                             checked={field.value === "S"}
-                                            onChange={(e) => field.onChange(e.target.checked ? "S" : "N")}
+                                            onChange={(e) => {
+                                                field.onChange(e.target.checked ? "S" : "N");
+                                                if (!e.target.checked) {
+                                                    setValue("cabtipodoc.tipodocref", "");
+                                                }
+                                            }}
                                             size="small"
                                         />
                                     }

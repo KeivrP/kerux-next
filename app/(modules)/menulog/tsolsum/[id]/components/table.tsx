@@ -88,6 +88,8 @@ export const FsolsumTable: React.FC<DataInputProps> = ({
 
   const { total, totalIVA, subtotal } = calcularTotales(formData);
 
+  console.log(totalIVA, formData?.detsolsum[0]?.porcimptos)
+
   return (
     <>
       <ActionCardHeader
