@@ -74,12 +74,12 @@ export const CrearSolicitud = () => {
       const match = res?.message.match(/(\d+)/);
       const numero = match ? match[1] : null;
       const id = variables.data.idsolsum;
-      const encodedIds = `<span class="math-inline">\{id\}\-</span>{numero}`;
+      const encodedIds = (`${id}-${numero}`)
 
       if (numero) {
         router.push(`/menulog/tcambioss/${encodedIds}`);
-        showNotification(res);
       }
+      showNotification(res);
     },
     onError: (error) => {
       console.error('Error uploading documents:', error);

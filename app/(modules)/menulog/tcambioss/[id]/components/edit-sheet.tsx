@@ -16,7 +16,6 @@ interface HistoriaDocumentoProps {
     data: Rengcambio;
     refetch: () => void;
     isNew?: boolean
-
 }
 
 const EditSheet = ({ isOpen, onClose, data, refetch, isNew = false }: HistoriaDocumentoProps) => {
@@ -25,24 +24,21 @@ const EditSheet = ({ isOpen, onClose, data, refetch, isNew = false }: HistoriaDo
         dependency: [],
     });
 
-    const id = data?.idsolsum ?? ''
-    const cambio = data?.nrocambio ?? ''
+    const id = data?.idsolsum ?? '';
+    const cambio = data?.nrocambio ?? '';
 
-
-    const [arrayLst, setarrayLst] = useState<any[]>([])
-
+    const [arrayLst, setarrayLst] = useState<any[]>([]);
 
     const { data: lst_renglones, isLoading } = useQueryData({
         entity: "list_renglones",
         enabled: isNew ? true : !!id && !!cambio,
-        params: { idsolsum: id, nrocambio: cambio},
+        params: { idsolsum: id, nrocambio: cambio },
         dependency: [id, cambio],
     });
 
     useEffect(() => {
         if (!Array.isArray(lst_renglones)) {
             setarrayLst([]);
-
         } else {
             setarrayLst(lst_renglones);
         }
@@ -50,7 +46,6 @@ const EditSheet = ({ isOpen, onClose, data, refetch, isNew = false }: HistoriaDo
 
     const { mutate, isSuccess, isPending } = useUpdateRenglon();
     const { mutate: create, isSuccess: iscreate, isPending: isprencreate } = useCreateRenglon();
-    
 
     const { setValue, handleSubmit, register, control, watch, reset } = useForm({
         defaultValues: {
@@ -72,19 +67,32 @@ const EditSheet = ({ isOpen, onClose, data, refetch, isNew = false }: HistoriaDo
             stsrngsol: '',
             destino: '',
             cantsol: ''
-
-
         }
     });
 
     useEffect(() => {
-        if(isNew){
-            reset()
-        }
-    }, [isNew])
-
-    useEffect(() => {
-        if (data) {
+        if (isNew) {
+            reset({
+                porcimptocamb: '',
+                preciocambio: 0,
+                coditem: '',
+                descadiitem: '',
+                unidbasica: '',
+                cantsolcamb: '',
+                porcimptoorig: '',
+                precioorig: '',
+                codserv: '',
+                cantsolorig: '',
+                nroreng: "",
+                tiporeng: '',
+                codigo: '',
+                desccatg: '',
+                descreng: '',
+                stsrngsol: '',
+                destino: '',
+                cantsol: ''
+            });
+        } else if (data) {
             setValue('porcimptocamb', data.porcimptocamb);
             setValue('preciocambio', Number(data.preciocambio));
             setValue('coditem', data.coditem);
@@ -96,16 +104,15 @@ const EditSheet = ({ isOpen, onClose, data, refetch, isNew = false }: HistoriaDo
             setValue('codserv', data.codserv);
             setValue('cantsolorig', data.cantsolorig);
             setValue('nroreng', data.nroreng ? data.nroreng.toString() : '');
-
         } else {
             reset();
         }
-    }, [data, setValue]);
+    }, [isNew, data, setValue, reset]);
 
     const onSubmit = (formData: any, event?: React.BaseSyntheticEvent) => {
         if (event) event.preventDefault(); // Evita comportamiento inesperado
 
-        if(isNew){
+        if (isNew) {
             const rengcambioss = {
                 idsolsum: id,
                 nrocambio: cambio,
@@ -125,39 +132,37 @@ const EditSheet = ({ isOpen, onClose, data, refetch, isNew = false }: HistoriaDo
                 porcimptocamb: formData.porcimptocamb,
                 desccatg: formData.desccatg
             };
-    
+
             create({ data: rengcambioss }); // Envía los datos al backend
         } else {
+            const rengcambioss = {
+                rengcambioss: {
+                    coditem: formData.coditem,
+                    codserv: formData.codserv,
+                    descadiitem: formData.descadiitem,
+                    unidbasica: formData.unidbasica,
+                    cantsolorig: Number(formData.cantsolorig),
+                    cantsolcamb: formData.cantsolcamb,
+                    precioorig: formData.precioorig,
+                    preciocambio: formData.preciocambio,
+                    porcimptoorig: formData.porcimptoorig,
+                    porcimptocamb: formData.porcimptocamb
+                },
+            };
 
-        const rengcambioss = {
-            rengcambioss: {
-                coditem: formData.coditem,
-                codserv: formData.codserv,
-                descadiitem: formData.descadiitem,
-                unidbasica: formData.unidbasica,
-                cantsolorig: Number(formData.cantsolorig),
-                cantsolcamb: formData.cantsolcamb,
-                precioorig: formData.precioorig,
-                preciocambio: formData.preciocambio,
-                porcimptoorig: formData.porcimptoorig,
-                porcimptocamb: formData.porcimptocamb
-            },
-        };
-
-        mutate({ idsolsum: data.idsolsum.toString(), nrocambio: data.nrocambio.toString(), nroreng: data.nroreng.toString(), data: rengcambioss }); // Envía los datos al backend
-    }
+            mutate({ idsolsum: data.idsolsum.toString(), nrocambio: data.nrocambio.toString(), nroreng: data.nroreng.toString(), data: rengcambioss }); // Envía los datos al backend
+        }
     };
 
     useEffect(() => {
         if (isSuccess || iscreate) {
-            refetch()
+            refetch();
             onClose();
         }
-    }, [isSuccess, iscreate])
+    }, [isSuccess, iscreate]);
 
     return (
         <>
-
             <ModalDialog
                 width="md"
                 title={`Renglon - ${data?.nroreng ?? 1}`}
@@ -200,14 +205,13 @@ const EditSheet = ({ isOpen, onClose, data, refetch, isNew = false }: HistoriaDo
                                                     setValue('unidbasica', newValue.unidbasica);
                                                     setValue('cantsol', newValue.cantsol);
                                                     setValue('destino', newValue.destino);
-                                                    setValue('cantsolorig', newValue.cantsol)
-                                                    setValue('porcimptoorig', newValue.porcimptoorig)
+                                                    setValue('cantsolorig', newValue.cantsol);
+                                                    setValue('porcimptoorig', newValue.porcimpto);
+                                                    setValue('precioorig', newValue.precio);
                                                     setValue('stsrngsol', newValue.stsrngsol);
                                                     setValue('preciocambio', newValue.preciocambio);
                                                     setValue('porcimptocamb', newValue.porcimptocamb);
-
-                                                }
-                                                }
+                                                }}
                                                 renderInput={(params) => <TextField {...params} />}
                                             />
                                         )}

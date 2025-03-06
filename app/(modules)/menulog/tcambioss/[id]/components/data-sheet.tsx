@@ -120,22 +120,14 @@ export default function DataSheet({
     useEffect(() => {
         if (data) {
             setRows(data);
-        }
-    }, [data]);
-
-    useEffect(() => {
-        if (rows && Object.keys(rows).length > 0) {
-            setValue('cabsolsum', rows.cabsolsum);
-            setValue('cabcambio', rows.cabcambio);
-            if (rows.TotCambio) {
-                setValue('TotCambio', rows.TotCambio[0]);
+            setValue('cabsolsum', data.cabsolsum);
+            setValue('cabcambio', data.cabcambio);
+            if (data.TotCambio && data.TotCambio.length > 0) {
+                setValue('TotCambio', data.TotCambio[0]);
             }
         }
-    }, [rows, isFetching]);
-
-    useEffect(() => {
-        refetch();
-    }, [watch('cabsolsum.idsolsum')]);
+    }, [data]);
+    
 
     const idsolsum = watch("cabsolsum.idsolsum");
     const nrocambio = watch("cabcambio.nrocambio");
@@ -211,7 +203,6 @@ export default function DataSheet({
             mtototalcambio: watch('cabcambio.mtototalcambio') || 0,
             usuing: watch("cabcambio.usuing") || ""
         };
-        console.log(data)
         if (nrocambio === 0) {
             crearSS({ data });
         } else {
