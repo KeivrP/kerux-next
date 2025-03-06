@@ -158,9 +158,10 @@ export interface RenglonInterface {
   codclasifsnc: string;
 }
 const today = new Date();
-
 const yesterday = new Date(today);
 yesterday.setDate(today.getDate() - 1);
+
+const year = today.getFullYear();
 
 export const initialRootData: Root = {
   cabsolsum: {
@@ -169,7 +170,7 @@ export const initialRootData: Root = {
     desccorta: "",
     ccosto: "",
     descsolsum: "",
-    fecsol: yesterday.toISOString().split("T")[0],
+    fecsol: today.toISOString().split("T")[0],
     fecrecsol: today.toISOString().split("T")[0],
     stssol: "PGN",
     fecreqsol: "",
@@ -177,14 +178,14 @@ export const initialRootData: Root = {
     fecing: "",
     origensol: "LOG",
     codaccint: "",
-    ano: 0,
+    ano: year,
     fecstssol: "",
-    indcomdir: "",
+    indcomdir: "N",
     fecapresol: "",
     mensajes: "",
     iddocres: null,
     coddependencia: "",
-    reserva: "",
+    reserva: "N",
     telefubic: null,
     codmoneda: "",
     codundcmp: "",
@@ -195,7 +196,7 @@ export const initialRootData: Root = {
     mtoneto: "",
     mtoimpto: "",
     iddocexterno: null,
-    indcompctto: "",
+    indcompctto: "N",
     Dependencia: {
       descdependencia: "",
     },

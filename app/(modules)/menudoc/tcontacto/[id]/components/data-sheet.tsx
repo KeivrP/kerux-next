@@ -117,8 +117,6 @@ export default function DataSheet({
             create({ beneficiario })
             reset()
         }
-
-        console.log(beneficiario)
     }
 
     useEffect(() => {

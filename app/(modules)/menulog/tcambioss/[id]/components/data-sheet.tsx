@@ -555,7 +555,7 @@ export default function DataSheet({
                                     { content: formatCurrency(row.precioorig), align: "center" },
                                     { content: formatCurrency(row.preciocambio), align: "center" },
                                     { content: row.porcimptocamb, align: "center" },
-                                    { content: formatCurrency(row.precioorig), align: "center" },
+                                    { content: formatCurrency(Number(row.preciocambio) * Number(row.cantsolorig)), align: "center" },
                                     {
                                         content: <AccionesSheet row={row} onEdit={handleOpen} onDelete={handleDelete} />,
                                         align: "center",
