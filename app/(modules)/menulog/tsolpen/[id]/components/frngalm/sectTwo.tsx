@@ -21,7 +21,6 @@ export const SectTwo = ({ loading, row }: Loading) => {
           <Typography
             variant="h3"
             color="primary.dark"
-            sx={{ marginBottom: "0.65rem" }}
           >
             Almacén
           </Typography>

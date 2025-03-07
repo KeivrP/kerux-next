@@ -42,54 +42,54 @@ const Frngalm = ({
 
     useEffect(() => {
         if (data) {
-           setRow(data)
+            setRow(data)
         }
     }, [data]);
 
 
     return (
         <ModalDialog
+            width="md"
             dialogOpen={open}
             handleClose={handleClose}
             title="Movimiento de Almacén"
+
             disableCancelButton={true} // Pass the prop to disable the cancel button
         >
             <Grid
                 container
                 direction="row"
                 alignItems="center"
-                px={5}
-                mb={3}
+                paddingX={5}
                 spacing={2}
             >
-                <Card className="">
-                    <CardHeader className="bg-muted py-2 text-[#142F62]" title="" />
-                    <CardContent className="p-4">
-                        <Grid size={12}>
-                            <Grid
-                                container
-                                direction="row"
-                                justifyContent="space-evenly"
-                                alignItems="center"
-                            >
-                                <SectOne loading={isLoading} row={row}/>
-                                <Grid
-                                    container
-                                    direction="row"
-                                    justifyContent="space-around"
-                                    alignItems="center"
-                                >
-                                    <Grid size={4}>
-                                        <SectTwo loading={isLoading} row={row} />
-                                    </Grid>
-                                    <Grid size={6.5}>
-                                        <SectThree loading={isLoading}  row={row}/>
-                                    </Grid>
-                                </Grid>
+
+                <Grid size={12}>
+                    <Grid
+                        container
+                        direction="row"
+                        alignItems="center"
+                    >
+                        <Grid size={12} mb={2}>
+
+                            <SectOne loading={isLoading} row={row} />
+                        </Grid>
+                        <Grid
+                            container
+                            direction="row"
+                            alignItems="center"
+                            spacing={2}
+                        >
+                            <Grid size={5}>
+                                <SectTwo loading={isLoading} row={row} />
+                            </Grid>
+                            <Grid size={7}>
+                                <SectThree loading={isLoading} row={row} />
                             </Grid>
                         </Grid>
-                    </CardContent>
-                </Card>
+                    </Grid>
+                </Grid>
+
 
 
             </Grid>

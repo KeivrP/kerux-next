@@ -21,10 +21,8 @@ export const SectOne = ({ loading, row }: Loading) => {
     <Grid
       container
       direction="row"
-      justifyContent="space-evenly"
       alignItems="center"
-      spacing={2}
-      sx={{ marginBottom: "0.65rem" }}
+      spacing={1}
     >
       {/* -------------------------------- SOLICITUD ------------------------------- */}
       <Grid size={2}>
@@ -33,7 +31,7 @@ export const SectOne = ({ loading, row }: Loading) => {
           color="primary.dark"
           sx={{ marginBottom: "0.65rem" }}
         >
-          Solicitud
+          ID Solicitud
         </Typography>
         <ConditionalWrapper condition={loading} wrapper={SkeletonInput}>
           <TextField
@@ -90,7 +88,7 @@ export const SectOne = ({ loading, row }: Loading) => {
         </ConditionalWrapper>
       </Grid>
       {/* ------------------------------- DESCRIPCIÓN ------------------------------ */}
-      <Grid size={6}>
+      <Grid size={7}>
         <Typography
           variant="h3"
           color="primary.dark"
