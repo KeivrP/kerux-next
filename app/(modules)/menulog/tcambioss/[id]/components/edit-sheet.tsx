@@ -129,8 +129,11 @@ const EditSheet = ({ isOpen, onClose, data, refetch, isNew = false }: HistoriaDo
                 stsrngsol: formData.stsrngsol,
                 preciocambio: Number(formData.preciocambio),
                 precioorig: Number(formData.precioorig),
+                desccatg: formData.desccatg,
                 porcimptocamb: formData.porcimptocamb,
-                desccatg: formData.desccatg
+                porcimptoorig: formData.porcimptoorig,
+
+
             };
 
             create({ data: rengcambioss }); // Envía los datos al backend
