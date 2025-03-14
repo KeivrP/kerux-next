@@ -1,6 +1,6 @@
 'use client'
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { IconButton, Tooltip, useTheme } from "@mui/material";
+import { useTheme } from "@mui/material";
 import { Order } from "@/components/button/OrderButton";
 import { Filter } from "@/components/button/FilterButton";
 import { useQueryData } from "@/server/fetch-data";
@@ -12,8 +12,13 @@ import { formatDate } from "@/utils/main";
 import { BadgeTipoComp } from "@/components/badge/badge-estatus";
 import { BaseTablePagination } from "@/components/table-material/baseTablePagination";
 import { ConfirmDialog } from "@/components/modal/confirmDialog";
+import { useAnularSC } from "../hook/useTipoCompUnd";
+import SimpleBackdrop from "@/components/backdrop/backdrop";
+import { usePathname, useRouter } from "next/navigation";
 
 export const TsolpenCompTable = () => {
+  const router = useRouter();
+  const pathname = usePathname();
   const theme = useTheme();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
@@ -22,11 +27,10 @@ export const TsolpenCompTable = () => {
   ]);
   const [filter, setFilter] = useState<Filter[]>([]);
   const [openDialog, setOpenDialog] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [row, setRow] = useState(0);
+
   const [RowDelete, setRowDelete] = useState(0);
   const [mensaje, setMensaje] = useState("");
-  const [mensajeText, setMensajeText] = useState(""); 
+  const [mensajeText, setMensajeText] = useState("");
 
   const { data, isLoading, refetch } = useQueryData({
     entity: "compra",
@@ -40,14 +44,6 @@ export const TsolpenCompTable = () => {
     () => (data ? data.solcomprslist : []),
     [data?.solcomprslist]
   );
-
-  function evaluarEstado(id: number) {
-    const row = rows.find((row: ITSolRec) => row.nrosc === id);
-    if (!row) {
-      return false;
-    }
-    return (row.stssc === "REC" || row.stssc === "COT") && row.ststes !== "ENV";
-  }
 
   function generarMensaje(id: number) {
     let mensaje = "";
@@ -63,41 +59,15 @@ export const TsolpenCompTable = () => {
     }
     return mensaje;
   }
-/* 
-  const { create: anularSolc, isLoading: loadingAnular } =
-  useMutationData({
-    entity: "anularCotizacion",
-    api: "comp",
 
-    onSuccess: (res) => {
-      handleSnack(res, true, '');
-    },
-    onError: (error) => {
-      console.log("No se hizo", error);
-      handleSnack("Ha ocurrido un error", true, "error");
-    },
-    params: `id=${RowDelete}`,
-  });
- */
-/*   useEffect(() => {
-    if (loadingAnular) {
-      handleLoading("Anulando", true);
-    } else {
+  const { mutate: anularSolc, isPending: loadingAnular, isSuccess } = useAnularSC()
+
+  useEffect(() => {
+    if (isSuccess) {
       refetch()
-      handleLoading("Anulando", false);
     }
-  }, [loadingAnular]);
- */
+  }, [isSuccess])
 
-  //funcion que abre
-  const openFile = (row: number) => {
-    setOpen(true);
-    setRow(row);
-  };
-  //cierra
-  const closeFile: () => void = () => {
-    setOpen(false);
-  };
 
   //si queremos cerrar sin hacer ningun cambio
   const handleCancelDelete = () => {
@@ -106,16 +76,17 @@ export const TsolpenCompTable = () => {
 
   // esta se coloca donde queremos que abra nuestro mensaje
   const handleDeleteClick = (id: number) => {
+    console.log('entre')
     setOpenDialog(true);
     setRowDelete(id)
     let mensajeGenerado = generarMensaje(id);
     setMensaje(mensajeGenerado);
   };
   //Funcion al confirmar
-const handleConfirmDelete = async () => {
-/*   anularSolc({ sol_compra: { mensajes: mensajeText } });
- */  setOpenDialog(false)
-};
+  const handleConfirmDelete = async () => {
+    anularSolc({ id: RowDelete.toString(), mensaje: mensajeText });
+    setOpenDialog(false)
+  };
 
   const handlePageChange = useCallback(
     (_: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
@@ -132,10 +103,10 @@ const handleConfirmDelete = async () => {
     []
   );
 
- 
+
   return (
     <>
-     <ActionCardHeader
+      <ActionCardHeader
         isAddButtonVisible={false}
         onApplyFilter={(filters) => setFilter(filters)}
         columnsFilter={columnsFilter}
@@ -162,13 +133,14 @@ const handleConfirmDelete = async () => {
               { content: row.descsc, align: "left" },
               { content: row.idsolsum, align: "center" },
               { content: formatDate(row.fecsts), align: "center" },
-              { content:<BadgeTipoComp tipo={row.stssc} />, align: "center" },
-              { content:<BadgeTipoComp tipo={row.stsres} />, align: "center" },
+              { content: <BadgeTipoComp tipo={row.stssc} />, align: "center" },
+              { content: <BadgeTipoComp tipo={row.stsres} />, align: "center" },
               {
                 content: <Acciones
-                row={row}
-                onFile={(id) => console.log(id)}
-              />,
+                  row={row}
+                  onFile={(id) => { router.push(`${pathname}/${id}`); }}
+                  onAnular={handleDeleteClick}
+                />,
                 action: () => null,
                 disableTooltip: true,
               },
@@ -197,7 +169,7 @@ const handleConfirmDelete = async () => {
 
       />
 
-{/*       <Frengsc open={open} row={row} handleClose={closeFile} />
- */}    </>
+      <SimpleBackdrop show={isLoading} />
+    </>
   );
 };

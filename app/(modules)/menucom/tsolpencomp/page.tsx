@@ -1,7 +1,8 @@
 import React, { Suspense } from "react";
-import { Breadcrumbs, Container } from "@mui/material";
+import { Container } from "@mui/material";
 import Loader from "@/components/backdrop/loader";
 import { TsolpenCompTable } from "./components/table";
+import Breadcrumbs from "@/components/breadcrumbs/breadcumbs";
 
 const page = () => {
   return (

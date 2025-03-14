@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/display-name */
 import React, { useState, useEffect } from "react";
-import { Table, Tooltip, Typography } from "@mui/material";
+import { Checkbox, Table, Tooltip, Typography } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
@@ -13,7 +13,6 @@ import { withStyles, makeStyles } from "@mui/styles";
 import { coerce, ConditionalWrapper } from "@/utils/main";
 import { SkeletonTable } from "../skeleton/table";
 import { CollapsedRow, CollapsibleRow, VisibleRow } from "./collapsibleRow";
-import Checkbox from "../checkbox/checkbox";
 
 export interface HeadersName {
   label: string;
