@@ -5,15 +5,19 @@ interface ModuleCardProps {
   title: string
   description: string
   icon: CodMenu
-  path: string
+  path: string;
+  disabled?: boolean; // Add a disabled prop
 }
 
-export function ModuleCard({ title, description, icon, path }: ModuleCardProps) {
+export function ModuleCard({ title, description, icon, path, disabled }: ModuleCardProps) {
+  const isLinkDisabled = disabled || (path !== "/menulog" && path !== "/menudoc");
+
   return (
-    <motion.a
-      href={path}
-      className="group flex h-full flex-col justify-between overflow-hidden rounded-lg bg-white p-4 shadow-md transition-all hover:shadow-lg"
-      whileHover={{ y: -2, transition: { duration: 0.2 } }}
+    <motion.div // Change motion.a to motion.div
+      className={`group flex h-full flex-col justify-between overflow-hidden rounded-lg bg-white p-4 shadow-md transition-all ${
+        isLinkDisabled ? "opacity-50 cursor-not-allowed" : "hover:shadow-lg"
+      }`}
+      whileHover={!isLinkDisabled ? { y: -2, transition: { duration: 0.2 } } : {}}
     >
       <div>
         <motion.div
@@ -32,10 +36,14 @@ export function ModuleCard({ title, description, icon, path }: ModuleCardProps) 
       <motion.div
         className="mt-2 h-0.5 w-full bg-gradient-to-r from-[#142F62] to-purple-600"
         initial={{ scaleX: 0 }}
-        whileHover={{ scaleX: 1 }}
+        whileHover={!isLinkDisabled ? { scaleX: 1 } : {}}
         transition={{ duration: 0.3 }}
       />
-    </motion.a>
-  )
+      {!isLinkDisabled && (
+        <a href={path} className="absolute inset-0">
+          <span className="sr-only">{title}</span>
+        </a>
+      )}
+    </motion.div>
+  );
 }
-

@@ -1,5 +1,5 @@
 'use client';
-import { FormContextProps, IFasigcom, initialDataFasigcom } from '@/app/(modules)/menucom/tsolrec/tsolrec-types';
+import { FormContextProps, IFasigcom, initialDataFasigcom } from '@/app/(modules)/menucomVFINAL/tsolrec/tsolrec-types';
 import React, { createContext, useContext, useState, type ReactNode } from 'react';
 
 

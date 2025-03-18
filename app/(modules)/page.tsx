@@ -19,6 +19,8 @@ export default function Home() {
     }
   }, [data, isLoading])
 
+  console.log(menus)
+
   return (
     <Suspense fallback={<Loader />}>
       <div className="min-h-full bg-gradient-to-b from-blue-50 to-white">

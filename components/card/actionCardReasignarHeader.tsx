@@ -5,7 +5,7 @@ import { Button, ButtonProps, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useQueryData } from "@/server/fetch-data";
 import AutocompleteAsync from "@/components/ui/autocompleteAsync";
-import { Compradoreslist } from "@/app/(modules)/menucom/tcompdor/tcompdor-types";
+import { Compradoreslist } from "@/app/(modules)/menucomVFINAL/tcompdor/tcompdor-types";
 import { Rows } from "lucide-react";
 import { OptionType } from "@/types/main";
 /* import { SearchInput } from "../searchInput"; */
